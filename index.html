@@ -536,6 +536,10 @@
           <label>I want to plan for…</label>
           <select id="olGoal" class="bb-sel"><option value="">Select a goal…</option></select>
         </div>
+        <div class="bb-sel-grp" id="olBdWrap" style="display:none">
+          <label>Birth date <span style="font-weight:400;color:var(--muted)">(for dasha)</span></label>
+          <input type="text" id="olBirthDate" class="bb-sel" placeholder="e.g. May 1, 1988" style="min-width:150px">
+        </div>
       </div>
       <div id="olEmpty" style="text-align:center;color:var(--muted);padding:28px 0;font-size:13.5px">Select a chart and a goal to see your 2025–2029 window analysis.</div>
       <div id="olResult" style="display:none"></div>
@@ -1370,7 +1374,8 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
   document.getElementById("addSave").onclick=()=>{
     const parsed=parse(textEl.value); const np=Object.keys(parsed.planets).length;
     if(!parsed.La||np<7){msg.style.color="var(--debil)";msg.textContent=`Couldn't read it — found Lagna:${parsed.La?"yes":"no"}, planets:${np}/9. Make sure you pasted the longitude table (Lagna, Sun…Ketu with sign & degree).`;return;}
-    charts.push({name:(nameEl.value.trim()||`Chart ${charts.length+1}`),La:parsed.La,planets:parsed.planets,birthDate:parsed.birthDate||null});
+    const bd=parsed.birthDate||null;
+    charts.push({name:(nameEl.value.trim()||`Chart ${charts.length+1}`),La:parsed.La,planets:parsed.planets,birthDate:bd,dashas:bd&&parsed.planets.Mo?computeVimDashas(parsed.planets.Mo,bd):null});
     active=charts.length-1; save(charts); closeModal(); draw(); JA.onChartsChange&&JA.onChartsChange();
   };
   draw();
@@ -1857,6 +1862,7 @@ function renderSpecialLagnas(c,La,sav){
 })();
 
 /* ===== VIMSHOTTARI DASHA CALCULATOR ===== */
+// Dates stored as ms timestamps (numbers) so the result serialises cleanly to localStorage.
 function computeVimDashas(mo,birthDateStr){
   if(!mo||!birthDateStr)return null;
   const bd=new Date(birthDateStr);
@@ -1865,23 +1871,23 @@ function computeVimDashas(mo,birthDateStr){
   const nakIdx=Math.floor(lon/nakSpan),degInNak=lon%nakSpan;
   const lordIdx0=nakIdx%9,lord0=DASHA_SEQ_K[lordIdx0];
   const balance=(nakSpan-degInNak)/nakSpan*VIMY[lord0];
-  const MS=365.25*86400000,addY=(d,y)=>new Date(d.getTime()+y*MS);
+  const MS=365.25*86400000;
+  const addY=(ts,y)=>ts+y*MS;
   const mahas=[];
-  // First partial maha: birth date is the start; virtual full start allows antardasha computation
-  const fs0=addY(bd,-(VIMY[lord0]-balance));
-  mahas.push({lord:lord0,start:new Date(bd),end:addY(fs0,VIMY[lord0]),fullStart:new Date(fs0),fullYears:VIMY[lord0],partial:true});
+  const fs0=addY(bd.getTime(),-(VIMY[lord0]-balance));
+  mahas.push({lord:lord0,start:bd.getTime(),end:addY(fs0,VIMY[lord0]),fullStart:fs0,fullYears:VIMY[lord0]});
   for(let i=1;i<=9;i++){
     const prev=mahas[mahas.length-1],lord=DASHA_SEQ_K[(lordIdx0+i)%9];
-    const start=new Date(prev.end),end=addY(start,VIMY[lord]);
-    mahas.push({lord,start,end,fullStart:new Date(start),fullYears:VIMY[lord],partial:false});
-    if(start.getFullYear()>2080)break;
+    const start=prev.end,end=addY(start,VIMY[lord]);
+    mahas.push({lord,start,end,fullStart:start,fullYears:VIMY[lord]});
+    if(new Date(start).getFullYear()>2080)break;
   }
   for(const md of mahas){
-    md.antars=[];let ac=new Date(md.fullStart);
+    md.antars=[];let ac=md.fullStart;
     const si=DASHA_SEQ_K.indexOf(md.lord);
     for(let i=0;i<9;i++){
       const al=DASHA_SEQ_K[(si+i)%9],ay=md.fullYears*VIMY[al]/120,ae=addY(ac,ay);
-      md.antars.push({lord:al,start:new Date(ac),end:new Date(ae)});ac=new Date(ae);
+      md.antars.push({lord:al,start:ac,end:ae});ac=ae;
     }
   }
   return{mahas};
@@ -2064,7 +2070,7 @@ function computeVimDashas(mo,birthDateStr){
     const avPos={La};
     for(const k of["Su","Mo","Ma","Me","Ju","Ve","Sa"])if(c.planets[k])avPos[k]=c.planets[k].sign;
     const sav=computeSAV(avPos);
-    const fD=d=>{if(!d||isNaN(d.getTime()))return"?";return MONTHS[d.getMonth()]+" "+d.getFullYear();};
+    const fD=ts=>{if(!ts)return"?";const d=new Date(ts);return MONTHS[d.getMonth()]+" "+d.getFullYear();};
     const ll=SIGN_LORD[La],llP=c.planets[ll];
     const llH=llP?houseFromSigns(La,llP.sign):null,llDig=llP?dignityOf(ll,llP.sign):null;
     const moP=c.planets.Mo,moH=moP?houseFromSigns(La,moP.sign):null;
@@ -2094,7 +2100,7 @@ function computeVimDashas(mo,birthDateStr){
     // Dasha section
     let dSec="";
     if(dashas){
-      const today=new Date(),r0=new Date("2025-01-01"),r1=new Date("2030-07-01");
+      const today=Date.now(),r0=new Date("2025-01-01").getTime(),r1=new Date("2030-07-01").getTime();
       const mhs=dashas.mahas.filter(md=>md.end>=r0&&md.start<=r1);
       for(const md of mhs){
         const mdP=c.planets[md.lord],mdH=mdP?houseFromSigns(La,mdP.sign):null;
@@ -2102,7 +2108,7 @@ function computeVimDashas(mo,birthDateStr){
         const mdL=[];for(let hh=1;hh<=12;hh++){if(SIGN_LORD[(La+hh-1)%12]===md.lord)mdL.push(`H${hh}`);}
         const mdConn=goal.houses.some(h=>mdL.includes(`H${h}`)||mdH===h);
         dSec+=`Mahadasha: ${GBYK[md.lord].name} (${fD(md.start)} — ${fD(md.end)})\n`;
-        dSec+=`  ${GBYK[md.lord].name}: ${mdP?`H${mdH} (${SIGNS[mdP.sign]}) · ${mdDig.full}`:  "unknown"} · lords ${mdL.join(",")||"Ra/Ke — no sign lordship"}${mdConn?" · ★ CONNECTED TO GOAL HOUSES":""}\n\n`;
+        dSec+=`  ${GBYK[md.lord].name}: ${mdP?`H${mdH} (${SIGNS[mdP.sign]}) · ${mdDig.full}`:"unknown"} · lords ${mdL.join(",")||"Ra/Ke — no sign lordship"}${mdConn?" · ★ CONNECTED TO GOAL HOUSES":""}\n\n`;
         dSec+=`  Antardashas in 2025–2030:\n`;
         for(const ad of md.antars.filter(a=>a.end>=r0&&a.start<=r1)){
           const adP=c.planets[ad.lord],adH=adP?houseFromSigns(La,adP.sign):null;
@@ -2111,7 +2117,7 @@ function computeVimDashas(mo,birthDateStr){
           const adConn=goal.houses.some(h=>adL.includes(`H${h}`)||adH===h);
           const cur=ad.start<=today&&ad.end>=today?" ◀ NOW":"";
           dSec+=`  ${GBYK[md.lord].name}/${GBYK[ad.lord].name}: ${fD(ad.start)} — ${fD(ad.end)}${cur}\n`;
-          dSec+=`    ${GBYK[ad.lord].name}: ${adP?`H${adH} (${SIGNS[adP.sign]}) · ${adDig.full}`:  "unknown"} · lords ${adL.join(",")||"none"}${adConn?" · ★ goal house connection":""}\n`;
+          dSec+=`    ${GBYK[ad.lord].name}: ${adP?`H${adH} (${SIGNS[adP.sign]}) · ${adDig.full}`:"unknown"} · lords ${adL.join(",")||"none"}${adConn?" · ★ goal house connection":""}\n`;
         }
         dSec+="\n";
       }
@@ -2137,12 +2143,11 @@ function computeVimDashas(mo,birthDateStr){
       addNakLine(`H${h} lord ${lp?GBYK[SIGN_LORD[(La+h-1)%12]].name:"?"}`,lp,true);
     }
     if(dashas){
-      const today=new Date();
+      const now=Date.now();
       for(const md of dashas.mahas){
         for(const ad of md.antars){
-          if(ad.start<=today&&ad.end>=today){
-            const adP2=c.planets[ad.lord];
-            addNakLine(`Current antardasha lord ${GBYK[ad.lord].name}`,adP2,true);
+          if(ad.start<=now&&ad.end>=now){
+            addNakLine(`Current antardasha lord ${GBYK[ad.lord].name}`,c.planets[ad.lord],true);
             break;
           }
         }
@@ -2233,7 +2238,7 @@ Reference actual planets, house numbers, and BPHS principles throughout.`;
     const charts=getCharts(),c=charts[chartIdx];
     if(!c)return;
     const goal=GOALS[goalIdx],La=c.La.sign;
-    const dashas=c.planets&&c.planets.Mo&&c.birthDate?computeVimDashas(c.planets.Mo,c.birthDate):null;
+    const dashas=c.dashas||null;
     const years=[2025,2026,2027,2028,2029];
     const results=years.map(y=>analyzeYear(c,La,goal,y));
     const best=results.reduce((a,b)=>b.score>a.score?b:a);
@@ -2283,6 +2288,7 @@ Reference actual planets, house numbers, and BPHS principles throughout.`;
   }
 
   const selChart=document.getElementById("olChart"),selGoal=document.getElementById("olGoal");
+  const bdInput=document.getElementById("olBirthDate"),bdWrap=document.getElementById("olBdWrap");
   GOALS.forEach((g,i)=>{const o=document.createElement("option");o.value=i;o.textContent=g.label;selGoal.appendChild(o);});
 
   function refreshCharts(){
@@ -2292,11 +2298,33 @@ Reference actual planets, house numbers, and BPHS principles throughout.`;
       :`<option value="">No charts saved yet</option>`;
     if(charts.find((_,i)=>String(i)===prev))selChart.value=prev;
   }
+  function updateBdInput(){
+    const ci=parseInt(selChart.value);
+    const charts=getCharts();
+    if(!isNaN(ci)&&ci>=0&&charts[ci]){
+      bdWrap.style.display="block";
+      bdInput.value=charts[ci].birthDate||"";
+      bdInput.placeholder=charts[ci].birthDate?"":"e.g. May 1, 1988";
+    } else {
+      bdWrap.style.display="none";
+    }
+  }
   function tryRender(){
+    updateBdInput();
     const ci=parseInt(selChart.value),gi=parseInt(selGoal.value);
     if(!isNaN(ci)&&ci>=0&&!isNaN(gi)&&gi>=0)renderOutlook(ci,gi);
     else{document.getElementById("olResult").style.display="none";document.getElementById("olEmpty").style.display="block";}
   }
+  bdInput.addEventListener("change",()=>{
+    const ci=parseInt(selChart.value);
+    const charts=getCharts();
+    if(isNaN(ci)||ci<0||!charts[ci])return;
+    const bd=bdInput.value.trim()||null;
+    charts[ci].birthDate=bd;
+    charts[ci].dashas=bd&&charts[ci].planets&&charts[ci].planets.Mo?computeVimDashas(charts[ci].planets.Mo,bd):null;
+    localStorage.setItem(LS_KEY,JSON.stringify(charts));
+    tryRender();
+  });
   selChart.onchange=tryRender;selGoal.onchange=tryRender;
   // Chain onto existing chart-change callback
   const _prev=JA.onChartsChange;
