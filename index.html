@@ -1208,6 +1208,7 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
     }
     const dl=lines.find(l=>l.trim().startsWith("Date:"));
     if(dl){const dm=dl.match(/Date:\s+(.+)/);if(dm)out.birthDate=dm[1].trim();}
+    out.dashas=parseVimsottariDasa(lines)||null;
     return out;
   }
   function load(){ try{return JSON.parse(localStorage.getItem(LS))||[]}catch(e){return[]} }
@@ -1375,7 +1376,8 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
     const parsed=parse(textEl.value); const np=Object.keys(parsed.planets).length;
     if(!parsed.La||np<7){msg.style.color="var(--debil)";msg.textContent=`Couldn't read it — found Lagna:${parsed.La?"yes":"no"}, planets:${np}/9. Make sure you pasted the longitude table (Lagna, Sun…Ketu with sign & degree).`;return;}
     const bd=parsed.birthDate||null;
-    charts.push({name:(nameEl.value.trim()||`Chart ${charts.length+1}`),La:parsed.La,planets:parsed.planets,birthDate:bd,dashas:bd&&parsed.planets.Mo?computeVimDashas(parsed.planets.Mo,bd):null});
+    const dashas=parsed.dashas||(bd&&parsed.planets.Mo?computeVimDashas(parsed.planets.Mo,bd):null);
+    charts.push({name:(nameEl.value.trim()||`Chart ${charts.length+1}`),La:parsed.La,planets:parsed.planets,birthDate:bd,dashas});
     active=charts.length-1; save(charts); closeModal(); draw(); JA.onChartsChange&&JA.onChartsChange();
   };
   draw();
@@ -1861,7 +1863,52 @@ function renderSpecialLagnas(c,La,sav){
   refreshChartSel();
 })();
 
-/* ===== VIMSHOTTARI DASHA CALCULATOR ===== */
+/* ===== VIMSHOTTARI DASHA — parse from JHora export ===== */
+// Reads the "Vimsottari Dasa ():" section that JHora exports.
+// JHora gives only START dates; end of period N = start of period N+1.
+function parseVimsottariDasa(lines){
+  const JM={Ket:'Ke',Ven:'Ve',Sun:'Su',Moon:'Mo',Mars:'Ma',Rah:'Ra',Jup:'Ju',Sat:'Sa',Merc:'Me'};
+  const LP='(Ket|Ven|Sun|Moon|Mars|Rah|Jup|Sat|Merc)';
+  const newMaRe=new RegExp('^'+LP+'\\b');          // maha line: lord at col-0
+  const pairRe=new RegExp('\\b'+LP+'\\s+(\\d{4}-\\d{2}-\\d{2})','g');
+
+  const si=lines.findIndex(l=>/Vimsottari Dasa/.test(l));
+  if(si<0)return null;
+
+  const mahas=[];let cur=null;
+  for(let i=si+1;i<lines.length;i++){
+    const line=lines[i];
+    if(!line.trim())continue;
+    const mm=line.match(newMaRe);
+    if(mm){
+      if(cur)mahas.push(cur);
+      cur={lord:JM[mm[1]],antars:[]};
+    } else if(!/^\s/.test(line)){
+      break; // non-indented, non-lord line = next section
+    }
+    if(!cur)continue;
+    let m; pairRe.lastIndex=0;
+    while((m=pairRe.exec(line))!==null)
+      cur.antars.push({lord:JM[m[1]],start:new Date(m[2]).getTime()});
+  }
+  if(cur)mahas.push(cur);
+  if(!mahas.length)return null;
+
+  // Derive start/end of each maha and antardasha
+  for(let mi=0;mi<mahas.length;mi++){
+    const md=mahas[mi];
+    if(!md.antars.length)continue;
+    md.start=md.antars[0].start;
+    const nextMahaStart=mi<mahas.length-1?mahas[mi+1].antars[0].start:null;
+    for(let ai=0;ai<md.antars.length;ai++)
+      md.antars[ai].end=ai<md.antars.length-1?md.antars[ai+1].start:nextMahaStart;
+    md.end=nextMahaStart;
+    md.fullYears=VIMY[md.lord];
+  }
+  return{mahas};
+}
+
+/* ===== VIMSHOTTARI DASHA CALCULATOR (formula fallback) ===== */
 // Dates stored as ms timestamps (numbers) so the result serialises cleanly to localStorage.
 function computeVimDashas(mo,birthDateStr){
   if(!mo||!birthDateStr)return null;
