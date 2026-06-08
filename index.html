@@ -279,6 +279,33 @@
   .sl-ival span{color:var(--muted)}
   .sl-ival b{color:var(--gold2)}
   @media(max-width:600px){.sl-grid{grid-template-columns:1fr}}
+  /* === life outlook === */
+  .ol-controls{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+  .ol-houses{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:6px}
+  .ol-htag{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:4px 11px;font-size:12.5px;font-weight:700;color:var(--gold2)}
+  .ol-htag span{font-weight:400;color:var(--muted);margin-left:4px;font-size:12px}
+  .ol-vk-note{font-size:12px;color:var(--muted);margin-bottom:14px}
+  .ol-best-banner{background:linear-gradient(90deg,#1e3324,#182a1e);border:1px solid #3a7a4a;border-radius:10px;padding:11px 16px;margin-bottom:16px;font-size:13.5px;color:#c8f0d0}
+  .ol-years{display:flex;flex-direction:column;gap:10px}
+  .ol-year-card{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:15px 18px}
+  .ol-year-card.ol-good{border-color:#2d5e38;background:linear-gradient(135deg,#1a2e1f 0%,var(--panel2) 60%)}
+  .ol-year-card.ol-weak{border-color:#5a2a22;background:linear-gradient(135deg,#2a1918 0%,var(--panel2) 60%)}
+  .ol-yhead{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+  .ol-yn{font-size:22px;font-weight:800;color:var(--gold2);min-width:54px}
+  .ol-ybadge{font-size:11.5px;font-weight:700;padding:3px 11px;border-radius:999px;background:var(--panel);border:1px solid var(--line)}
+  .ol-year-card.ol-good .ol-ybadge{background:#1d3a20;color:var(--exalt);border-color:transparent}
+  .ol-year-card.ol-weak .ol-ybadge{background:#2d1a1a;color:var(--debil);border-color:transparent}
+  .ol-yt{font-size:12px;color:var(--muted);margin-left:auto}
+  .ol-sati{font-size:11px;padding:2px 8px;border-radius:999px;background:#2d1a1a;color:var(--debil);font-weight:600;white-space:nowrap}
+  .ol-msg{font-size:13px;color:#dfe4f6;line-height:1.62;margin-bottom:6px}
+  .ol-msg b{color:var(--fg)}
+  .ol-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .ol-pill{font-size:11.5px;padding:3px 10px;border-radius:999px;font-weight:600}
+  .ol-pill-pos{background:#1d3a20;color:var(--exalt)}
+  .ol-pill-neg{background:#2d1a1a;color:var(--debil)}
+  .ol-pill-neu{background:var(--panel);color:var(--muted);border:1px solid var(--line)}
+  .ol-foot{margin-top:16px;padding:13px 16px;font-size:13px;color:var(--muted);background:var(--panel);border-radius:10px;border:1px solid var(--line)}
+  @media(max-width:600px){.ol-controls{flex-direction:column}.ol-yt{margin-left:0}}
 </style>
 </head>
 <body>
@@ -292,6 +319,7 @@
     <a href="#synth">Synthesizer</a>
     <a href="#charts">My Charts</a>
     <a href="#bbavam">Bhavat Bhavam</a>
+    <a href="#outlook">Life Outlook</a>
     <a href="#quiz">Practice</a>
   </nav>
 </header>
@@ -480,6 +508,26 @@
         <div class="bb-cards" id="bbCards"></div>
         <div class="bb-reading"><div id="bbReadingText"></div></div>
       </div>
+    </div>
+  </section>
+
+  <section id="outlook">
+    <div class="eyebrow">Life outlook · 2025 – 2029</div>
+    <h2>When is the right time?</h2>
+    <p class="sub">Jupiter and Saturn move slowly — roughly one sign per year and 2.5 years respectively. Where they land against your natal houses, crossed with SAV, reveals your strongest windows for each goal.</p>
+    <div class="panel" style="padding:22px">
+      <div class="ol-controls">
+        <div class="bb-sel-grp">
+          <label>Chart</label>
+          <select id="olChart" class="bb-sel"><option value="">No charts yet</option></select>
+        </div>
+        <div class="bb-sel-grp">
+          <label>I want to plan for…</label>
+          <select id="olGoal" class="bb-sel"><option value="">Select a goal…</option></select>
+        </div>
+      </div>
+      <div id="olEmpty" style="text-align:center;color:var(--muted);padding:28px 0;font-size:13.5px">Select a chart and a goal to see your 2025–2029 window analysis.</div>
+      <div id="olResult" style="display:none"></div>
     </div>
   </section>
 
@@ -1792,6 +1840,228 @@ function renderSpecialLagnas(c,La,sav){
   selTopic.addEventListener("change",runQuery);
   JA.onChartsChange=refreshChartSel;
   refreshChartSel();
+})();
+
+/* ===== LIFE OUTLOOK ===== */
+(function(){
+  const LS_KEY="jyotish_charts_v1";
+  function getCharts(){try{return JSON.parse(localStorage.getItem(LS_KEY))||[];}catch(e){return[];}}
+
+  const GOALS=[
+    {id:"career",   label:"Career change / promotion",    houses:[10,6,2],  vn:"D-10 Dasamsha",
+     hd:{10:"profession & authority",6:"job change & service",2:"income & status"}},
+    {id:"wealth",   label:"Wealth / income growth",        houses:[2,11,5],  vn:"D-2 Hora",
+     hd:{2:"savings & wealth",11:"income & gains",5:"investments"}},
+    {id:"property", label:"Property / home purchase",     houses:[4,12,11], vn:"D-4 Chaturthamsha",
+     hd:{4:"home & fixed assets",12:"large expenditure",11:"acquisition"}},
+    {id:"vehicle",  label:"Vehicle / comforts",           houses:[4,11],    vn:"D-16 Shodashamsha",
+     hd:{4:"vehicles & comforts",11:"purchase timing"}},
+    {id:"marriage", label:"Marriage / relationship",       houses:[7,2,11],  vn:"D-9 Navamsha",
+     hd:{7:"spouse & partnership",2:"family formation",11:"desire fulfilment"}},
+    {id:"child",    label:"Child / fertility",             houses:[5,9],     vn:"D-7 Saptamsha",
+     hd:{5:"children & progeny",9:"second child / fortune"}},
+    {id:"business", label:"Business / entrepreneurship",   houses:[7,10,11], vn:"D-10 Dasamsha",
+     hd:{7:"partnerships & clients",10:"brand & authority",11:"profit & network"}},
+    {id:"health",   label:"Health / recovery",             houses:[1,6,8],   vn:null,
+     hd:{1:"vitality & body",6:"illness & recovery",8:"chronic deep issues"}},
+  ];
+
+  // Sidereal (Lahiri) transit segments: [year, month(1-12), sign(0=Ar..11=Pi)]
+  const TR={
+    Ju:[[2024,5,1],[2025,5,2],[2026,6,3],[2027,7,4],[2028,8,5],[2030,1,6]],
+    //    Taurus     Gemini   Cancer(ex)  Leo         Virgo
+    Sa:[[2023,1,10],[2025,3,11],[2027,6,0],[2030,1,1]],
+    //   Aquarius    Pisces     Aries
+    Ra:[[2023,10,11],[2025,5,10],[2026,11,9],[2028,5,8],[2030,1,7]]
+    //   Pisces      Aquarius   Capricorn  Sagittarius
+  };
+  function trSign(p,y,m){
+    const s=TR[p]; let sg=s[0][2];
+    for(const[sy,sm,ss]of s){if(y>sy||(y===sy&&m>=sm))sg=ss; else break;}
+    return sg;
+  }
+  function trChangeInYear(p,y){
+    const jan=trSign(p,y,1),dec=trSign(p,y,12);
+    if(jan===dec)return null;
+    for(let m=2;m<=12;m++){if(trSign(p,y,m)!==jan)return{from:jan,to:dec,mon:m};}
+    return null;
+  }
+
+  function juAsp(h){return new Set([h,((h-1+4)%12)+1,((h-1+6)%12)+1,((h-1+8)%12)+1]);}
+  function saAsp(h){return new Set([h,((h-1+2)%12)+1,((h-1+6)%12)+1,((h-1+9)%12)+1]);}
+
+  // Concise activation text per planet × goal × house
+  const ACT={
+    Ju:{
+      career:  {10:"Career authority and visibility expand — the strongest transit for promotion and recognition.",
+                6: "Job market opens and work conditions improve — a role change or new position is backed.",
+                2: "Income rises directly — salary negotiation and financial reward from your profession."},
+      wealth:  {2: "The wealth house is activated — savings, bank balance, and earned income expand.",
+                11:"The gains house is lit — network income, dividends, and financial desires are fulfilled.",
+                5: "Investment returns and creative financial ventures are transit-supported."},
+      property:{4: "Fixed assets and home expand — property purchase, land, or renovation is directly backed.",
+                12:"Large settlement expenditure flows — finalizing a property deal requiring major outflow is supported.",
+                11:"Gains provide the financial capacity to acquire — income and network enable the purchase."},
+      vehicle: {4: "The vehicle and comfort house is activated — a new vehicle or domestic upgrade is transit-backed.",
+                11:"Income gains enable the purchase — acquisition timing is supported."},
+      marriage:{7: "The classic marriage transit — partnerships form, bonds deepen, and commitments are made.",
+                2: "Family formation and financial stability for partnership are supported.",
+                11:"Social networks bring the right connections — desires are fulfilled."},
+      child:   {5: "The primary fertility transit — conception, birth, or adoption is most directly backed.",
+                9: "Fortune of children and second-child matters are favored — H9 = H5 from H5."},
+      business:{7: "Business partnerships and client relationships expand — sign contracts and launch co-ventures.",
+                10:"Brand visibility, authority, and public recognition grow for the business.",
+                11:"Profit and network multiply — revenue and high-value connections increase."},
+      health:  {1: "Vitality and constitution are strengthened — immunity and energy are enhanced.",
+                6: "Healing and recovery are transit-supported — address existing conditions now.",
+                8: "Chronic and deep issues can be resolved — transformative healing is available."},
+    },
+    Sa:{
+      career:  {10:"Career is restructured under pressure — authority earned the hard way becomes permanent.",
+                6: "Work environment is disciplined — competence must be demonstrated; patience precedes recognition.",
+                2: "Income requires strategic effort — what is earned now is kept."},
+      wealth:  {2: "Wealth requires discipline — build foundations carefully; avoid speculation.",
+                11:"Gains through sustained effort — systematic, compounding income growth; no windfalls.",
+                5: "Conservative investing is safer — avoid speculative risk this period."},
+      property:{4: "Property decisions are permanent — what you buy or build now is a long-term commitment.",
+                12:"Controlled large expenditure — overspending on property is a real risk.",
+                11:"Acquisition through disciplined financing is manageable — loans and structured payment work."},
+      vehicle: {4: "Practical vehicle purchase is supported — function and reliability over luxury.",
+                11:"Finance-based acquisition is manageable with disciplined planning."},
+      marriage:{7: "Relationships are tested and karmic — what survives endures; patience is required.",
+                2: "Pragmatic family responsibility — manage finances and expectations for commitment.",
+                11:"Depth and loyalty over quick romance — long-term, friendship-rooted love is likely."},
+      child:   {5: "Conception may require patience and support — delays are common but not permanent.",
+                9: "Long-term planning and responsibility around children's education and fortune."},
+      business:{7: "Only robust partnerships survive Saturn's gaze — commit only to what is long-term.",
+                10:"Business authority earned through grind — slow recognition leads to permanent brand equity.",
+                11:"Steady compounding revenue — systematic client acquisition; no sudden windfalls."},
+      health:  {1: "Bones, joints, and chronic conditions demand attention — preventive care now prevents larger issues.",
+                6: "Recurring conditions need consistent management — slow recovery; medical vigilance is key.",
+                8: "Long-standing health issues resurface for resolution — seek early medical attention."},
+    }
+  };
+
+  function actMsg(planet,goalId,house,how,savQ,juExalt){
+    const inH=how==="in";
+    const gl=planet==="Ju"?"♃ Jupiter":"♄ Saturn";
+    const pos=inH?`<b>${gl} in H${house}</b>`:`<b>${gl} aspecting H${house}</b> <span style="color:var(--muted)">(from H${how.replace("aspecting from H","")})</span>`;
+    const base=(ACT[planet]?.[goalId]?.[house])||`${gl} activates H${house}.`;
+    const ex=juExalt&&planet==="Ju"?" <span style='color:var(--gold2)'>★ exalted — maximum energy</span>":"";
+    const sv=savQ==="strong"?` <span style='color:var(--exalt)'>SAV strong — fully backed.</span>`:savQ==="moderate"?` <span style='color:var(--muted)'>SAV moderate — partial backing.</span>`:` <span style='color:var(--debil)'>SAV weak — signal muted.</span>`;
+    return `${pos}${ex} — ${base}${sv}`;
+  }
+
+  function analyzeYear(c,La,goal,year){
+    const juS=trSign("Ju",year,7),saS=trSign("Sa",year,7),raS=trSign("Ra",year,7);
+    const juH=houseFromSigns(La,juS),saH=houseFromSigns(La,saS),raH=houseFromSigns(La,raS);
+    const moSign=c.planets.Mo?.sign;
+    const juMo=moSign!==undefined?houseFromSigns(moSign,juS):null;
+    const saMo=moSign!==undefined?houseFromSigns(moSign,saS):null;
+    const avPos={La};
+    for(const k of["Su","Mo","Ma","Me","Ju","Ve","Sa"])if(c.planets[k])avPos[k]=c.planets[k].sign;
+    const sav=computeSAV(avPos);
+    const juExalt=juS===3;
+    const ja=juAsp(juH),sa=saAsp(saH);
+    const acts=[],msgs=[];
+    let score=0;
+
+    for(const h of goal.houses){
+      const hSav=sav[(La+h-1)%12];
+      const savQ=hSav>=30?"strong":hSav>=25?"moderate":"weak";
+      if(ja.has(h)){
+        const how=juH===h?"in":`aspecting from H${juH}`;
+        const pts=(hSav>=30?2.5:hSav>=25?1.5:0.7)*(juExalt?1.3:1);
+        score+=pts;
+        acts.push({planet:"Ju",house:h,sav:hSav,savQ,pts,pos:true});
+        msgs.push(actMsg("Ju",goal.id,h,how,savQ,juExalt));
+      }
+      if(sa.has(h)){
+        const how=saH===h?"in":`aspecting from H${saH}`;
+        const favSa=saMo!==null&&[3,6,11].includes(saMo);
+        const pts=(hSav>=30?1.1:hSav>=25?0.7:0.3)*(favSa?1:-0.8);
+        score+=pts;
+        acts.push({planet:"Sa",house:h,sav:hSav,savQ,pts,pos:favSa});
+        msgs.push(actMsg("Sa",goal.id,h,how,savQ,false));
+      }
+    }
+    // Gochara from Moon
+    if(juMo!==null){
+      if([1,2,5,7,9,11].includes(juMo))score+=0.5;
+      else if([3,6,8,12].includes(juMo))score-=0.3;
+    }
+    const sadeSati=saMo!==null&&[12,1,2].includes(saMo);
+    if(sadeSati)score-=1;
+    if(juExalt)score+=0.2;
+    if(msgs.length===0)msgs.push(`<b>Background year</b> — Jupiter (H${juH}) and Saturn (H${saH}) are not directly activating the key houses for this goal. Consolidate existing progress rather than initiating major moves.`);
+
+    const rating=score>=3.5?"Excellent":score>=2?"Strong":score>=0.8?"Moderate":score>=-0.5?"Mixed":"Challenging";
+    const rcls=score>=2?"ol-good":score>=0.8?"":"ol-weak";
+    // Detect sign change mid-year
+    const juChg=trChangeInYear("Ju",year),saChg=trChangeInYear("Sa",year);
+    return{year,juH,saH,raH,juS,saS,juExalt,acts,msgs,sadeSati,saMo,juMo,score,rating,rcls,sav,juChg,saChg};
+  }
+
+  const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  function renderOutlook(chartIdx,goalIdx){
+    const charts=getCharts(),c=charts[chartIdx];
+    if(!c)return;
+    const goal=GOALS[goalIdx],La=c.La.sign;
+    const years=[2025,2026,2027,2028,2029];
+    const results=years.map(y=>analyzeYear(c,La,goal,y));
+    const best=results.reduce((a,b)=>b.score>a.score?b:a);
+
+    const housePills=goal.houses.map(h=>`<span class="ol-htag">H${h}<span>${goal.hd[h]}</span></span>`).join("");
+    let html=`<div class="ol-houses">${housePills}</div>
+    ${goal.vn?`<div class="ol-vk-note">Divisional cross-check: <b>${goal.vn}</b></div>`:""}
+    <div class="ol-best-banner">★ Strongest window: <b>${best.year}</b> (${best.rating})${best.juExalt?" · Jupiter exalted in Cancer":""}</div>
+    <div class="ol-years">`;
+
+    for(const r of results){
+      const juLabel=r.juChg?`H${houseFromSigns(La,r.juChg.from)}→H${r.juH} (${MONTHS[r.juChg.mon-1]})`:`H${r.juH}`;
+      const saLabel=r.saChg?`H${houseFromSigns(La,r.saChg.from)}→H${r.saH} (${MONTHS[r.saChg.mon-1]})`:`H${r.saH}`;
+      const pills=r.acts.map(a=>`<span class="ol-pill ${a.pos?"ol-pill-pos":a.pts>0?"ol-pill-neu":"ol-pill-neg"}">${a.planet==="Ju"?"♃":"♄"} H${a.house} · SAV ${a.sav}</span>`).join("");
+      html+=`<div class="ol-year-card ${r.rcls}">
+        <div class="ol-yhead">
+          <span class="ol-yn">${r.year}</span>
+          <span class="ol-ybadge">${r.rating}</span>
+          <span class="ol-yt">♃ ${juLabel}${r.juExalt?" ★":""} &nbsp;·&nbsp; ♄ ${saLabel}</span>
+          ${r.sadeSati?`<span class="ol-sati">Sade Sati</span>`:""}
+        </div>
+        ${r.msgs.map(m=>`<div class="ol-msg">${m}</div>`).join("")}
+        ${pills?`<div class="ol-pills">${pills}</div>`:""}
+      </div>`;
+    }
+    html+=`</div>`;
+    if(goal.vn){
+      html+=`<div class="ol-foot">Transit windows show <i>when</i> — natal conditions show <i>if</i>. Use the <b>Bhavat Bhavam</b> section above to check the natal house conditions in <b>${goal.vn}</b> and confirm whether the window can actually deliver.</div>`;
+    }
+    document.getElementById("olResult").innerHTML=html;
+    document.getElementById("olResult").style.display="block";
+    document.getElementById("olEmpty").style.display="none";
+  }
+
+  const selChart=document.getElementById("olChart"),selGoal=document.getElementById("olGoal");
+  GOALS.forEach((g,i)=>{const o=document.createElement("option");o.value=i;o.textContent=g.label;selGoal.appendChild(o);});
+
+  function refreshCharts(){
+    const charts=getCharts(),prev=selChart.value;
+    selChart.innerHTML=charts.length
+      ?charts.map((c,i)=>`<option value="${i}">${c.name}</option>`).join("")
+      :`<option value="">No charts saved yet</option>`;
+    if(charts.find((_,i)=>String(i)===prev))selChart.value=prev;
+  }
+  function tryRender(){
+    const ci=parseInt(selChart.value),gi=parseInt(selGoal.value);
+    if(!isNaN(ci)&&ci>=0&&!isNaN(gi)&&gi>=0)renderOutlook(ci,gi);
+    else{document.getElementById("olResult").style.display="none";document.getElementById("olEmpty").style.display="block";}
+  }
+  selChart.onchange=tryRender;selGoal.onchange=tryRender;
+  // Chain onto existing chart-change callback
+  const _prev=JA.onChartsChange;
+  JA.onChartsChange=()=>{_prev&&_prev();refreshCharts();tryRender();};
+  refreshCharts();
 })();
 
 /* ===== QUIZ ===== */
