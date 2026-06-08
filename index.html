@@ -2230,9 +2230,10 @@ Reference actual planets, house numbers, and BPHS principles throughout.`;
       </div>
     </div>`;
     document.getElementById("olResult").innerHTML=html;
-    document.getElementById("olPromptText").value=buildPrompt(c,La,goal,results,dashas);
     document.getElementById("olResult").style.display="block";
     document.getElementById("olEmpty").style.display="none";
+    try{document.getElementById("olPromptText").value=buildPrompt(c,La,goal,results,dashas);}
+    catch(e){console.error("buildPrompt:",e);document.getElementById("olPromptText").value="Error building prompt: "+e.message;}
   }
 
   const selChart=document.getElementById("olChart"),selGoal=document.getElementById("olGoal");
