@@ -306,6 +306,17 @@
   .ol-pill-neu{background:var(--panel);color:var(--muted);border:1px solid var(--line)}
   .ol-foot{margin-top:16px;padding:13px 16px;font-size:13px;color:var(--muted);background:var(--panel);border-radius:10px;border:1px solid var(--line)}
   @media(max-width:600px){.ol-controls{flex-direction:column}.ol-yt{margin-left:0}}
+  .ol-ai-wrap{margin-top:22px;padding:18px 20px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+  .ol-ai-hdr{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+  .ol-ai-hdr b{font-size:14px}
+  .ol-ai-hdr span{font-size:12px;color:var(--muted)}
+  .ol-prompt-ta{width:100%;box-sizing:border-box;height:190px;background:#0d1117;color:#c9d1d9;border:1px solid var(--line);border-radius:9px;padding:11px 13px;font-size:11.5px;font-family:monospace;line-height:1.55;resize:vertical;outline:none}
+  .ol-ai-btns{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;align-items:center}
+  .ol-ai-btn{padding:9px 22px;border-radius:10px;border:none;cursor:pointer;font-size:13px;font-weight:700;letter-spacing:.02em;transition:.15s opacity,.15s transform}
+  .ol-ai-btn:hover{opacity:.88;transform:translateY(-1px)}
+  .ol-ai-btn-cl{background:linear-gradient(135deg,#d97b4f,#b84028);color:#fff}
+  .ol-ai-btn-gm{background:linear-gradient(135deg,#4a90e2,#1a7f50);color:#fff}
+  .ol-ai-note{font-size:11.5px;color:var(--muted);margin-left:4px}
 </style>
 </head>
 <body>
@@ -695,6 +706,7 @@ const NAK=[
 ];
 function nakInfo(lon){const span=40/3;lon=((lon%360)+360)%360;const idx=Math.floor(lon/span);const pada=Math.floor((lon-idx*span)/(span/4))+1;return Object.assign({idx,pada},NAK[idx]);}
 const VIMY={Ke:7,Ve:20,Su:6,Mo:10,Ma:7,Ra:18,Ju:16,Sa:19,Me:17};
+const DASHA_SEQ_K=["Ke","Ve","Su","Mo","Ma","Ra","Ju","Sa","Me"];
 function fmtDeg(d){const s=Math.floor(d/30)%12;const dd=d-Math.floor(d/30)*30;const deg=Math.floor(dd);const min=Math.round((dd-deg)*60);return SIGN3[s]+" "+deg+"°"+(min?(" "+(min<10?"0":"")+min+"'"):"");}
 function openNak(idx){
   const n=NAK[idx],lord=GBYK[n.l],span=40/3,start=idx*span;
@@ -1190,6 +1202,8 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
       const deg=(+m[1])+(+m[3])/60+(m[4]?+m[4]:0)/3600, sign=ABBR[m[2]], retro=/\(R\)/.test(line);
       if(key==="La") out.La={sign,deg}; else out.planets[key]={sign,deg,retro};
     }
+    const dl=lines.find(l=>l.trim().startsWith("Date:"));
+    if(dl){const dm=dl.match(/Date:\s+(.+)/);if(dm)out.birthDate=dm[1].trim();}
     return out;
   }
   function load(){ try{return JSON.parse(localStorage.getItem(LS))||[]}catch(e){return[]} }
@@ -1356,7 +1370,7 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
   document.getElementById("addSave").onclick=()=>{
     const parsed=parse(textEl.value); const np=Object.keys(parsed.planets).length;
     if(!parsed.La||np<7){msg.style.color="var(--debil)";msg.textContent=`Couldn't read it — found Lagna:${parsed.La?"yes":"no"}, planets:${np}/9. Make sure you pasted the longitude table (Lagna, Sun…Ketu with sign & degree).`;return;}
-    charts.push({name:(nameEl.value.trim()||`Chart ${charts.length+1}`),La:parsed.La,planets:parsed.planets});
+    charts.push({name:(nameEl.value.trim()||`Chart ${charts.length+1}`),La:parsed.La,planets:parsed.planets,birthDate:parsed.birthDate||null});
     active=charts.length-1; save(charts); closeModal(); draw(); JA.onChartsChange&&JA.onChartsChange();
   };
   draw();
@@ -1842,6 +1856,37 @@ function renderSpecialLagnas(c,La,sav){
   refreshChartSel();
 })();
 
+/* ===== VIMSHOTTARI DASHA CALCULATOR ===== */
+function computeVimDashas(mo,birthDateStr){
+  if(!mo||!birthDateStr)return null;
+  const bd=new Date(birthDateStr);
+  if(isNaN(bd.getTime()))return null;
+  const lon=mo.sign*30+mo.deg,nakSpan=360/27;
+  const nakIdx=Math.floor(lon/nakSpan),degInNak=lon%nakSpan;
+  const lordIdx0=nakIdx%9,lord0=DASHA_SEQ_K[lordIdx0];
+  const balance=(nakSpan-degInNak)/nakSpan*VIMY[lord0];
+  const MS=365.25*86400000,addY=(d,y)=>new Date(d.getTime()+y*MS);
+  const mahas=[];
+  // First partial maha: birth date is the start; virtual full start allows antardasha computation
+  const fs0=addY(bd,-(VIMY[lord0]-balance));
+  mahas.push({lord:lord0,start:new Date(bd),end:addY(fs0,VIMY[lord0]),fullStart:new Date(fs0),fullYears:VIMY[lord0],partial:true});
+  for(let i=1;i<=9;i++){
+    const prev=mahas[mahas.length-1],lord=DASHA_SEQ_K[(lordIdx0+i)%9];
+    const start=new Date(prev.end),end=addY(start,VIMY[lord]);
+    mahas.push({lord,start,end,fullStart:new Date(start),fullYears:VIMY[lord],partial:false});
+    if(start.getFullYear()>2080)break;
+  }
+  for(const md of mahas){
+    md.antars=[];let ac=new Date(md.fullStart);
+    const si=DASHA_SEQ_K.indexOf(md.lord);
+    for(let i=0;i<9;i++){
+      const al=DASHA_SEQ_K[(si+i)%9],ay=md.fullYears*VIMY[al]/120,ae=addY(ac,ay);
+      md.antars.push({lord:al,start:new Date(ac),end:new Date(ae)});ac=new Date(ae);
+    }
+  }
+  return{mahas};
+}
+
 /* ===== LIFE OUTLOOK ===== */
 (function(){
   const LS_KEY="jyotish_charts_v1";
@@ -2004,10 +2049,145 @@ function renderSpecialLagnas(c,La,sav){
 
   const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
+  JA.olCopyOpen=function(url){
+    const txt=document.getElementById("olPromptText").value;
+    const go=()=>window.open(url,"_blank");
+    if(navigator.clipboard){navigator.clipboard.writeText(txt).then(go).catch(go);}
+    else{
+      const ta=document.createElement("textarea");ta.value=txt;ta.style.cssText="position:fixed;opacity:0";
+      document.body.appendChild(ta);ta.select();try{document.execCommand("copy");}catch(e){}
+      document.body.removeChild(ta);go();
+    }
+  };
+
+  function buildPrompt(c,La,goal,results,dashas){
+    const avPos={La};
+    for(const k of["Su","Mo","Ma","Me","Ju","Ve","Sa"])if(c.planets[k])avPos[k]=c.planets[k].sign;
+    const sav=computeSAV(avPos);
+    const fD=d=>{if(!d||isNaN(d.getTime()))return"?";return MONTHS[d.getMonth()]+" "+d.getFullYear();};
+    const ll=SIGN_LORD[La],llP=c.planets[ll];
+    const llH=llP?houseFromSigns(La,llP.sign):null,llDig=llP?dignityOf(ll,llP.sign):null;
+    const moP=c.planets.Mo,moH=moP?houseFromSigns(La,moP.sign):null;
+    const moNak=moP?nakInfo(moP.sign*30+moP.deg):null;
+    // Natal house conditions
+    let hSec="";
+    for(const h of goal.houses){
+      const hs=(La+h-1)%12,lord=SIGN_LORD[hs],lp=c.planets[lord];
+      const lH=lp?houseFromSigns(La,lp.sign):null,lDig=lp?dignityOf(lord,lp.sign):null;
+      const inH=Object.entries(c.planets).filter(([k,p])=>houseFromSigns(La,p.sign)===h)
+        .map(([k,p])=>`${GBYK[k].name}${p.retro?" (R)":""} [${dignityOf(k,p.sign).full.split("·")[0].trim()}]`);
+      let combNote="";
+      const sunP=c.planets.Su;
+      if(lp&&sunP&&lord!=="Su"&&lord!=="Mo"&&lord!=="Ra"&&lord!=="Ke"){
+        const diff=Math.abs(lp.sign*30+lp.deg-(sunP.sign*30+sunP.deg));
+        const orb=Math.min(diff,360-diff);
+        const CO={Ma:17,Me:14,Ju:11,Ve:10,Sa:15};
+        if(CO[lord]&&orb<=CO[lord])combNote=` · COMBUST (${orb.toFixed(0)}° from Sun)`;
+      }
+      const lordsOf=[];for(let hh=1;hh<=12;hh++){if(SIGN_LORD[(La+hh-1)%12]===lord)lordsOf.push(`H${hh}`);}
+      hSec+=`H${h} — ${goal.hd[h]} (${SIGNS[hs]})\n`;
+      hSec+=`  Lord: ${GBYK[lord].name} · ${lp?`H${lH} (${SIGNS[lp.sign]}) · ${lDig.full}${combNote}${lp.retro?" · Retrograde":""}`:  "unknown"}\n`;
+      hSec+=`  ${GBYK[lord].name} lords: ${lordsOf.join(", ")||"none"} in this chart\n`;
+      hSec+=`  SAV: ${sav[hs]}/48 (${sav[hs]>=30?"strong":sav[hs]>=25?"average":"weak"})\n`;
+      hSec+=`  In house: ${inH.length?inH.join(", "):"none"}\n\n`;
+    }
+    // Dasha section
+    let dSec="";
+    if(dashas){
+      const today=new Date(),r0=new Date("2025-01-01"),r1=new Date("2030-07-01");
+      const mhs=dashas.mahas.filter(md=>md.end>=r0&&md.start<=r1);
+      for(const md of mhs){
+        const mdP=c.planets[md.lord],mdH=mdP?houseFromSigns(La,mdP.sign):null;
+        const mdDig=mdP?dignityOf(md.lord,mdP.sign):null;
+        const mdL=[];for(let hh=1;hh<=12;hh++){if(SIGN_LORD[(La+hh-1)%12]===md.lord)mdL.push(`H${hh}`);}
+        const mdConn=goal.houses.some(h=>mdL.includes(`H${h}`)||mdH===h);
+        dSec+=`Mahadasha: ${GBYK[md.lord].name} (${fD(md.start)} — ${fD(md.end)})\n`;
+        dSec+=`  ${GBYK[md.lord].name}: ${mdP?`H${mdH} (${SIGNS[mdP.sign]}) · ${mdDig.full}`:  "unknown"} · lords ${mdL.join(",")||"Ra/Ke — no sign lordship"}${mdConn?" · ★ CONNECTED TO GOAL HOUSES":""}\n\n`;
+        dSec+=`  Antardashas in 2025–2030:\n`;
+        for(const ad of md.antars.filter(a=>a.end>=r0&&a.start<=r1)){
+          const adP=c.planets[ad.lord],adH=adP?houseFromSigns(La,adP.sign):null;
+          const adDig=adP?dignityOf(ad.lord,adP.sign):null;
+          const adL=[];for(let hh=1;hh<=12;hh++){if(SIGN_LORD[(La+hh-1)%12]===ad.lord)adL.push(`H${hh}`);}
+          const adConn=goal.houses.some(h=>adL.includes(`H${h}`)||adH===h);
+          const cur=ad.start<=today&&ad.end>=today?" ◀ NOW":"";
+          dSec+=`  ${GBYK[md.lord].name}/${GBYK[ad.lord].name}: ${fD(ad.start)} — ${fD(ad.end)}${cur}\n`;
+          dSec+=`    ${GBYK[ad.lord].name}: ${adP?`H${adH} (${SIGNS[adP.sign]}) · ${adDig.full}`:  "unknown"} · lords ${adL.join(",")||"none"}${adConn?" · ★ goal house connection":""}\n`;
+        }
+        dSec+="\n";
+      }
+    } else {
+      dSec="Birth date not in chart file — add 'Date: Month D, YYYY' to your JHora export to enable dasha timing.\n";
+    }
+    // Transit section
+    let trSec="";
+    for(const r of results){
+      const juSav=r.sav[(La+r.juH-1)%12],saSav=r.sav[(La+r.saH-1)%12];
+      const juConn=goal.houses.some(h=>juAsp(r.juH).has(h)),saConn=goal.houses.some(h=>saAsp(r.saH).has(h));
+      const jNote=r.juChg?` (→H${houseFromSigns(La,r.juChg.to)} from ${MONTHS[r.juChg.mon-1]})`:"";
+      const sNote=r.saChg?` (→H${houseFromSigns(La,r.saChg.to)} from ${MONTHS[r.saChg.mon-1]})`:"";
+      trSec+=`${r.year}: Jupiter H${r.juH}${r.juExalt?" [EXALTED-Cancer]":""}${jNote} · SAV ${juSav}${juConn?" · activates goal house":""}\n`;
+      trSec+=`       Saturn  H${r.saH}${r.sadeSati?" [SADE SATI]":""}${sNote} · SAV ${saSav}${saConn?" · activates goal house":""}\n`;
+    }
+    return `You are an expert Vedic astrologer trained in Parashara's Brihat Parashara Hora Shastra (BPHS). Analyse the chart below for the stated goal. Give a specific, honest timing forecast for 2025–2030. Reference actual planet names, house numbers, and BPHS principles. Do not give generic advice.
+
+=======================================
+BIRTH DATA
+=======================================
+Chart: ${c.name}
+${c.birthDate?"Born: "+c.birthDate:"(Birth date not in file — add Date: Month D, YYYY for dasha timing)"}
+Lagna: ${SIGNS[La]} · Lord ${GBYK[ll].name}${llP?` in H${llH} (${SIGNS[llP.sign]}) · ${llDig.full}`:" — unknown"}
+Moon: ${moP?`H${moH} (${SIGNS[moP.sign]}) · ${moNak.n} nakshatra`:"unknown"}
+
+=======================================
+GOAL: ${goal.label.toUpperCase()}
+Key houses: ${goal.houses.map(h=>`H${h} = ${goal.hd[h]}`).join(" · ")}${goal.vn?" | Divisional: "+goal.vn:""}
+=======================================
+
+NATAL HOUSE CONDITIONS
+---------------------------------------
+${hSec}=======================================
+VIMSHOTTARI DASHA — 2025 to 2030
+=======================================
+${dSec}=======================================
+JUPITER & SATURN TRANSITS (sidereal / Lahiri)
+=======================================
+${trSec}
+=======================================
+ANALYSIS — please address each section:
+=======================================
+
+1. NATAL FOUNDATION
+   Is this chart structurally set up to deliver ${goal.label.toLowerCase()}?
+   Evaluate the relevant house lords — dignity, placement, SAV, any classical yogas.
+   Note any debilitation, combustion, or weak SAV that may permanently obstruct the goal.
+
+2. DASHA ACTIVATION
+   Which mahadasha / antardasha periods in 2025–2030 activate the goal houses
+   (via lordship, placement, or aspect)?
+   Starred items (★) show where the dasha lord also lords a goal house — double-activation = strongest signal.
+   Which periods are obstructive, and why?
+
+3. TRANSIT x DASHA COMBINATIONS
+   Cross-reference the dasha sequence with Jupiter/Saturn transits.
+   Which years have BOTH a supportive dasha AND a transit directly activating a goal house?
+   These double or triple activations are the most reliable timing windows in Jyotish.
+
+4. VERDICT
+   Name the 1–2 strongest 12–18 month windows (year + dasha + transit) with clear reasoning.
+   Name any years where the person should consolidate rather than initiate.
+
+5. WATCH LIST
+   What specific planetary condition or dasha would signal the goal is about to materialise?
+   What would be a warning sign it is being delayed or blocked?
+
+Reference actual planets, house numbers, and BPHS principles throughout.`;
+  }
+
   function renderOutlook(chartIdx,goalIdx){
     const charts=getCharts(),c=charts[chartIdx];
     if(!c)return;
     const goal=GOALS[goalIdx],La=c.La.sign;
+    const dashas=c.planets&&c.planets.Mo&&c.birthDate?computeVimDashas(c.planets.Mo,c.birthDate):null;
     const years=[2025,2026,2027,2028,2029];
     const results=years.map(y=>analyzeYear(c,La,goal,y));
     const best=results.reduce((a,b)=>b.score>a.score?b:a);
@@ -2037,7 +2217,20 @@ function renderSpecialLagnas(c,La,sav){
     if(goal.vn){
       html+=`<div class="ol-foot">Transit windows show <i>when</i> — natal conditions show <i>if</i>. Use the <b>Bhavat Bhavam</b> section above to check the natal house conditions in <b>${goal.vn}</b> and confirm whether the window can actually deliver.</div>`;
     }
+    html+=`<div class="ol-ai-wrap">
+      <div class="ol-ai-hdr">
+        <b>✦ Get a full AI reading</b>
+        <span>This prompt has your complete chart data${dashas?" + dasha timing":""}. Paste it into Claude or Gemini for a synthesised reading.</span>
+      </div>
+      <textarea class="ol-prompt-ta" id="olPromptText" readonly></textarea>
+      <div class="ol-ai-btns">
+        <button class="ol-ai-btn ol-ai-btn-cl" onclick="JA.olCopyOpen('https://claude.ai')">Copy &amp; open Claude.ai →</button>
+        <button class="ol-ai-btn ol-ai-btn-gm" onclick="JA.olCopyOpen('https://gemini.google.com')">Copy &amp; open Gemini →</button>
+        <span class="ol-ai-note">Prompt is copied to clipboard — just paste ⌘V</span>
+      </div>
+    </div>`;
     document.getElementById("olResult").innerHTML=html;
+    document.getElementById("olPromptText").value=buildPrompt(c,La,goal,results,dashas);
     document.getElementById("olResult").style.display="block";
     document.getElementById("olEmpty").style.display="none";
   }
