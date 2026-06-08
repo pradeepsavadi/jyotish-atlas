@@ -494,15 +494,127 @@ function aspectsFromHouse(gk,house){
   const set=new Set([7]); (add[gk]||[]).forEach(a=>set.add(a));
   return [...set].map(d=>((house-1+d-1)%12)+1);
 }
-function combinedVerdict(d1,d9,vg){
-  const s1=d1.score,s9=d9.score; let t,x,col,g;
-  if(s1>=1&&s9>=1){t="Strong & consistent";g="✓";col="var(--exalt)";x="Promises in the Rasi (D-1) and delivers in the Navamsa (D-9) — real substance behind the show.";}
-  else if(s1>=1&&s9<=-1){t="Promises, under-delivers";g="▽";col="var(--debil)";x="Strong outwardly (D-1) but weak underneath (D-9) — can over-promise; results often fade or don't ripen into lasting fruit.";}
-  else if(s1<=-1&&s9>=1){t="Late bloomer · hidden strength";g="↗";col="var(--friend)";x="Struggles on the surface (D-1) but strong inside (D-9) — improves with maturity and effort, classically after marriage. Don't write it off.";}
-  else if(s1<=-1&&s9<=-1){t="Genuinely weak";g="⚠";col="var(--debil)";x="Under-supported in both charts — needs conscious effort, good dasha or remedy to function.";}
-  else {t="Mixed · workable";g="≈";col="var(--neutral)";x="Neither clearly strong nor weak — uneven results that lean on dasha, aspects and effort.";}
-  if(vg){t+=" + Vargottama";g="✦";col="var(--gold)";x="<b>Vargottama</b> (same sign in D-1 &amp; D-9): unusually steady and self-confirming — whatever its dignity, it's locked in. "+x;}
-  return {t,x,col,g};
+const MALEFIC_PLANETS=new Set(["Su","Ma","Sa","Ra","Ke"]);
+function houseType(h){
+  if(!h) return {};
+  return {
+    kendra:[1,4,7,10].includes(h), trikona:[1,5,9].includes(h),
+    dusthana:[6,8,12].includes(h), upachaya:[3,6,10,11].includes(h),
+    maraka:[2,7].includes(h)
+  };
+}
+/* opts = { house, planet, bavScore } — all optional */
+function combinedVerdict(d1,d9,vg,opts={}){
+  const s1=d1.score, s9=d9.score;
+  const gk=opts.planet||null, h=opts.house||null, bav=opts.bavScore!=null?opts.bavScore:null;
+  const ht=houseType(h);
+  const isMal=gk?MALEFIC_PLANETS.has(gk):null;
+
+  /* ── HOUSE LABELS ── */
+  const hLabel=h?`the ${ORD(h)} house`:"this house";
+  const hCatLabel=!ht?"":(ht.kendra&&ht.trikona)?"the 1st (Kendra + Trikona — apex of power and grace)":
+    ht.kendra?"a Kendra (angular pillar — planet gains visibility and worldly agency)":
+    (ht.trikona&&!ht.kendra)?"a Trikona (fortune house — connects to dharma, grace and blessings)":
+    (h===6)?"the 6th (Dusthana + Upachaya — difficult but grows through competition and service)":
+    ht.dusthana?"a Dusthana (6·8·12 — expression constrained; themes of struggle, transformation, loss)":
+    (h===11)?"the 11th (Upachaya — best gains house; all planets benefit here over time)":
+    ht.upachaya?"an Upachaya (3·10·11 — growth house; results build with effort and maturity)":
+    ht.maraka?"a Maraka house (2·7 — neutral strength; watch during maraka dashas)":"a neutral house";
+
+  /* ── TITLE & BADGE ── */
+  let t,g,col;
+  if(vg&&s1>=1.5){t="Vargottama powerhouse";g="✦";col="var(--gold)";}
+  else if(vg&&s1<=-1){t="Vargottama neecha — locked weakness";g="✦";col="var(--debil)";}
+  else if(s1===2&&ht.kendra&&ht.trikona){t="Peak strength · Kendra Trikona";g="✓";col="var(--exalt)";}
+  else if(s1===2&&ht.kendra){t="Exalted in a pillar house";g="✓";col="var(--exalt)";}
+  else if(s1===2&&ht.trikona){t="Exalted · Trikona grace";g="✓";col="var(--exalt)";}
+  else if(s1===2&&ht.dusthana){t="Exalted but constrained";g="≈";col="var(--friend)";}
+  else if(s1===2){t="Exalted — full expression";g="✓";col="var(--exalt)";}
+  else if(s1>=1&&ht.kendra&&ht.trikona){t="Strong · Raja Yoga potential";g="✓";col="var(--exalt)";}
+  else if(s1>=1&&ht.kendra){t="Strong & visible — Kendra";g="✓";col="var(--exalt)";}
+  else if(s1>=1&&ht.trikona){t="Strong & fortunate — Trikona";g="✓";col="var(--exalt)";}
+  else if(s1>=1&&ht.dusthana){t="Strong dignity · difficult stage";g="≈";col="var(--friend)";}
+  else if(s1>=1&&ht.upachaya&&isMal){t="Malefic grows in Upachaya";g="↗";col="var(--exalt)";}
+  else if(s1>=1&&ht.upachaya){t="Strong · grows with effort";g="↗";col="var(--exalt)";}
+  else if(s1>=1){t="Strong dignity";g="✓";col="var(--exalt)";}
+  else if(s1===-2&&ht.dusthana){t="Viparita potential — Neecha in Dusthana";g="↗";col="var(--friend)";}
+  else if(s1===-2&&ht.kendra){t="Neecha in Kendra — check cancellation";g="⚠";col="var(--debil)";}
+  else if(s1===-2&&ht.upachaya&&isMal){t="Neecha · grows in Upachaya";g="≈";col="var(--neutral)";}
+  else if(s1===-2){t="Debilitated — Neecha";g="⚠";col="var(--debil)";}
+  else if(s1===-1&&ht.dusthana){t="Enemy sign · Dusthana — doubly difficult";g="⚠";col="var(--debil)";}
+  else if(s1===-1&&ht.kendra){t="Enemy sign in pillar — strained";g="▽";col="var(--enemy)";}
+  else if(s1===-1&&ht.upachaya&&isMal){t="Enemy sign but grows — Upachaya";g="≈";col="var(--neutral)";}
+  else if(s1===-1){t="Enemy sign — Shatru";g="▽";col="var(--enemy)";}
+  else if(ht.kendra&&ht.trikona){t="Neutral · powerful stage";g="≈";col="var(--neutral)";}
+  else if(ht.kendra){t="Neutral dignity in Kendra";g="≈";col="var(--neutral)";}
+  else if(ht.trikona){t="Neutral dignity in Trikona";g="≈";col="var(--neutral)";}
+  else if(ht.dusthana){t="Neutral dignity · Dusthana";g="▽";col="var(--neutral)";}
+  else if(ht.upachaya&&isMal){t="Malefic Upachaya — grows over time";g="↗";col="var(--friend)";}
+  else{t="Mixed · workable";g="≈";col="var(--neutral)";}
+
+  if(vg&&!t.includes("Vargottama")){t+=" · Vargottama";g="✦";if(s1>=1)col="var(--gold)";}
+
+  /* ── EXPLANATION ── */
+  const ps=[];
+
+  /* Layer 1: D-1 + house */
+  if(hCatLabel){
+    ps.push(`<b>D-1:</b> ${d1.full} in ${hCatLabel}.`);
+  } else {
+    ps.push(`<b>D-1:</b> ${d1.full}.`);
+  }
+
+  /* Special BPHS rules */
+  if(s1===-2&&ht.dusthana)
+    ps.push(`<b>Viparita Raja Yoga seed:</b> a debilitated planet in a Dusthana (especially when it lords that dusthana) can paradoxically generate sudden rise after suffering — most potent when unaspected by strong benefics and activated by its own dasha.`);
+  if(s1===-2&&ht.kendra)
+    ps.push(`<b>Neecha Bhanga check:</b> if the dispositor (lord of the debilitation sign) or the exaltation-sign lord occupies a Kendra from Lagna or Moon, the fall is cancelled and the planet regains power — sometimes more than an ordinary placement would give.`);
+  if(s1===2&&ht.dusthana)
+    ps.push(`Exalted in a Dusthana: the planet has great personal strength, but the house themes (obstacles/transformation/loss) inevitably frame where that energy is spent — powerful, but working through difficult material.`);
+  if(s1>=1&&ht.kendra&&ht.trikona)
+    ps.push(`<b>Raja Yoga potential:</b> Kendra + Trikona is where classical Raja Yogas form — the planet combines worldly power (Kendra) with dharmic fortune (Trikona). When its dasha runs, expect significant elevation in the house's domain.`);
+  if(isMal&&ht.upachaya&&!ht.dusthana)
+    ps.push(`Natural malefics (${gk}) gain in Upachaya houses — they sharpen competitive drive and grow stronger with each test rather than flagging. Over time they out-perform their starting condition.`);
+  if(isMal===false&&h===6)
+    ps.push(`Benefics in the 6th lose some of their benefic quality — the dusthana part pressures them, though the upachaya part means they still improve with effort and service.`);
+
+  /* Layer 2: D-9 delivery */
+  const d9Desc=s9===2?"exalted in D-9 — delivery is fully realised":
+               s9===1.5?"own sign in D-9 — steady, dependable delivery":
+               s9>=1?"friendly sign in D-9 — delivers well":
+               s9<=-2?"debilitated in D-9 — inner substance is weak; the fruit rarely ripens fully":
+               s9<=-1?"enemy sign in D-9 — delivery is strained; results arrive incomplete or with hidden friction":
+               "neutral D-9 — delivery is even, neither amplified nor blocked";
+  if(s1>=1&&s9>=1)
+    ps.push(`<b>D-9 confirms:</b> ${d9Desc} — what is promised in D-1 is delivered; substance matches the surface.`);
+  else if(s1>=1&&s9<=-1)
+    ps.push(`<b>D-9 undermines:</b> ${d9Desc} — strong outwardly but hollow underneath; results tend to fade or over-promise.`);
+  else if(s1<=-1&&s9>=1)
+    ps.push(`<b>D-9 redeems:</b> ${d9Desc} — struggles on the surface but inner strength grows; classically improves after 35 or after marriage.`);
+  else if(s1<=-1&&s9<=-1)
+    ps.push(`<b>D-9 confirms difficulty:</b> ${d9Desc} — both layers are under-supported; needs strong dasha or conscious remediation to function.`);
+  else
+    ps.push(`<b>D-9:</b> ${d9Desc}.`);
+
+  /* Layer 3: BAV */
+  if(bav!==null){
+    const bDesc=bav>=6?`very strong (${bav}/8) — excellent support; transits through this house are productive`:
+                bav===5?`strong (5/8) — good support; transits activate positive themes`:
+                bav===4?`solid (4/8) — above average`:
+                bav===3?`average (3/8) — moderate transit support`:
+                bav===2?`weak (2/8) — transits here are difficult; plan accordingly`:
+                `very weak (${bav}/8) — minimal BAV support; this house is testing during most transits`;
+    ps.push(`<b>BAV (natal house):</b> ${bDesc}.`);
+  }
+
+  /* Layer 4: Vargottama */
+  if(vg){
+    ps.push(s1>=1?`<b>Vargottama:</b> the same sign in D-1 and D-9 locks in the strength — unusually steady and self-confirming; the planet keeps its promise across time and circumstance.`:
+            s1<=-1?`<b>Vargottama neecha:</b> the debilitation is reinforced across both charts — more fixed and harder to lift through transits or remedies alone.`:
+            `<b>Vargottama:</b> same sign in both divisions steadies the overall result, making the planet more consistent and predictable than its dignity alone would suggest.`);
+  }
+
+  return {t,g,col,x:ps.join(" ")};
 }
 function vrow(label,sign,dg){
   return `<div class="vrow"><div><div class="vl">${label}</div><div class="vsign">${sign}</div></div><span class="vdig" style="background:${dg.col}">${dg.full}</span></div>`;
@@ -556,7 +668,7 @@ const JA={};
     const gk=sG.value,ri=+sR.value,deg=+sD.value,bn=+sB.value;
     const g=GBYK[gk],r=RASHIS[ri],b=BHAVAS[bn-1];
     const d9i=navamsaSign(ri,deg),r9=RASHIS[d9i];
-    const d1=dignityOf(gk,ri),d9=dignityOf(gk,d9i),vg=(ri===d9i),v=combinedVerdict(d1,d9,vg);
+    const d1=dignityOf(gk,ri),d9=dignityOf(gk,d9i),vg=(ri===d9i),v=combinedVerdict(d1,d9,vg,{house:bn,planet:gk});
     const asp=aspectsFromHouse(gk,bn);
     const lon=ri*30+deg, ni=nakInfo(lon), nl=GBYK[ni.l];
     document.getElementById("sDegVal").textContent=deg.toFixed(1)+"°";
@@ -602,7 +714,7 @@ const JA={};
     const lag=+hL.value,hn=+hN.value,b=BHAVAS[hn-1];
     const signOnHouse=(lag+hn-1)%12,lordK=SIGN_LORD[signOnHouse],lord=GBYK[lordK];
     const ls=+hS.value,ld=+hD.value,lordHouse=houseFromSigns(lag,ls);
-    const d9i=navamsaSign(ls,ld),d1=dignityOf(lordK,ls),d9=dignityOf(lordK,d9i),vg=(ls===d9i),v=combinedVerdict(d1,d9,vg);
+    const d9i=navamsaSign(ls,ld),d1=dignityOf(lordK,ls),d9=dignityOf(lordK,d9i),vg=(ls===d9i),v=combinedVerdict(d1,d9,vg,{house:lordHouse,planet:lordK});
     const hc=houseClass(lordHouse),kar=GBYK[HOUSE_KARAKA[hn]];
     document.getElementById("hLordDegVal").textContent=ld.toFixed(1)+"°";
     document.getElementById("hLordName").innerHTML=`${lord.gl} ${lord.name}`;
@@ -716,12 +828,18 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
     if(active<0||!charts[active]){empty.style.display="flex";empty.style.justifyContent="center";empty.style.alignItems="center";view.style.display="none";return;}
     empty.style.display="none";view.style.display="block";
     const c=charts[active], La=c.La.sign;
+    // pre-compute BAV so verdict has the natal-house score
+    const avPos0={La:c.La.sign};
+    for(const k of ["Su","Mo","Ma","Me","Ju","Ve","Sa"]) if(c.planets[k]) avPos0[k]=c.planets[k].sign;
+    const bavForVerdict={};
+    for(const k of ["Su","Mo","Ma","Me","Ju","Ve","Sa"]) bavForVerdict[k]=computeBAV(k,avPos0);
     // planet table
     let pt=`<tr><th>Planet</th><th>D-1 (house)</th><th>Nakshatra</th><th>D-9</th><th>Verdict</th></tr>`;
     PORDER.forEach(k=>{
       const p=c.planets[k]; if(!p) return; const g=GBYK[k];
       const house=houseFromSigns(La,p.sign), d9i=navamsaSign(p.sign,p.deg), ni=nakInfo(p.sign*30+p.deg);
-      const d1=dignityOf(k,p.sign),d9=dignityOf(k,d9i),v=combinedVerdict(d1,d9,p.sign===d9i);
+      const bavScore=bavForVerdict[k]?bavForVerdict[k][p.sign]:null;
+      const d1=dignityOf(k,p.sign),d9=dignityOf(k,d9i),v=combinedVerdict(d1,d9,p.sign===d9i,{house,planet:k,bavScore});
       pt+=`<tr class="clk" data-k="${k}" data-s="${p.sign}" data-d="${p.deg}" data-h="${house}">
         <td><span class="gname"><span class="gdot" style="background:${g.col}">${g.gl}</span>${g.name}${p.retro?" (R)":""}</span></td>
         <td>${SIGN3[p.sign]} ${p.deg.toFixed(1)}° · H${house}</td>
