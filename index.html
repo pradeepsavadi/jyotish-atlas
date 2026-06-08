@@ -145,22 +145,24 @@
   .nakclk:hover{color:var(--gold2);border-color:var(--gold2)}
   /* BAV */
   .bav-section{margin-top:20px}
-  .bav-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px}
-  .bav-tab{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:5px 11px;
-    cursor:pointer;font-size:12.5px;font-weight:600;transition:.1s}
-  .bav-tab.active{border-color:var(--gold);color:var(--gold2)}
-  .bav-tab.sav{border-color:var(--accent);color:var(--accent)}
-  .bav-tab.sav.active{background:var(--accent);color:#0b0e1a}
-  .bav-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:5px;margin-bottom:8px}
-  .bav-cell{border:1px solid var(--line);border-radius:8px;padding:7px 4px;text-align:center;background:var(--panel2);transition:.2s}
-  .bav-cell .bn{font-size:18px;font-weight:800;line-height:1}
-  .bav-cell .bl{font-size:10px;color:var(--muted);margin-top:2px}
-  .bav-cell .bs{font-size:9.5px;margin-top:1px;color:var(--muted);line-height:1.2}
-  .bav-cell.hi5{background:#1d3a20;border-color:var(--exalt)}.bav-cell.hi5 .bn{color:var(--exalt)}
-  .bav-cell.hi4{background:#1e3220;border-color:#6fcf87}.bav-cell.hi4 .bn{color:#9ee0b0}
-  .bav-cell.lo2{background:#2d1a1a;border-color:var(--debil)}.bav-cell.lo2 .bn{color:var(--debil)}
-  .bav-cell.lo3{background:#2a1818;border-color:#c0513c}.bav-cell.lo3 .bn{color:#de8070}
-  .bav-cell.occ{outline:2px solid var(--gold);outline-offset:1px}
+  .bav-table-wrap{overflow-x:auto;margin-bottom:8px}
+  .bav-table{border-collapse:collapse;width:100%;min-width:680px}
+  .bav-table thead th{font-size:11px;color:var(--muted);font-weight:600;padding:5px 4px;text-align:center;
+    background:var(--panel);border:1px solid var(--line);white-space:nowrap}
+  .bav-table thead th.hh{color:var(--gold2);font-size:12px}
+  .bav-table td{padding:6px 4px;text-align:center;font-size:14px;font-weight:700;border:1px solid var(--line);min-width:38px}
+  .bav-table td.plabel{font-size:12px;font-weight:700;text-align:right;padding:4px 8px;
+    white-space:nowrap;background:var(--panel);color:var(--fg);min-width:80px}
+  .bav-table tr.sav-row td{font-weight:800;font-size:15px;border-top:2px solid var(--gold)}
+  .bav-table tr.sav-row td.plabel{color:var(--gold2)}
+  .bav-table td.hi5{background:#1d3a20;color:var(--exalt)}
+  .bav-table td.hi4{background:#1e3220;color:#9ee0b0}
+  .bav-table td.lo2{background:#2d1a1a;color:var(--debil)}
+  .bav-table td.lo1{background:#2a1818;color:#de8070}
+  .bav-table td.sav-hi{background:#1d3a20;color:var(--exalt)}
+  .bav-table td.sav-mid{background:var(--panel2);color:var(--fg)}
+  .bav-table td.sav-lo{background:#2d1a1a;color:var(--debil)}
+  .bav-table td.natal{outline:2px solid var(--gold);outline-offset:-2px;position:relative}
   .bav-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:6px}
   .bav-legend span{display:flex;align-items:center;gap:5px}
   .bav-legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
@@ -296,15 +298,14 @@
       </div>
       <div class="bav-section panel" style="margin-top:14px">
         <h4 style="margin:0 0 4px">Bhinna Ashtakavarga (BAV) — benefic points per house</h4>
-        <p class="note" style="margin:0 0 12px">Each planet casts benefic points (0–8) into houses based on its relationships with other planets. More points = better transits through that house. 5+ is strong, 2– is weak. Outlined = planet's <b>natal</b> house. Click a planet tab to see its BAV; <span style="color:var(--accent)">SAV</span> is the combined total (out of 337).</p>
-        <div class="bav-tabs" id="bavTabs"></div>
-        <div class="bav-grid" id="bavGrid"></div>
+        <p class="note" style="margin:0 0 12px">Each cell shows how many benefic points (0–8) that planet contributes to that house. <b>∑ SAV</b> is the house total across all 7 planets (≥30 strong, 25–29 average, &lt;25 weak). Gold outline = planet's natal house.</p>
+        <div class="bav-table-wrap"><table class="bav-table" id="bavTable"></table></div>
         <div class="bav-legend">
-          <span><i style="background:#1d3a20;border:1px solid var(--exalt)"></i>5+ strong</span>
+          <span><i style="background:#1d3a20;border:1px solid var(--exalt)"></i>5–8 strong</span>
           <span><i style="background:#1e3220;border:1px solid #6fcf87"></i>4 solid</span>
           <span><i style="background:var(--panel2);border:1px solid var(--line)"></i>3 average</span>
           <span><i style="background:#2d1a1a;border:1px solid var(--debil)"></i>2 weak</span>
-          <span><i style="background:#2a1818;border:1px solid #c0513c"></i>1 very weak</span>
+          <span><i style="background:#2a1818;border:1px solid #c0513c"></i>0–1 very weak</span>
           <span style="border:1px solid var(--gold);border-radius:4px;padding:0 5px;color:var(--gold2)">outlined = natal house</span>
         </div>
         <div class="bav-insight" id="bavInsight"></div>
@@ -660,24 +661,6 @@ function computeSAV(pos){
   for(const P of ["Su","Mo","Ma","Me","Ju","Ve","Sa"]) computeBAV(P,pos).forEach((v,i)=>s[i]+=v);
   return s;
 }
-function bavInsightText(planet,bav,La,planets){
-  const PORD=["Su","Mo","Ma","Me","Ju","Ve","Sa"];
-  if(planet==="SAV"){
-    const sav=bav;
-    const top=sav.map((v,i)=>({v,h:i})).sort((a,b)=>b.v-a.v).slice(0,3);
-    const bot=sav.map((v,i)=>({v,h:i})).sort((a,b)=>a.v-b.v).slice(0,3);
-    const total=sav.reduce((a,b)=>a+b,0);
-    return `<b>Total: ${total}/337</b> · Best houses for any transit: <b>${top.map(x=>`H${((x.h-La+12)%12)+1} (${SIGN3[x.h]} · ${x.v}pts)`).join(", ")}</b>. Weakest: <b>${bot.map(x=>`H${((x.h-La+12)%12)+1} (${SIGN3[x.h]} · ${x.v}pts)`).join(", ")}</b>.`;
-  }
-  const p=GBYK[planet],total=bav.reduce((a,b)=>a+b,0);
-  const top=bav.map((v,i)=>({v,h:i})).sort((a,b)=>b.v-a.v).slice(0,3);
-  const bot=bav.map((v,i)=>({v,h:i})).sort((a,b)=>a.v-b.v).slice(0,2);
-  const natalSign=planets[planet]?planets[planet].sign:null;
-  const natalHouse=natalSign!==null?((natalSign-La+12)%12)+1:null;
-  const natalBav=natalSign!==null?bav[natalSign]:null;
-  let extra=""; if(natalSign!==null) extra=` Natal house ${natalHouse} has <b style="color:${natalBav>=4?"var(--exalt)":natalBav<=2?"var(--debil)":"var(--neutral)"}">${natalBav} pts</b>.`;
-  return `<b>${p.name} BAV total: ${total}/56</b>.${extra} Best transits through: <b>${top.map(x=>`H${((x.h-La+12)%12)+1} (${SIGN3[x.h]} · ${x.v}pts)`).join(", ")}</b>. Watch: <b>${bot.map(x=>`H${((x.h-La+12)%12)+1} (${x.v}pts)`).join(", ")}</b>.`;
-}
 
 /* ===== MY CHARTS (parse + persist + apply) ===== */
 (function(){
@@ -775,40 +758,46 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
     for(const P of ["Su","Mo","Ma","Me","Ju","Ve","Sa"]) allBAV[P]=computeBAV(P,avPos);
     allBAV.SAV=computeSAV(avPos);
 
-    // tabs
-    const tabs=document.getElementById("bavTabs"); tabs.innerHTML="";
-    let activeBav="Su";
-    const PLANET_BAV_ORDER=["Su","Mo","Ma","Me","Ju","Ve","Sa","SAV"];
-    function renderBavTab(sel){
-      activeBav=sel;
-      [...tabs.children].forEach(t=>t.classList.toggle("active",t.dataset.bk===sel));
-      const bav=allBAV[sel];
-      const grid=document.getElementById("bavGrid"); grid.innerHTML="";
-      for(let s=0;s<12;s++){
-        const house=((s-La+12)%12)+1;
-        const v=bav[s];
-        const cls=v>=5?"hi5":v===4?"hi4":v<=1?"lo3":v===2?"lo2":"";
-        // is this sign occupied by any planet?
-        const occBy=["Su","Mo","Ma","Me","Ju","Ve","Sa"].filter(k=>c.planets[k]&&c.planets[k].sign===s).map(k=>GBYK[k].gl).join("");
-        // is this the planet's own natal sign?
-        const isNatal=(sel!=="SAV"&&c.planets[sel]&&c.planets[sel].sign===s)||(sel==="SAV"&&false);
-        const d=document.createElement("div"); d.className="bav-cell "+cls+(isNatal?" occ":"");
-        d.innerHTML=`<div class="bn">${v}</div><div class="bl">${SIGN3[s]}</div><div class="bs">H${house}${occBy?" "+occBy:""}</div>`;
-        grid.appendChild(d);
-      }
-      document.getElementById("bavInsight").innerHTML=bavInsightText(sel,bav,La,c.planets);
+    // BAV table: rows=planets+SAV, columns=H1-H12
+    const PLANET_BAV_ORDER=["Su","Mo","Ma","Me","Ju","Ve","Sa"];
+    const tbl=document.getElementById("bavTable");
+    // header row
+    let th=`<thead><tr><th style="text-align:right">Planet</th>`;
+    for(let h=1;h<=12;h++){
+      const s=(La+h-1)%12;
+      th+=`<th class="hh">H${h}<div style="font-size:9px;font-weight:400;color:var(--muted)">${SIGN3[s]}</div></th>`;
     }
-    PLANET_BAV_ORDER.forEach(k=>{
-      const g=k==="SAV"?null:GBYK[k];
-      const t=document.createElement("div");
-      t.className="bav-tab"+(k==="SAV"?" sav":"")+(k===activeBav?" active":"");
-      t.dataset.bk=k;
-      t.innerHTML=k==="SAV"?"∑ SAV":`${g.gl} ${g.name}`;
-      if(k!=="SAV") t.style.borderColor=GBYK[k].col+"66";
-      t.onclick=()=>renderBavTab(k);
-      tabs.appendChild(t);
-    });
-    renderBavTab("Su");
+    th+=`</tr></thead>`;
+    // body: one row per planet
+    let tb=`<tbody>`;
+    for(const P of PLANET_BAV_ORDER){
+      const bav=allBAV[P], g=GBYK[P];
+      const natalSign=c.planets[P]?c.planets[P].sign:null;
+      tb+=`<tr><td class="plabel">${g.gl} ${g.name}</td>`;
+      for(let h=1;h<=12;h++){
+        const s=(La+h-1)%12, v=bav[s];
+        const cls=v>=5?"hi5":v===4?"hi4":v===2?"lo2":v<=1?"lo1":"";
+        const nat=natalSign===s?" natal":"";
+        tb+=`<td class="${cls}${nat}">${v}</td>`;
+      }
+      tb+=`</tr>`;
+    }
+    // SAV total row
+    const sav=allBAV.SAV;
+    tb+=`<tr class="sav-row"><td class="plabel">∑ SAV</td>`;
+    for(let h=1;h<=12;h++){
+      const s=(La+h-1)%12, v=sav[s];
+      const cls=v>=30?"sav-hi":v>=25?"sav-mid":"sav-lo";
+      tb+=`<td class="${cls}">${v}</td>`;
+    }
+    tb+=`</tr></tbody>`;
+    tbl.innerHTML=th+tb;
+    // insight: SAV summary
+    const top3=sav.map((v,i)=>({v,i})).sort((a,b)=>b.v-a.v).slice(0,3);
+    const bot3=sav.map((v,i)=>({v,i})).sort((a,b)=>a.v-b.v).slice(0,3);
+    const savTotal=sav.reduce((a,b)=>a+b,0);
+    document.getElementById("bavInsight").innerHTML=
+      `<b>SAV total: ${savTotal}</b> · Best houses for any transit: <b>${top3.map(x=>`H${((x.i-La+12)%12)+1} (${SIGN3[x.i]} · ${x.v})`).join(", ")}</b>. Weakest: <b>${bot3.map(x=>`H${((x.i-La+12)%12)+1} (${SIGN3[x.i]} · ${x.v})`).join(", ")}</b>.`;
   }
 
   // modal
