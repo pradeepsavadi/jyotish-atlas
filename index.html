@@ -227,7 +227,24 @@
   .bb-sav-mid{border:1px solid var(--line);color:var(--fg)}
   .bb-sav-lo{background:#2d1a1a;color:var(--debil)}
   .bb-reading{background:linear-gradient(160deg,#0f1530,#0b0e1a);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:13.5px;line-height:1.75;color:#dfe4f6}
-  .bb-reading-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#a78bfa;margin-bottom:10px}
+  .bb-section-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 8px}
+  .bb-section-lbl:first-child{margin-top:0}
+  .bb-conds{display:flex;flex-direction:column;gap:7px}
+  .bb-cond{display:flex;gap:10px;padding:10px 12px;border-radius:8px;font-size:13px;line-height:1.5}
+  .bb-cond.pos{background:rgba(29,58,32,.5);border:1px solid rgba(76,175,80,.2)}
+  .bb-cond.neg{background:rgba(45,26,26,.5);border:1px solid rgba(211,47,47,.2)}
+  .bb-cond.neu{background:var(--panel2);border:1px solid var(--line)}
+  .bb-cond-icon{font-size:14px;flex-shrink:0;line-height:1.5}
+  .bb-cond-title{font-weight:700;color:var(--ink);margin-bottom:2px;font-size:13px}
+  .bb-cond-desc{color:var(--muted);font-size:12.5px}
+  .bb-verdict-bar{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-radius:10px;margin-top:4px}
+  .bb-verdict-bar.v-strong{background:rgba(29,58,32,.5);border:1px solid rgba(76,175,80,.3)}
+  .bb-verdict-bar.v-mid{background:rgba(15,21,48,.9);border:1px solid var(--line)}
+  .bb-verdict-bar.v-weak{background:rgba(45,26,26,.5);border:1px solid rgba(211,47,47,.3)}
+  .bb-verdict-badge{font-size:12px;font-weight:800;padding:3px 11px;border-radius:999px;white-space:nowrap;display:inline-block;margin-bottom:6px}
+  .v-strong .bb-verdict-badge{background:var(--exalt);color:#0b1a0d}
+  .v-mid .bb-verdict-badge{background:var(--gold);color:#0b0e1a}
+  .v-weak .bb-verdict-badge{background:var(--debil);color:#fff8f8}
   @media(max-width:600px){.bb-cards{grid-template-columns:1fr}}
 </style>
 </head>
@@ -421,7 +438,7 @@
       <div id="bbResult" style="display:none">
         <div class="bb-chain" id="bbChain"></div>
         <div class="bb-cards" id="bbCards"></div>
-        <div class="bb-reading"><div class="bb-reading-label">Reading</div><div id="bbReadingText"></div></div>
+        <div class="bb-reading"><div id="bbReadingText"></div></div>
       </div>
     </div>
   </section>
@@ -1346,37 +1363,181 @@ function buildVarga(c,fn){
       </div></div>`;
   }
 
-  function generateReading(c,La,person,topic,resultH,resultSign,lord,lordSign,lordDig,sav,varga){
-    const bhava=BHAVAS[resultH-1];
-    const lg=GBYK[lord];
+  const COMBUST_ORB={Ma:17,Me:14,Ju:11,Ve:10,Sa:15,Mo:12};
+
+  function evaluateHouse(c,La,resultH){
+    const hSign=(La+resultH-1)%12;
+    const lord=SIGN_LORD[hSign];
+    const lordP=c.planets[lord];
+    const lordSign=lordP?lordP.sign:undefined;
+    const lordDig=lordSign!==undefined?dignityOf(lord,lordSign):null;
     const lordHn=lordSign!==undefined?houseFromSigns(La,lordSign):null;
-
-    const d1=lordDig
-      ?`<b>${SIGNS[resultSign]}</b> is H${resultH} (${bhava.skt}) — ${lg.name} is its lord, ${lordDig.full.toLowerCase()} in ${SIGNS[lordSign]}${lordHn?` (H${lordHn})`:""}. ${lordDig.score>=1?"A dignified lord actively supports the themes of this house.":lordDig.score<=-1?"A weakened lord means this area takes more effort — dasha timing and transit activation become critical.":"Neutral placement — neither amplifying nor blocking; results come through consistently but not exceptionally."}`
-      :`<b>${SIGNS[resultSign]}</b> is H${resultH} (${bhava.skt}) with ${lg.name} as its lord.`;
-
-    const d1Pls=Object.entries(c.planets).filter(([k,p])=>p.sign===resultSign)
-      .map(([k,p])=>`${GBYK[k].name} (${dignityOf(k,resultSign).full.split("·")[0].trim()})`);
-    const plSent=d1Pls.length
-      ?`${d1Pls.join(" and ")} ${d1Pls.length===1?"occupies":"occupy"} this house directly, adding their nature to the signification.`
-      :"No planet sits here directly — the lord's condition is the primary indicator.";
-
-    const savLvl=sav>=30?"strong":sav>=25?"average":"below average";
-    const savSent=`SAV is <b>${sav}</b> (${savLvl}). ${sav>=30?`Transit support through H${resultH} is consistently strong — this domain activates reliably when relevant dashas run.`:sav>=25?`Moderate transit support — results come in phases rather than continuously.`:`Limited transit backing; meaningful results require precise dasha alignment.`}`;
-
-    let vSent="";
-    if(varga){
-      const vSign=(varga.lagna+resultH-1)%12;
-      const vLord=SIGN_LORD[vSign];
-      const vLordSign=varga.planets[vLord];
-      const vLordDig=vLordSign!==undefined?dignityOf(vLord,vLordSign):null;
-      if(vLordDig){
-        vSent=`In <b>${topic.vn}</b> (the lens for ${topic.vdesc}), H${resultH} maps to <b>${SIGNS[vSign]}</b> with ${GBYK[vLord].name} as lord — ${vLordDig.full.toLowerCase()}. ${vLordDig.score>=1?"The divisional chart confirms the D-1 promise — delivery capacity is strong.":vLordDig.score<=-1?"The varga chart shows reduced delivery; the D-1 promise may not fully manifest without strong dasha support.":"Moderate varga support — partially reinforces D-1."}`;
+    const lordHt=lordHn?houseType(lordHn):null;
+    const lordFromBhava=lordSign!==undefined?houseFromSigns(hSign,lordSign):null;
+    const planetsInH=Object.entries(c.planets).filter(([k,p])=>p.sign===hSign);
+    const sunP=c.planets.Su;
+    let isCombust=false;
+    if(lordP&&sunP&&lord!=="Su"&&lord!=="Mo"){
+      const orb=COMBUST_ORB[lord]||12;
+      const diff=Math.abs(lordP.sign*30+lordP.deg-(sunP.sign*30+sunP.deg));
+      isCombust=Math.min(diff,360-diff)<=orb;
+    }
+    // Neecha Bhanga
+    let nb=false;
+    if(lordDig&&lordDig.score===-2&&lordSign!==undefined){
+      const debilLord=SIGN_LORD[lordSign];
+      const dlP=c.planets[debilLord];
+      if(dlP&&[1,4,7,10].includes(houseFromSigns(La,dlP.sign)))nb=true;
+      const exSign=GBYK[lord].exalt;
+      if(!nb&&exSign>=0){const elP=c.planets[SIGN_LORD[exSign]];if(elP&&[1,4,7,10].includes(houseFromSigns(La,elP.sign)))nb=true;}
+      if(!nb&&lordHn&&[1,4,7,10].includes(lordHn))nb=true;
+    }
+    const conds=[];
+    const lg=GBYK[lord];
+    // 1. Dignity
+    if(lordDig){
+      if(nb){
+        conds.push({pos:true,title:"Neecha Bhanga — debilitation cancelled",text:`${lg.name} is debilitated in ${SIGNS[lordSign]} but one or more BPHS cancellation conditions are met (dispositor or exaltation lord in Kendra, or planet itself in Kendra). The fall reverses — the house themes activate with unusual force once the dasha fires, often after visible struggle.`});
+      } else if(lordDig.score>=2){
+        conds.push({pos:true,title:`Lord exalted — Uccha`,text:`${lg.name} (lord of H${resultH}) is exalted in ${SIGNS[lordSign]}${lordHn?` (H${lordHn})`:""}. BPHS: a bhava lord at peak dignity is the single strongest indicator — it can fully sustain and elevate the house's themes.`});
+      } else if(lordDig.score>=1.5){
+        conds.push({pos:true,title:`Lord in own sign — Swakshetra`,text:`${lg.name} is in its own sign ${SIGNS[lordSign]}${lordHn?` (H${lordHn})`:""}. BPHS: own-sign gives comfort, authority and full expression of the house — second only to exaltation.`});
+      } else if(lordDig.score===1){
+        conds.push({pos:true,title:`Lord in friendly sign — Mitra`,text:`${lg.name} is in a friendly sign (${SIGNS[lordSign]}${lordHn?`, H${lordHn}`:""}). Cooperative environment — the lord functions at a solid if not peak level.`});
+      } else if(lordDig.score===0){
+        conds.push({pos:null,title:`Lord in neutral sign — Sama`,text:`${lg.name} is in a neutral sign (${SIGNS[lordSign]}${lordHn?`, H${lordHn}`:""}). Neither amplified nor blocked — moderate output. House position and SAV carry more weight here.`});
+      } else if(lordDig.score===-1){
+        conds.push({pos:false,title:`Lord in enemy sign — Shatru`,text:`${lg.name} is in ${SIGNS[lordSign]}${lordHn?` (H${lordHn})`:""}, an enemy's territory. BPHS: the lord under consistent friction cannot naturally represent its house — themes face resistance and irregular delivery.`});
+      } else {
+        conds.push({pos:false,title:`Lord debilitated — Neecha`,text:`${lg.name} is debilitated in ${SIGNS[lordSign]}${lordHn?` (H${lordHn})`:""}, at its weakest point. BPHS: the bhava lord at Neecha struggles to sustain the house — themes are persistently difficult and require deliberate effort and careful dasha timing.`});
       }
     }
+    // 2. Lord's house from Lagna
+    if(lordHt){
+      if(lordHt.kendra&&lordHt.trikona){
+        conds.push({pos:true,title:`Lord in Kendra-Trikona — H${lordHn}`,text:`${lg.name} occupies H${lordHn} — simultaneously a Kendra and Trikona (H1). BPHS: maximum worldly power (Kendra) and dharmic support (Trikona) combine here — the seed condition for Raja Yoga.`});
+      } else if(lordHt.kendra){
+        conds.push({pos:true,title:`Lord in Kendra — H${lordHn}`,text:`${lg.name} sits in H${lordHn} (Kendra: 1/4/7/10). BPHS: a bhava lord in a Kendra has stability and capacity for sustained worldly action — it reliably activates the house's promise.`});
+      } else if(lordHt.trikona){
+        conds.push({pos:true,title:`Lord in Trikona — H${lordHn}`,text:`${lg.name} sits in H${lordHn} (Trikona: 1/5/9). BPHS: a bhava lord in a Trikona draws on dharmic support and accumulated merit — the house themes manifest with a sense of rightness and relative ease.`});
+      } else if(lordHt.dusthana){
+        const vip=[6,8,12].includes(resultH)&&[6,8,12].includes(lordHn);
+        if(vip){
+          conds.push({pos:null,title:`Viparita potential — Dusthana lord in Dusthana (H${lordHn})`,text:`${lg.name} (lord of the dusthana H${resultH}) is in H${lordHn} (also a dusthana). BPHS Viparita Raja Yoga: dusthana lords in other dusthanas turn evil inward and can produce dramatic reversals of fortune during the dasha — powerful but unpredictable.`});
+        } else {
+          conds.push({pos:false,title:`Lord in Dusthana — H${lordHn}`,text:`${lg.name} is in H${lordHn} (Dusthana: 6/8/12). BPHS: a bhava lord in a dusthana cannot fully sustain the house — the domain faces struggle, obstruction, or delay.`});
+        }
+      } else if(lordHt.upachaya){
+        conds.push({pos:null,title:`Lord in Upachaya — H${lordHn}`,text:`${lg.name} is in H${lordHn} (Upachaya: 3/6/10/11). BPHS: Upachaya houses grow with time and effort — this domain improves progressively through life, stronger in the second half.`});
+      } else if(lordHt.maraka){
+        conds.push({pos:null,title:`Lord in Maraka — H${lordHn}`,text:`${lg.name} is in H${lordHn} (Maraka: 2/7). Mildly challenging position — not severely blocking but the lord is not in a naturally supportive house.`});
+      }
+    }
+    // 3. Lord 6/8/12 from its own bhava
+    if(lordFromBhava&&[6,8,12].includes(lordFromBhava)){
+      conds.push({pos:false,title:`Lord ${ORD(lordFromBhava)} from its own house`,text:`${lg.name} sits in the ${ORD(lordFromBhava)} position counted from H${resultH} itself. BPHS: a bhava lord in the 6th, 8th, or 12th from its own bhava weakens that bhava independent of Lagna-based strength — the lord is positioned "away" from what it needs to sustain.`});
+    }
+    // 4. Combustion
+    if(isCombust){
+      conds.push({pos:false,title:`Lord combust — Moudyami`,text:`${lg.name} is within ${COMBUST_ORB[lord]||12}° of the Sun. BPHS: a combust planet loses independent identity — it merges into the Sun's agenda and cannot represent its own house. Combustion materially reduces delivery capacity.`});
+    }
+    // 5. Retrograde
+    if(lordP&&lordP.retro&&lord!=="Su"&&lord!=="Mo"){
+      conds.push({pos:null,title:`Lord retrograde — Vakri`,text:`${lg.name} is retrograde. BPHS treats retrograde planets as intensified. House themes may manifest non-linearly, with delay, or in unconventional ways — but often with unusual depth when they do arrive.`});
+    }
+    // 6. Planets in house
+    const benInH=planetsInH.filter(([k])=>["Ju","Ve","Mo","Me"].includes(k));
+    const malInH=planetsInH.filter(([k])=>["Su","Ma","Sa","Ra","Ke"].includes(k));
+    if(benInH.length&&malInH.length){
+      conds.push({pos:null,title:`Mixed occupation — benefics and malefics`,text:`${benInH.map(([k])=>GBYK[k].name).join(", ")} (benefic) and ${malInH.map(([k])=>GBYK[k].name).join(", ")} (malefic) both occupy H${resultH}. Competing influences — outcome depends on which planets are more dignified and whose dasha is active.`});
+    } else if(benInH.length){
+      conds.push({pos:true,title:`Natural benefic${benInH.length>1?"s":""} in house`,text:`${benInH.map(([k])=>GBYK[k].name).join(", ")} occupy H${resultH}. BPHS: natural benefics in a bhava protect and enhance its themes — they add their own positive significations and shield the house from harm.`});
+    } else if(malInH.length){
+      conds.push({pos:false,title:`Malefic${malInH.length>1?"s":""} in house — unprotected`,text:`${malInH.map(([k])=>GBYK[k].name).join(", ")} occupy H${resultH} without benefic presence. BPHS: malefics in a bhava obstruct or disturb its themes — impact depends on their dignity and functional lordship.`});
+    }
+    // 7. SAV
+    const avPos={La:c.La.sign};
+    for(const k of["Su","Mo","Ma","Me","Ju","Ve","Sa"])if(c.planets[k])avPos[k]=c.planets[k].sign;
+    const savScore=computeSAV(avPos)[hSign];
+    if(savScore>=30){
+      conds.push({pos:true,title:`SAV ${savScore} — strong transit support`,text:`H${resultH} carries ${savScore} SAV points (≥30 = strong). BPHS Ashtakavarga: planets transiting this house consistently trigger favorable results. Transit timing through H${resultH} will be productive.`});
+    } else if(savScore>=25){
+      conds.push({pos:null,title:`SAV ${savScore} — average transit support`,text:`H${resultH} has ${savScore} SAV points (25–29 = average). Moderate transit backing — major planet transits (Jupiter/Saturn) activate this house; minor transits produce weaker effects.`});
+    } else {
+      conds.push({pos:false,title:`SAV ${savScore} — limited transit support`,text:`H${resultH} has only ${savScore} SAV points (<25 = weak). BPHS: transits through weak SAV houses deliver few consistent results — natal conditions and dasha timing matter more than transits here.`});
+    }
+    // Score
+    let score=0;
+    if(lordDig) score+=nb?1:Math.max(-2,Math.min(2,lordDig.score));
+    if(lordHt){
+      if(lordHt.kendra&&lordHt.trikona)score+=3;
+      else if(lordHt.kendra)score+=2;
+      else if(lordHt.trikona)score+=2;
+      else if(lordHt.dusthana)score-=2;
+      else if(lordHt.upachaya)score+=0.5;
+    }
+    if(lordFromBhava&&[6,8,12].includes(lordFromBhava))score-=1.5;
+    if(isCombust)score-=1.5;
+    score+=benInH.length*0.5-(benInH.length===0?malInH.length*0.5:0);
+    if(savScore>=30)score+=1;else if(savScore<25)score-=1;
+    const verdict=score>=6?"Excellent":score>=3.5?"Strong":score>=1?"Supportive":score>=-1?"Mixed":score>=-3?"Challenged":"Severely challenged";
+    const verdictClass=score>=3.5?"v-strong":score>=1?"v-mid":"v-weak";
+    return{conds,verdict,verdictClass,score,sav:savScore};
+  }
 
-    const rule=`<span class="note" style="display:block;margin-top:12px;border-top:1px dashed var(--line);padding-top:10px">Bhavat bhavam: H${person.h} (${person.label}) + count ${topic.countH} = <b>H${resultH} · ${bhava.skt} · ${bhava.en}</b></span>`;
-    return [d1,plSent,savSent,vSent].filter(Boolean).join("<br><br>")+rule;
+  function evaluateVargaHouse(varga,resultH,topicVn){
+    const hSign=(varga.lagna+resultH-1)%12;
+    const lord=SIGN_LORD[hSign];
+    const lordSign=varga.planets[lord];
+    const lordDig=lordSign!==undefined?dignityOf(lord,lordSign):null;
+    const lordHn=lordSign!==undefined?((lordSign-varga.lagna+12)%12)+1:null;
+    const lordHt=lordHn?houseType(lordHn):null;
+    const conds=[];
+    const lg=GBYK[lord];
+    if(lordDig){
+      const pos=lordDig.score>=1?true:lordDig.score<=-1?false:null;
+      conds.push({pos,title:`Lord ${lordDig.full.split("·")[0].trim()} in ${topicVn}`,text:`${lg.name} (H${resultH} lord in this varga) is ${lordDig.full.toLowerCase()} in ${SIGNS[lordSign]}${lordHn?` (H${lordHn} in ${topicVn})`:""}. ${lordDig.score>=1?"Delivery capacity is strong — the varga chart confirms the D-1 promise.":lordDig.score<=-1?"Delivery is compromised — the natal promise may not fully manifest without strong dasha support.":"Moderate delivery — varga neither amplifies nor blocks the D-1 reading."}`});
+    }
+    if(lordHt){
+      if(lordHt.kendra||lordHt.trikona){
+        conds.push({pos:true,title:`Lord in ${lordHt.kendra&&lordHt.trikona?"Kendra-Trikona":lordHt.kendra?"Kendra":"Trikona"} in ${topicVn}`,text:`${lg.name} occupies H${lordHn} in the varga chart — a ${lordHt.kendra?"Kendra":"Trikona"}. Strong positional support in the divisional lens.`});
+      } else if(lordHt.dusthana){
+        conds.push({pos:false,title:`Lord in Dusthana in ${topicVn}`,text:`${lg.name} falls in H${lordHn} (Dusthana) in the varga — delivery through this divisional lens is obstructed.`});
+      }
+    }
+    let score=0;
+    if(lordDig)score+=Math.max(-2,Math.min(2,lordDig.score));
+    if(lordHt){if(lordHt.kendra||lordHt.trikona)score+=1.5;else if(lordHt.dusthana)score-=1.5;}
+    const verdict=score>=2.5?"Strong":score>=0?"Moderate":"Challenged";
+    return{conds,verdict,score};
+  }
+
+  function generateReading(c,La,person,topic,resultH,varga){
+    const d1Eval=evaluateHouse(c,La,resultH);
+    const vEval=varga?evaluateVargaHouse(varga,resultH,topic.vn):null;
+    const bhava=BHAVAS[resultH-1];
+    function condHTML(conds){
+      return`<div class="bb-conds">${conds.map(cd=>`<div class="bb-cond ${cd.pos===true?"pos":cd.pos===false?"neg":"neu"}"><span class="bb-cond-icon">${cd.pos===true?"✓":cd.pos===false?"✗":"~"}</span><div><div class="bb-cond-title">${cd.title}</div><div class="bb-cond-desc">${cd.text}</div></div></div>`).join("")}</div>`;
+    }
+    let html=`<div class="bb-section-lbl">D-1 Rasi · ${d1Eval.conds.length} condition${d1Eval.conds.length!==1?"s":""} evaluated</div>`;
+    html+=condHTML(d1Eval.conds);
+    if(vEval&&vEval.conds.length){
+      html+=`<div class="bb-section-lbl" style="margin-top:14px">${topic.vn} · ${vEval.conds.length} condition${vEval.conds.length!==1?"s":""} evaluated</div>`;
+      html+=condHTML(vEval.conds);
+    }
+    const d1Strong=d1Eval.score>=1, vStrong=vEval?vEval.score>=0:null;
+    let synth="";
+    if(vEval){
+      if(d1Strong&&vStrong)synth=`D-1 and ${topic.vn} are aligned — both natal promise and divisional delivery are supported. Results should manifest with relative consistency once the relevant dasha runs.`;
+      else if(d1Strong&&!vStrong)synth=`D-1 shows potential but ${topic.vn} is under-supported — delivery is compromised. The promise exists but may arrive partially, with delay, or through indirect paths.`;
+      else if(!d1Strong&&vStrong)synth=`D-1 is challenged while ${topic.vn} has strength — the deeper dharmic quality is sound even if the surface indicators are difficult. Conscious effort and correct timing can unlock this domain.`;
+      else synth=`Both D-1 and ${topic.vn} face challenges. Sustained effort, realistic expectations, and precise dasha timing are needed.`;
+    } else {
+      synth=d1Strong?`D-1 is supportive — this domain has natal backing.`:`D-1 is challenged — effort and timing are key to accessing the promise of H${resultH}.`;
+    }
+    html+=`<div class="bb-verdict-bar ${d1Eval.verdictClass}" style="margin-top:14px"><div><span class="bb-verdict-badge">${d1Eval.verdict}</span><br><span style="font-size:13px;line-height:1.6;color:#dfe4f6">${synth}</span></div></div>`;
+    html+=`<div class="note" style="margin-top:10px;border-top:1px dashed var(--line);padding-top:8px">Bhavat bhavam: H${person.h} (${person.label}) + count ${topic.countH} = <b>H${resultH} · ${bhava.skt} · ${bhava.en}</b></div>`;
+    return html;
   }
 
   function runQuery(){
@@ -1428,7 +1589,7 @@ function buildVarga(c,fn){
     document.getElementById("bbCards").innerHTML=
       vCardHTML(`D-1 Rasi · H${resultH}`,resultSign,d1Lord,d1LS,d1LD,d1LHn,d1Pls,sav)+vargaHTML;
     document.getElementById("bbReadingText").innerHTML=
-      generateReading(c,La,person,topic,resultH,resultSign,d1Lord,d1LS,d1LD,sav,varga);
+      generateReading(c,La,person,topic,resultH,varga);
     emptyDiv.style.display="none";
     resultDiv.style.display="block";
   }
