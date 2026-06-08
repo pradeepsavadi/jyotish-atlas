@@ -166,9 +166,23 @@
   .bav-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:6px}
   .bav-legend span{display:flex;align-items:center;gap:5px}
   .bav-legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
-  .bav-insight{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 16px;
+  .bav-insight{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;
     margin-top:12px;font-size:13px;color:#dfe4f6}
   .bav-insight b{color:var(--gold2)}
+  .bav-insight-total{font-size:13px;color:var(--muted);margin-bottom:12px}
+  .bav-insight-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:700px){.bav-insight-grid{grid-template-columns:1fr}}
+  .bav-insight-col-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--line)}
+  .bav-insight-col-title.strong{color:var(--exalt)}
+  .bav-insight-col-title.weak{color:var(--debil)}
+  .bav-insight-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+  .bav-insight-item:last-child{margin-bottom:0}
+  .bav-score-badge{flex:0 0 auto;min-width:44px;padding:3px 6px;border-radius:8px;font-size:13px;font-weight:800;text-align:center;line-height:1.4}
+  .bav-score-badge.hi{background:#1d3a20;color:var(--exalt)}
+  .bav-score-badge.lo{background:#2d1a1a;color:var(--debil)}
+  .bav-insight-body{flex:1}
+  .bav-insight-hlabel{font-weight:700;font-size:12.5px;margin-bottom:2px}
+  .bav-insight-hdesc{font-size:12px;color:var(--muted);line-height:1.45}
   footer{padding:40px 0 70px;color:var(--muted);font-size:12.5px}
   .note{font-size:12px;color:var(--muted)}
 </style>
@@ -414,6 +428,34 @@ const BHAVAS=[
  {n:10,skt:"Karma",en:"Career & status",cat:"Kendra · Artha",kar:["career & action","public status","authority","fame","reputation"]},
  {n:11,skt:"Labha",en:"Gains & networks",cat:"Upachaya · Kama",kar:["income & gains","elder siblings","fulfilled desires","social networks","large goals"]},
  {n:12,skt:"Vyaya",en:"Loss & liberation",cat:"Dusthana · Moksha",kar:["expenditure & loss","foreign lands","isolation, retreat","moksha","bed, sleep, the beyond"]}
+];
+
+/* SAV house interpretations — indexed 0-11 (H1-H12) */
+const SAV_HOUSE_INTERP=[
+ {hi:"Vitality and self-expression come naturally; the body holds up well and transit planets here boost health, confidence and personal agency.",
+  lo:"Health and self-assertion need more conscious support; transit planets in the 1st tend to drain rather than energise."},
+ {hi:"Wealth accumulates steadily; family bonds are supportive, speech carries weight and financial transits are consistently productive.",
+  lo:"Financial transits are lean; speech may land poorly and family matters need careful handling — guard accumulated resources."},
+ {hi:"Effort pays off reliably; courage and initiative hit their targets, siblings are supportive and communication lands well.",
+  lo:"Extra push needed for efforts to land; communication misfires are more common and 3rd-house transits feel harder than they should."},
+ {hi:"Home, mother and inner peace are well-supported; property and vehicle matters resolve favourably and 4th-house transits bring comfort.",
+  lo:"Domestic and property matters need careful tending; emotional support may feel thin and home situations can become unsettled during these transits."},
+ {hi:"Intelligence and creativity flow freely; children, romance and speculation are favoured, and past-life merit (Purva Punya) activates through transits here.",
+  lo:"5th-house matters — children, creative projects, speculation — require extra caution; speculative ventures are less reliably rewarding."},
+ {hi:"Opponents are consistently overcome; health is resilient with quick recovery; debts get resolved and the native thrives under competitive pressure.",
+  lo:"Enemies may gain ground; health issues can drag and competitive situations are less reliably won — be more strategic here."},
+ {hi:"Partnerships, marriage and business alliances are strongly supported; 7th-house transits bring collaborative gains and fulfilling relationships.",
+  lo:"Relationship conflicts and business disputes surface more readily; partnerships require more conscious nurturing and clear agreements."},
+ {hi:"Longevity and resilience are strong; sudden events are navigated well, inheritance or research pursuits are productive and transformation is ultimately growth.",
+  lo:"Sudden disruptions hit harder; health scares, hidden losses or abrupt change during 8th-house transits need more preparation and caution."},
+ {hi:"Fortune and grace flow abundantly; father and guru relationships are supportive and 9th-house transits routinely bring unexpected blessings and opportunities.",
+  lo:"Luck requires cultivation here; 9th-house transits are less reliably fortunate — dharmic effort and consistency matter more than hoping for windfalls."},
+ {hi:"Career, authority and public recognition are strongly favoured; professional advancement during 10th-house transits is meaningful and tends to last.",
+  lo:"Career progress is harder-won; recognition comes slowly and status may be contested — extra visibility and consistency are needed."},
+ {hi:"Income, gains and fulfilled desires are well-supported; networks are productive, large goals get realised and 11th-house transits routinely deliver results.",
+  lo:"Gains are inconsistent; goals need more groundwork and income streams require active cultivation rather than passive accumulation."},
+ {hi:"Expenditure is productive rather than wasteful; foreign connections and spiritual practice bring genuine benefit and losses often carry transformative seeds.",
+  lo:"12th-house transits tend toward draining expenditure, unwanted isolation or health leakage — more vigilance and boundaries needed during these periods."}
 ];
 
 /* 27 nakshatras — the finer "costume": lord, deity, symbol, theme */
@@ -910,12 +952,33 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
     }
     tb+=`</tr></tbody>`;
     tbl.innerHTML=th+tb;
-    // insight: SAV summary
-    const top3=sav.map((v,i)=>({v,i})).sort((a,b)=>b.v-a.v).slice(0,3);
-    const bot3=sav.map((v,i)=>({v,i})).sort((a,b)=>a.v-b.v).slice(0,3);
+    // insight: SAV summary with house-level interpretation
+    const savWithHouse=sav.map((v,si)=>({v,si,h:((si-La+12)%12)+1}));
+    const top3=[...savWithHouse].sort((a,b)=>b.v-a.v).slice(0,3);
+    const bot3=[...savWithHouse].sort((a,b)=>a.v-b.v).slice(0,3);
     const savTotal=sav.reduce((a,b)=>a+b,0);
+    function hItem(x,isHi){
+      const interp=SAV_HOUSE_INTERP[x.h-1];
+      return `<div class="bav-insight-item">
+        <div class="bav-score-badge ${isHi?"hi":"lo"}">${x.v}</div>
+        <div class="bav-insight-body">
+          <div class="bav-insight-hlabel">H${x.h} · ${SIGNS[x.si]} · ${BHAVAS[x.h-1].en}</div>
+          <div class="bav-insight-hdesc">${isHi?interp.hi:interp.lo}</div>
+        </div>
+      </div>`;
+    }
     document.getElementById("bavInsight").innerHTML=
-      `<b>SAV total: ${savTotal}</b> · Best houses for any transit: <b>${top3.map(x=>`H${((x.i-La+12)%12)+1} (${SIGN3[x.i]} · ${x.v})`).join(", ")}</b>. Weakest: <b>${bot3.map(x=>`H${((x.i-La+12)%12)+1} (${SIGN3[x.i]} · ${x.v})`).join(", ")}</b>.`;
+      `<div class="bav-insight-total"><b>SAV total: ${savTotal}</b> &nbsp;·&nbsp; ≥30 strong &nbsp;·&nbsp; 25–29 average &nbsp;·&nbsp; &lt;25 weak &nbsp;·&nbsp; max 56 per house</div>
+      <div class="bav-insight-grid">
+        <div>
+          <div class="bav-insight-col-title strong">★ Strongest — transits here work hardest for you</div>
+          ${top3.map(x=>hItem(x,true)).join("")}
+        </div>
+        <div>
+          <div class="bav-insight-col-title weak">⚠ Weakest — transits here are more testing</div>
+          ${bot3.map(x=>hItem(x,false)).join("")}
+        </div>
+      </div>`;
   }
 
   // modal
