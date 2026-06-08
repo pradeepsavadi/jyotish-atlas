@@ -197,6 +197,7 @@
   .story-label.current{color:var(--exalt)}
   .story-label.friction{color:var(--debil)}
   .story-label.ruler{color:var(--gold2)}
+  .story-label.patterns{color:#a78bfa}
   .story-text{font-size:13.5px;color:#dfe4f6;line-height:1.65}
   .story-text b{color:var(--ink)}
   .story-text i{color:var(--gold2);font-style:normal}
@@ -361,6 +362,10 @@
         <div class="story-block">
           <div class="story-num">4</div>
           <div class="story-content"><div class="story-label ruler">Hidden ruler · nakshatra undercurrent</div><div class="story-text" id="storyP4"></div></div>
+        </div>
+        <div class="story-block">
+          <div class="story-num">5</div>
+          <div class="story-content"><div class="story-label patterns">Relative patterns · house relationships</div><div class="story-text" id="storyP5"></div></div>
         </div>
       </div>
     </div>
@@ -855,6 +860,44 @@ function computeSAV(pos){
   return s;
 }
 
+/* ===== HOUSE PAIR RELATIONSHIPS ===== */
+const HOUSE_PAIRS=[
+  {a:10,b:11,
+   aGt:"Karma outpaces reward (H10 > H11 by {d}) — effort and authority are strong but the fruits need conscious cultivation; recognition tends to exceed financial gain.",
+   bGt:"Gains flow ahead of karma (H11 > H10 by {d}) — the network and income channels work well; the opportunity is to match that inflow with equal depth of execution and sustained action.",
+   eq:"Karma and reward are in balance — effort and gain are roughly proportional."},
+  {a:11,b:2,
+   aGt:"Earns well, holds less (H11 > H2 by {d}) — income and opportunities flow in but wealth accumulates slowly. The vessel earns well but leaks. Conscious saving, investment and building the family resource base are the growth edge.",
+   bGt:"Steady accumulator, narrower inflow (H2 > H11 by {d}) — what comes in is reliably preserved and built upon, but income streams and network gains may be more limited. Expanding outward connections is the opportunity.",
+   eq:"Earning and accumulation are in balance — income flows in and tends to stay."},
+  {a:1,b:7,
+   aGt:"Self-reliant over collaborative (H1 > H7 by {d}) — solo efforts and personal agency outperform partnerships; strongest when operating independently. Relationships may not deliver proportionally to the effort invested in them.",
+   bGt:"Partnership-powered (H7 > H1 by {d}) — collaborative ventures and alliances amplify results beyond what solo effort produces. Others bring out the best; the opportunity is to choose partners wisely.",
+   eq:"Self and partnership are in balance — works well both independently and in collaboration."},
+  {a:5,b:9,
+   aGt:"Self-made over fortunate (H5 > H9 by {d}) — intelligence, creativity and effort drive outcomes more than luck or grace; results are earned, not gifted. Strengthening dharmic alignment and teacher/guru connections could improve the grace factor.",
+   bGt:"Fortune's reach (H9 > H5 by {d}) — grace and luck amplify effort; the universe tends to meet them more than halfway. Creative output, children and speculative ventures may need more deliberate attention to match the fortune they receive.",
+   eq:"Earned merit and fortune are in balance — both intelligence and grace contribute to outcomes."},
+  {a:4,b:10,
+   aGt:"Inner over outer (H4 > H10 by {d}) — private life, home and inner peace are richer than public achievement; the deepest fulfilment comes from within. Public role may feel like a duty rather than a calling.",
+   bGt:"Outer over inner (H10 > H4 by {d}) — public karma and authority are the dominant current; inner peace and home life may be secondary to the drive to act in the world. A conscious investment in the 4th house prevents burnout.",
+   eq:"Inner and outer worlds are in balance — public achievement and private contentment both receive support."},
+  {a:2,b:12,
+   aGt:"Accumulation over expenditure (H2 > H12 by {d}) — wealth builds more than it drains; resources are preserved and grown steadily.",
+   bGt:"Expenditure over accumulation (H12 > H2 by {d}) — outflow is stronger than inflow storage; money and energy tend to leave more than they stay. Worth examining what 12th-house themes (foreign ties, health, spiritual practice, hidden losses) are consuming the resources.",
+   eq:"Accumulation and expenditure are roughly in balance."},
+  {a:6,b:8,
+   aGt:"Overcomes more than transforms (H6 > H8 by {d}) — competitive wins and daily victories are consistently supported; sudden shocks and deep inner transformation are less so.",
+   bGt:"Transforms more than conquers (H8 > H6 by {d}) — depth, research, sudden change and inner transformation are more consistently supported than day-to-day competitive wins and obstacle-clearing.",
+   eq:"Obstacle-overcoming and transformation are in balance."}
+];
+function savPairInsight(pair,sav,La){
+  const sA=((La+pair.a-1)%12), sB=((La+pair.b-1)%12);
+  const vA=sav[sA], vB=sav[sB], diff=vA-vB, abs=Math.abs(diff);
+  const raw=diff>4?pair.aGt:diff<-4?pair.bGt:pair.eq;
+  return {abs,vA,vB,text:raw.replace(/{d}/g,abs),a:pair.a,b:pair.b};
+}
+
 /* ===== CHART STORY ENGINE ===== */
 function generateStory(c, La, bavForVerdict, allBAV){
   const PLANETS_7=["Su","Mo","Ma","Me","Ju","Ve","Sa"];
@@ -944,7 +987,17 @@ function generateStory(c, La, bavForVerdict, allBAV){
   const dnlPlacement=dnlPlanet&&dnlHouse?`${dnlG.name} itself is ${dnlD1.full.toLowerCase()} in the ${ORD(dnlHouse)} house (${BHAVAS[dnlHouse-1].en}${dnlNi?`, in ${dnlNi.n}`:""}) — its own strength directly colours all those it rules. `:"";
   const p4=`<b>${underDominant.length} planet${underDominant.length!==1?"s":""}${lagnaAlso?" (plus the lagna)":""}</b> fall in nakshatras ruled by <b>${dnlG.name}</b>: ${planetList}. This makes ${dnlG.name} the chart's hidden ruler — its significations (${dnlG.karakas.slice(0,3).join(", ").toLowerCase()}) run as an undercurrent through the whole chart, shaping motivation behind seemingly separate life domains. ${dnlPlacement}When ${dnlG.name}'s dasha or antardasha runs, or when it is transited by a major planet, the ripple is far wider than its single house suggests.`;
 
-  return {p1,p2,p3,p4};
+  // p5 — relative house patterns
+  const allPairInsights=HOUSE_PAIRS.map(pair=>savPairInsight(pair,sav,La));
+  const significantPairs=allPairInsights.filter(x=>x.abs>=4).sort((a,b)=>b.abs-a.abs).slice(0,3);
+  let p5="";
+  if(significantPairs.length===0){
+    p5="House energies are broadly in balance — no single pair shows a sharp differential. Each life domain is receiving roughly proportional support.";
+  } else {
+    p5=significantPairs.map(x=>`<b>H${x.a} (${x.vA}) vs H${x.b} (${x.vB}):</b> ${x.text}`).join("<br><br>");
+  }
+
+  return {p1,p2,p3,p4,p5};
 }
 
 /* ===== MY CHARTS (parse + persist + apply) ===== */
@@ -1117,6 +1170,7 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
     document.getElementById("storyP2").innerHTML=story.p2;
     document.getElementById("storyP3").innerHTML=story.p3;
     document.getElementById("storyP4").innerHTML=story.p4;
+    document.getElementById("storyP5").innerHTML=story.p5;
     document.getElementById("chartStory").style.display="block";
   }
 
