@@ -183,6 +183,23 @@
   .bav-insight-body{flex:1}
   .bav-insight-hlabel{font-weight:700;font-size:12.5px;margin-bottom:2px}
   .bav-insight-hdesc{font-size:12px;color:var(--muted);line-height:1.45}
+  /* Chart Story */
+  .chart-story{margin-top:14px;background:linear-gradient(160deg,#0f1530,#0b0e1a);border:1px solid var(--line);border-radius:16px;padding:20px 22px}
+  .chart-story-header{display:flex;align-items:center;gap:10px;margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:12px}
+  .chart-story-header h4{margin:0;font-size:16px;font-weight:800;color:var(--gold2)}
+  .chart-story-header .sub{font-size:12px;color:var(--muted)}
+  .story-block{display:flex;gap:14px;margin-bottom:18px}
+  .story-block:last-child{margin-bottom:0}
+  .story-num{flex:0 0 auto;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;background:var(--panel2);border:1px solid var(--line);color:var(--gold2)}
+  .story-content{}
+  .story-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+  .story-label.identity{color:#7aa2ff}
+  .story-label.current{color:var(--exalt)}
+  .story-label.friction{color:var(--debil)}
+  .story-label.ruler{color:var(--gold2)}
+  .story-text{font-size:13.5px;color:#dfe4f6;line-height:1.65}
+  .story-text b{color:var(--ink)}
+  .story-text i{color:var(--gold2);font-style:normal}
   footer{padding:40px 0 70px;color:var(--muted);font-size:12.5px}
   .note{font-size:12px;color:var(--muted)}
 </style>
@@ -323,6 +340,28 @@
           <span style="border:1px solid var(--gold);border-radius:4px;padding:0 5px;color:var(--gold2)">outlined = natal house</span>
         </div>
         <div class="bav-insight" id="bavInsight"></div>
+      </div>
+      <div class="chart-story" id="chartStory" style="display:none">
+        <div class="chart-story-header">
+          <h4>✦ Chart Story</h4>
+          <span class="sub">Synthesised from dignity · nakshatra · house position · BAV · D-9</span>
+        </div>
+        <div class="story-block">
+          <div class="story-num">1</div>
+          <div class="story-content"><div class="story-label identity">Identity · Lagna &amp; its lord</div><div class="story-text" id="storyP1"></div></div>
+        </div>
+        <div class="story-block">
+          <div class="story-num">2</div>
+          <div class="story-content"><div class="story-label current">Natural current · strongest thread</div><div class="story-text" id="storyP2"></div></div>
+        </div>
+        <div class="story-block">
+          <div class="story-num">3</div>
+          <div class="story-content"><div class="story-label friction">Friction · where effort is needed</div><div class="story-text" id="storyP3"></div></div>
+        </div>
+        <div class="story-block">
+          <div class="story-num">4</div>
+          <div class="story-content"><div class="story-label ruler">Hidden ruler · nakshatra undercurrent</div><div class="story-text" id="storyP4"></div></div>
+        </div>
       </div>
     </div>
   </section>
@@ -816,6 +855,98 @@ function computeSAV(pos){
   return s;
 }
 
+/* ===== CHART STORY ENGINE ===== */
+function generateStory(c, La, bavForVerdict, allBAV){
+  const PLANETS_7=["Su","Mo","Ma","Me","Ju","Ve","Sa"];
+  const ALL_9=["Su","Mo","Ma","Me","Ju","Ve","Sa","Ra","Ke"];
+
+  // Lagna nakshatra
+  const laNak=nakInfo(La*30+c.La.deg);
+  const laRashi=RASHIS[La];
+  const lagnaLordK=SIGN_LORD[La];
+  const llPlanet=c.planets[lagnaLordK];
+
+  // Score each of the 7 planets for overall strength
+  const scored=PLANETS_7.map(k=>{
+    const p=c.planets[k]; if(!p) return null;
+    const house=houseFromSigns(La,p.sign);
+    const d1=dignityOf(k,p.sign);
+    const d9i=navamsaSign(p.sign,p.deg);
+    const d9=dignityOf(k,d9i);
+    const bav=bavForVerdict[k]?bavForVerdict[k][p.sign]:3;
+    const ht=houseType(house);
+    const ni=nakInfo(p.sign*30+p.deg);
+    let score=d1.score*2+d9.score*0.7;
+    if(ht.kendra&&ht.trikona) score+=3;
+    else if(ht.kendra||ht.trikona) score+=1.5;
+    else if(ht.dusthana) score-=2;
+    score+=(bav-3)*0.4;
+    return {k,p,house,d1,d9,d9i,bav,score,ni,ht};
+  }).filter(Boolean);
+
+  const byScore=[...scored].sort((a,b)=>b.score-a.score);
+  const strongest=byScore[0];
+  const mostChallenged=byScore[byScore.length-1];
+
+  // Nakshatra lord frequency across all 9 planets + lagna
+  const nlCount={};
+  ALL_9.forEach(k=>{
+    const p=c.planets[k]; if(!p) return;
+    const ni=nakInfo(p.sign*30+p.deg);
+    nlCount[ni.l]=(nlCount[ni.l]||0)+1;
+  });
+  nlCount[laNak.l]=(nlCount[laNak.l]||0)+0.5;
+  const dominantNLK=Object.entries(nlCount).sort((a,b)=>b[1]-a[1])[0][0];
+  const underDominant=ALL_9.map(k=>{
+    const p=c.planets[k]; if(!p) return null;
+    const ni=nakInfo(p.sign*30+p.deg);
+    return ni.l===dominantNLK?{k,ni}:null;
+  }).filter(Boolean);
+
+  // Top 2 SAV houses
+  const sav=allBAV.SAV;
+  const savRanked=sav.map((v,si)=>({v,si,h:((si-La+12)%12)+1})).sort((a,b)=>b.v-a.v);
+  const t1=savRanked[0], t2=savRanked[1];
+
+  // --- PARA 1: IDENTITY ---
+  let llDesc="";
+  if(llPlanet){
+    const llH=houseFromSigns(La,llPlanet.sign);
+    const llD1=dignityOf(lagnaLordK,llPlanet.sign);
+    const llNi=nakInfo(llPlanet.sign*30+llPlanet.deg);
+    const llBav=bavForVerdict[lagnaLordK]?bavForVerdict[lagnaLordK][llPlanet.sign]:null;
+    const llBavNote=llBav!==null?(llBav>=5?` BAV in the ${ORD(llH)} is strong (${llBav}/8) — the chart's engine runs with consistent fuel.`:llBav<=2?` BAV is weak (${llBav}/8), limiting transit support for the lagna lord.`:""):"";
+    llDesc=`Its lord <b>${GBYK[lagnaLordK].name}</b> is <b>${llD1.full}</b> in <b>${RASHIS[llPlanet.sign].name}</b>, in the <b>${ORD(llH)} house</b> — nakshatra <b>${llNi.n}</b>, star of ${llNi.d}, carrying <i>${llNi.sh}</i>.${llBavNote} The lagna lord's nakshatra shapes how this person moves through the world: ${llNi.t.split(",").slice(0,2).join(", ")}.`;
+  } else {
+    llDesc=`Its lord <b>${GBYK[lagnaLordK].name}</b> was not found in the chart — read through its sign placement.`;
+  }
+  const p1=`<b>${laRashi.name} rises</b> — ${laRashi.elem.toLowerCase()} sign, ${laRashi.mode.toLowerCase()}, nature: ${laRashi.traits.join(", ")}. The lagna falls in <b>${laNak.n}</b>, nakshatra of ${laNak.d} — <i>${laNak.sh}</i> — giving the body and personality a current of ${laNak.t.split(",")[0]}. ${llDesc}`;
+
+  // --- PARA 2: NATURAL CURRENT ---
+  const sg=strongest, sgG=GBYK[sg.k];
+  const sgBavNote=sg.bav>=5?`BAV in the ${ORD(sg.house)} is strong (${sg.bav}/8) — transits consistently back this placement.`:sg.bav<=2?`BAV in the ${ORD(sg.house)} is weak (${sg.bav}/8) — this strength deserves more transit support than it gets.`:`BAV is moderate (${sg.bav}/8).`;
+  const p2=`The chart's most powerfully placed planet is <b>${sgG.name}</b> — <b>${sg.d1.full}</b> in <b>${RASHIS[sg.p.sign].name}</b>, ${ORD(sg.house)} house (${BHAVAS[sg.house-1].en}). Nakshatra <b>${sg.ni.n}</b>, star of ${sg.ni.d} — <i>${sg.ni.sh}</i> — gives this placement a flavour of ${sg.ni.t.split(",")[0]}. ${sgBavNote} The universe also consistently backs <b>H${t1.h}</b> (${BHAVAS[t1.h-1].en}, ${t1.v} SAV): ${SAV_HOUSE_INTERP[t1.h-1].hi} Close behind, <b>H${t2.h}</b> (${BHAVAS[t2.h-1].en}, ${t2.v} SAV): ${SAV_HOUSE_INTERP[t2.h-1].hi}`;
+
+  // --- PARA 3: FRICTION ---
+  const mc=mostChallenged, mcG=GBYK[mc.k];
+  const mcBavNote=mc.bav<=2?`BAV in the ${ORD(mc.house)} is weak (${mc.bav}/8) — transit support is minimal, compounding the challenge.`:mc.bav>=5?`BAV is strong (${mc.bav}/8) here — a compensating grace that softens the difficulty during transits.`:``;
+  const d9Verdict=mc.d1.score<=-1&&mc.d9.score<=-1?"Both D-1 and D-9 confirm the difficulty — this needs conscious work, strong dasha periods or remediation.":mc.d9.score>=1?"D-9 redeems it — inner strength grows over time; this placement improves with maturity and effort.":"D-9 is mixed — delivery is uneven.";
+  const p3=`The most challenged placement is <b>${mcG.name}</b> — <b>${mc.d1.full}</b> in <b>${RASHIS[mc.p.sign].name}</b> (ruled by ${GBYK[SIGN_LORD[mc.p.sign]].name}), ${ORD(mc.house)} house (${BHAVAS[mc.house-1].en}). Nakshatra <b>${mc.ni.n}</b>, star of ${mc.ni.d} — adds the undertone of ${mc.ni.t.split(",")[0]}. ${mcBavNote} ${d9Verdict} The significations ${mcG.name} carries — ${mcG.karakas.slice(0,3).join(", ").toLowerCase()} — are where this person must work harder, more patiently and more consciously than most.`;
+
+  // --- PARA 4: HIDDEN RULER ---
+  const dnlG=GBYK[dominantNLK];
+  const dnlPlanet=c.planets[dominantNLK];
+  const dnlHouse=dnlPlanet?houseFromSigns(La,dnlPlanet.sign):null;
+  const dnlD1=dnlPlanet?dignityOf(dominantNLK,dnlPlanet.sign):null;
+  const dnlNi=dnlPlanet?nakInfo(dnlPlanet.sign*30+dnlPlanet.deg):null;
+  const planetList=underDominant.map(x=>`${GBYK[x.k].name} in ${x.ni.n}`).join(", ");
+  const lagnaAlso=laNak.l===dominantNLK;
+  const dnlPlacement=dnlPlanet&&dnlHouse?`${dnlG.name} itself is ${dnlD1.full.toLowerCase()} in the ${ORD(dnlHouse)} house (${BHAVAS[dnlHouse-1].en}${dnlNi?`, in ${dnlNi.n}`:""}) — its own strength directly colours all those it rules. `:"";
+  const p4=`<b>${underDominant.length} planet${underDominant.length!==1?"s":""}${lagnaAlso?" (plus the lagna)":""}</b> fall in nakshatras ruled by <b>${dnlG.name}</b>: ${planetList}. This makes ${dnlG.name} the chart's hidden ruler — its significations (${dnlG.karakas.slice(0,3).join(", ").toLowerCase()}) run as an undercurrent through the whole chart, shaping motivation behind seemingly separate life domains. ${dnlPlacement}When ${dnlG.name}'s dasha or antardasha runs, or when it is transited by a major planet, the ripple is far wider than its single house suggests.`;
+
+  return {p1,p2,p3,p4};
+}
+
 /* ===== MY CHARTS (parse + persist + apply) ===== */
 (function(){
   const LS="jyotish_charts_v1";
@@ -979,6 +1110,14 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
           ${bot3.map(x=>hItem(x,false)).join("")}
         </div>
       </div>`;
+
+    // Chart Story
+    const story=generateStory(c,La,bavForVerdict,allBAV);
+    document.getElementById("storyP1").innerHTML=story.p1;
+    document.getElementById("storyP2").innerHTML=story.p2;
+    document.getElementById("storyP3").innerHTML=story.p3;
+    document.getElementById("storyP4").innerHTML=story.p4;
+    document.getElementById("chartStory").style.display="block";
   }
 
   // modal
