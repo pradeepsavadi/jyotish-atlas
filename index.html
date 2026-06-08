@@ -203,6 +203,32 @@
   .story-text i{color:var(--gold2);font-style:normal}
   footer{padding:40px 0 70px;color:var(--muted);font-size:12.5px}
   .note{font-size:12px;color:var(--muted)}
+  /* === bhavat bhavam explorer === */
+  .bb-selectors{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin-bottom:22px}
+  .bb-sel-grp{display:flex;flex-direction:column;gap:5px}
+  .bb-sel-grp label{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+  .bb-sel{background:var(--panel2);border:1px solid var(--line);color:var(--fg);border-radius:8px;padding:7px 11px;font-size:13.5px;min-width:190px}
+  .bb-chain{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:18px;padding:14px 20px;background:var(--panel2);border-radius:12px;border:1px solid var(--line)}
+  .bb-chain-node{display:flex;flex-direction:column;align-items:center;gap:2px}
+  .bb-chain-house{font-size:24px;font-weight:800;color:var(--gold2)}
+  .bb-chain-label{font-size:11px;color:var(--muted);text-align:center;max-width:140px}
+  .bb-chain-sign{font-size:12px;color:var(--fg);font-weight:600}
+  .bb-chain-arrow{font-size:18px;color:var(--line);padding:0 14px;font-weight:700;white-space:nowrap;padding-bottom:14px}
+  .bb-chain-result .bb-chain-house{color:var(--exalt);font-size:30px}
+  .bb-chain-result .bb-chain-sign{color:var(--exalt);font-size:13px}
+  .bb-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+  .bb-vcard{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .bb-vcard-title{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .bb-vcard-sign{font-size:22px;font-weight:800;color:var(--gold2);margin-bottom:8px}
+  .bb-vcard-kv{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:13px}
+  .bb-vcard-kv b{color:var(--muted);font-weight:600;white-space:nowrap}
+  .bb-sav-badge{display:inline-block;padding:2px 9px;border-radius:999px;font-weight:700;font-size:12px}
+  .bb-sav-hi{background:#1d3a20;color:var(--exalt)}
+  .bb-sav-mid{border:1px solid var(--line);color:var(--fg)}
+  .bb-sav-lo{background:#2d1a1a;color:var(--debil)}
+  .bb-reading{background:linear-gradient(160deg,#0f1530,#0b0e1a);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:13.5px;line-height:1.75;color:#dfe4f6}
+  .bb-reading-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#a78bfa;margin-bottom:10px}
+  @media(max-width:600px){.bb-cards{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -215,6 +241,7 @@
     <a href="#bhavas">Bhavas</a>
     <a href="#synth">Synthesizer</a>
     <a href="#charts">My Charts</a>
+    <a href="#bbavam">Bhavat Bhavam</a>
     <a href="#quiz">Practice</a>
   </nav>
 </header>
@@ -367,6 +394,34 @@
           <div class="story-num">5</div>
           <div class="story-content"><div class="story-label patterns">Relative patterns · house relationships</div><div class="story-text" id="storyP5"></div></div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="bbavam">
+    <div class="eyebrow">Advanced technique · bhavat bhavam</div>
+    <h2>Relationship decoder</h2>
+    <p class="sub">Every person in your life maps to a specific house. Any topic about that person maps to another house counted forward from there — <i>bhavat bhavam</i>, "from house to house." Select who you're asking about and what you want to know — the app shows exactly where to look in D-1 and the relevant divisional chart.</p>
+    <div class="panel" style="padding:22px">
+      <div class="bb-selectors">
+        <div class="bb-sel-grp">
+          <label>Chart</label>
+          <select id="bbChart" class="bb-sel"></select>
+        </div>
+        <div class="bb-sel-grp">
+          <label>I want to know about my…</label>
+          <select id="bbPerson" class="bb-sel"></select>
+        </div>
+        <div class="bb-sel-grp">
+          <label>…specifically their</label>
+          <select id="bbTopic" class="bb-sel"></select>
+        </div>
+      </div>
+      <div id="bbEmpty" style="text-align:center;color:var(--muted);padding:30px 0;font-size:13.5px">Add a chart in <b>My Charts</b> above to use the decoder.</div>
+      <div id="bbResult" style="display:none">
+        <div class="bb-chain" id="bbChain"></div>
+        <div class="bb-cards" id="bbCards"></div>
+        <div class="bb-reading"><div class="bb-reading-label">Reading</div><div id="bbReadingText"></div></div>
       </div>
     </div>
   </section>
@@ -1044,7 +1099,7 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
       t.innerHTML=`<span>${c.name}</span><span class="x" title="remove">✕</span>`;
       t.querySelector("span").onclick=()=>{active=i;draw();};
       t.onclick=(e)=>{if(!e.target.classList.contains("x")){active=i;draw();}};
-      t.querySelector(".x").onclick=(e)=>{e.stopPropagation();charts.splice(i,1);if(active>=charts.length)active=charts.length-1;save(charts);draw();};
+      t.querySelector(".x").onclick=(e)=>{e.stopPropagation();charts.splice(i,1);if(active>=charts.length)active=charts.length-1;save(charts);draw();JA.onChartsChange&&JA.onChartsChange();};
       tabs.appendChild(t);
     });
     const add=document.createElement("div"); add.className="ctab add"; add.textContent="＋ Add chart"; add.onclick=openModal; tabs.appendChild(add);
@@ -1188,14 +1243,212 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
     rd.readAsText(f);
   };
   document.getElementById("addFirst").onclick=e=>{e.preventDefault();openModal();};
-  document.getElementById("demoFirst").onclick=e=>{e.preventDefault();charts.push({name:"Demo chart",...parse(DEMO)});active=charts.length-1;save(charts);draw();};
+  document.getElementById("demoFirst").onclick=e=>{e.preventDefault();charts.push({name:"Demo chart",...parse(DEMO)});active=charts.length-1;save(charts);draw();JA.onChartsChange&&JA.onChartsChange();};
   document.getElementById("addSave").onclick=()=>{
     const parsed=parse(textEl.value); const np=Object.keys(parsed.planets).length;
     if(!parsed.La||np<7){msg.style.color="var(--debil)";msg.textContent=`Couldn't read it — found Lagna:${parsed.La?"yes":"no"}, planets:${np}/9. Make sure you pasted the longitude table (Lagna, Sun…Ketu with sign & degree).`;return;}
     charts.push({name:(nameEl.value.trim()||`Chart ${charts.length+1}`),La:parsed.La,planets:parsed.planets});
-    active=charts.length-1; save(charts); closeModal(); draw();
+    active=charts.length-1; save(charts); closeModal(); draw(); JA.onChartsChange&&JA.onChartsChange();
   };
   draw();
+})();
+
+/* ===== DIVISIONAL CHART COMPUTATIONS ===== */
+function computeD2(s,d){const isOdd=s%2===0;return(d<15)===isOdd?4:3;}
+function computeD3(s,d){return(s+Math.floor(d/10)*4)%12;}
+function computeD4(s,d){return(s+Math.floor(d/7.5)*3)%12;}
+function computeD7(s,d){const p=Math.floor(d/(30/7));return s%2===0?(s+p)%12:(s+6+p)%12;}
+function computeD10(s,d){const p=Math.floor(d/3);return s%2===0?(s+p)%12:(s+8+p)%12;}
+function computeD12(s,d){return(s+Math.floor(d/2.5))%12;}
+function computeD16(s,d){return([0,4,8][s%3]+Math.floor(d/1.875))%12;}
+const VARGA_FN={
+  D2:computeD2,D3:computeD3,D4:computeD4,D7:computeD7,
+  D9:(s,d)=>navamsaSign(s,d),D10:computeD10,D12:computeD12,D16:computeD16
+};
+function buildVarga(c,fn){
+  const lagna=fn(c.La.sign,c.La.deg),planets={};
+  for(const[k,p]of Object.entries(c.planets))planets[k]=fn(p.sign,p.deg);
+  return{lagna,planets};
+}
+
+/* ===== BHAVAT BHAVAM EXPLORER ===== */
+(function(){
+  const BB_PERSONS=[
+    {label:"Self",                    h:1},
+    {label:"Spouse / partner",        h:7},
+    {label:"First child",             h:5},
+    {label:"Second child",            h:9,  note:"H5 from H5"},
+    {label:"Mother",                  h:4},
+    {label:"Father",                  h:9},
+    {label:"Younger sibling",         h:3},
+    {label:"Elder sibling",           h:11},
+    {label:"Paternal grandfather",    h:5,  note:"H9 from H9"},
+    {label:"Maternal grandmother",    h:7,  note:"H4 from H4"},
+  ];
+  const BB_TOPICS=[
+    {label:"Spouse / partner",        countH:7,  vk:"D9",  vn:"D-9 Navamsha",     vdesc:"marriage & dharma"},
+    {label:"Children",                countH:5,  vk:"D7",  vn:"D-7 Saptamsha",    vdesc:"progeny"},
+    {label:"Career / calling",        countH:10, vk:"D10", vn:"D-10 Dasamsha",    vdesc:"profession & authority"},
+    {label:"Wealth",                  countH:2,  vk:"D2",  vn:"D-2 Hora",         vdesc:"financial matters"},
+    {label:"Siblings",                countH:3,  vk:"D3",  vn:"D-3 Drekkana",     vdesc:"co-born & courage"},
+    {label:"Property / home",         countH:4,  vk:"D4",  vn:"D-4 Chaturthamsha",vdesc:"fixed assets & home"},
+    {label:"Parents",                 countH:9,  vk:"D12", vn:"D-12 Dwadashamsha",vdesc:"parents & ancestors"},
+    {label:"Fortune / dharma",        countH:9,  vk:"D9",  vn:"D-9 Navamsha",     vdesc:"dharmic fortune"},
+    {label:"Vehicles / comforts",     countH:4,  vk:"D16", vn:"D-16 Shodashamsha",vdesc:"vehicles & happiness"},
+    {label:"Income / gains",          countH:11, vk:null,  vn:null,               vdesc:"inflow & network"},
+    {label:"Longevity",               countH:8,  vk:null,  vn:null,               vdesc:"lifespan"},
+    {label:"Health / vitality",       countH:1,  vk:null,  vn:null,               vdesc:"body & vitality"},
+  ];
+  const LS_KEY="jyotish_charts_v1";
+  function getCharts(){try{return JSON.parse(localStorage.getItem(LS_KEY))||[];}catch(e){return[];}}
+
+  const selChart=document.getElementById("bbChart");
+  const selPerson=document.getElementById("bbPerson");
+  const selTopic=document.getElementById("bbTopic");
+  const resultDiv=document.getElementById("bbResult");
+  const emptyDiv=document.getElementById("bbEmpty");
+
+  BB_PERSONS.forEach((p,i)=>{
+    const o=document.createElement("option");o.value=i;
+    o.textContent=p.label+(p.note?` (${p.note})`:"")+(p.h!==1?` · H${p.h}`:"");
+    selPerson.appendChild(o);
+  });
+  BB_TOPICS.forEach((t,i)=>{
+    const o=document.createElement("option");o.value=i;o.textContent=t.label;selTopic.appendChild(o);
+  });
+
+  function savForHouse(c,La,resultH){
+    const avPos={La:c.La.sign};
+    for(const k of["Su","Mo","Ma","Me","Ju","Ve","Sa"])if(c.planets[k])avPos[k]=c.planets[k].sign;
+    return computeSAV(avPos)[(La+resultH-1)%12];
+  }
+
+  function planetsInVargaSign(vargaPlanets,sign){
+    return Object.entries(vargaPlanets).filter(([k,v])=>v===sign).map(([k])=>k);
+  }
+
+  function vCardHTML(title,hSign,lord,lordVSign,lordDig,lordHn,pls,sav){
+    const lg=GBYK[lord];
+    const lordInfo=lordVSign!==undefined
+      ?`${lg.gl} ${lg.name} · ${lordDig?lordDig.full:"—"} in ${SIGNS[lordVSign]}${lordHn?` (H${lordHn})`:""}`
+      :`${lg.gl} ${lg.name}`;
+    const plHTML=pls.length?pls.map(k=>`${GBYK[k].gl} ${GBYK[k].name}`).join(", ")
+      :`<span style="color:var(--muted)">empty</span>`;
+    const savHTML=sav!=null
+      ?`<span class="bb-sav-badge ${sav>=30?"bb-sav-hi":sav>=25?"bb-sav-mid":"bb-sav-lo"}">${sav} SAV</span>`:"";
+    return `<div class="bb-vcard">
+      <div class="bb-vcard-title">${title}</div>
+      <div class="bb-vcard-sign">${SIGNS[hSign]}</div>
+      <div class="bb-vcard-kv">
+        <b>Lord</b><span>${lordInfo}</span>
+        <b>Planets</b><span>${plHTML}</span>
+        ${sav!=null?`<b>SAV</b><span>${savHTML}</span>`:""}
+      </div></div>`;
+  }
+
+  function generateReading(c,La,person,topic,resultH,resultSign,lord,lordSign,lordDig,sav,varga){
+    const bhava=BHAVAS[resultH-1];
+    const lg=GBYK[lord];
+    const lordHn=lordSign!==undefined?houseFromSigns(La,lordSign):null;
+
+    const d1=lordDig
+      ?`<b>${SIGNS[resultSign]}</b> is H${resultH} (${bhava.skt}) — ${lg.name} is its lord, ${lordDig.full.toLowerCase()} in ${SIGNS[lordSign]}${lordHn?` (H${lordHn})`:""}. ${lordDig.score>=1?"A dignified lord actively supports the themes of this house.":lordDig.score<=-1?"A weakened lord means this area takes more effort — dasha timing and transit activation become critical.":"Neutral placement — neither amplifying nor blocking; results come through consistently but not exceptionally."}`
+      :`<b>${SIGNS[resultSign]}</b> is H${resultH} (${bhava.skt}) with ${lg.name} as its lord.`;
+
+    const d1Pls=Object.entries(c.planets).filter(([k,p])=>p.sign===resultSign)
+      .map(([k,p])=>`${GBYK[k].name} (${dignityOf(k,resultSign).full.split("·")[0].trim()})`);
+    const plSent=d1Pls.length
+      ?`${d1Pls.join(" and ")} ${d1Pls.length===1?"occupies":"occupy"} this house directly, adding their nature to the signification.`
+      :"No planet sits here directly — the lord's condition is the primary indicator.";
+
+    const savLvl=sav>=30?"strong":sav>=25?"average":"below average";
+    const savSent=`SAV is <b>${sav}</b> (${savLvl}). ${sav>=30?`Transit support through H${resultH} is consistently strong — this domain activates reliably when relevant dashas run.`:sav>=25?`Moderate transit support — results come in phases rather than continuously.`:`Limited transit backing; meaningful results require precise dasha alignment.`}`;
+
+    let vSent="";
+    if(varga){
+      const vSign=(varga.lagna+resultH-1)%12;
+      const vLord=SIGN_LORD[vSign];
+      const vLordSign=varga.planets[vLord];
+      const vLordDig=vLordSign!==undefined?dignityOf(vLord,vLordSign):null;
+      if(vLordDig){
+        vSent=`In <b>${topic.vn}</b> (the lens for ${topic.vdesc}), H${resultH} maps to <b>${SIGNS[vSign]}</b> with ${GBYK[vLord].name} as lord — ${vLordDig.full.toLowerCase()}. ${vLordDig.score>=1?"The divisional chart confirms the D-1 promise — delivery capacity is strong.":vLordDig.score<=-1?"The varga chart shows reduced delivery; the D-1 promise may not fully manifest without strong dasha support.":"Moderate varga support — partially reinforces D-1."}`;
+      }
+    }
+
+    const rule=`<span class="note" style="display:block;margin-top:12px;border-top:1px dashed var(--line);padding-top:10px">Bhavat bhavam: H${person.h} (${person.label}) + count ${topic.countH} = <b>H${resultH} · ${bhava.skt} · ${bhava.en}</b></span>`;
+    return [d1,plSent,savSent,vSent].filter(Boolean).join("<br><br>")+rule;
+  }
+
+  function runQuery(){
+    const charts=getCharts();
+    if(!charts.length){emptyDiv.style.display="";resultDiv.style.display="none";return;}
+    const c=charts[Math.min(+selChart.value||0,charts.length-1)];
+    if(!c) return;
+    const person=BB_PERSONS[+selPerson.value];
+    const topic=BB_TOPICS[+selTopic.value];
+    const La=c.La.sign;
+    const resultH=((person.h-1+topic.countH-1)%12)+1;
+    const resultSign=(La+resultH-1)%12;
+
+    document.getElementById("bbChain").innerHTML=`
+      <div class="bb-chain-node">
+        <span class="bb-chain-house">H${person.h}</span>
+        <span class="bb-chain-label">${person.label}</span>
+        <span class="bb-chain-sign">${SIGNS[(La+person.h-1)%12]}</span>
+      </div>
+      <div class="bb-chain-arrow">+${topic.countH}→</div>
+      <div class="bb-chain-node bb-chain-result">
+        <span class="bb-chain-house">H${resultH}</span>
+        <span class="bb-chain-label">${person.label}'s ${topic.label.toLowerCase()}</span>
+        <span class="bb-chain-sign">${SIGNS[resultSign]} · ${BHAVAS[resultH-1].skt}</span>
+      </div>`;
+
+    const d1Lord=SIGN_LORD[resultSign];
+    const d1LP=c.planets[d1Lord];
+    const d1LS=d1LP?d1LP.sign:undefined;
+    const d1LD=d1LS!==undefined?dignityOf(d1Lord,d1LS):null;
+    const d1LHn=d1LS!==undefined?houseFromSigns(La,d1LS):null;
+    const d1Pls=Object.entries(c.planets).filter(([k,p])=>p.sign===resultSign).map(([k])=>k);
+    const sav=savForHouse(c,La,resultH);
+
+    const fn=topic.vk?VARGA_FN[topic.vk]:null;
+    const varga=fn?buildVarga(c,fn):null;
+    let vargaHTML="";
+    if(varga){
+      const vSign=(varga.lagna+resultH-1)%12;
+      const vLord=SIGN_LORD[vSign];
+      const vLS=varga.planets[vLord];
+      const vLD=vLS!==undefined?dignityOf(vLord,vLS):null;
+      const vLHn=vLS!==undefined?((vLS-varga.lagna+12)%12)+1:null;
+      vargaHTML=vCardHTML(`${topic.vn} · H${resultH}`,vSign,vLord,vLS,vLD,vLHn,planetsInVargaSign(varga.planets,vSign),null);
+    } else {
+      vargaHTML=`<div class="bb-vcard"><div class="bb-vcard-title">Secondary chart</div><div style="color:var(--muted);font-size:13px;padding-top:6px">This topic is read from D-1 primarily — no secondary varga is prescribed in classical sources for this specific query.</div></div>`;
+    }
+
+    document.getElementById("bbCards").innerHTML=
+      vCardHTML(`D-1 Rasi · H${resultH}`,resultSign,d1Lord,d1LS,d1LD,d1LHn,d1Pls,sav)+vargaHTML;
+    document.getElementById("bbReadingText").innerHTML=
+      generateReading(c,La,person,topic,resultH,resultSign,d1Lord,d1LS,d1LD,sav,varga);
+    emptyDiv.style.display="none";
+    resultDiv.style.display="block";
+  }
+
+  function refreshChartSel(){
+    const charts=getCharts();
+    selChart.innerHTML="";
+    if(!charts.length){
+      const o=document.createElement("option");o.textContent="(no charts)";selChart.appendChild(o);
+      emptyDiv.style.display="";resultDiv.style.display="none";return;
+    }
+    charts.forEach((c,i)=>{const o=document.createElement("option");o.value=i;o.textContent=c.name;selChart.appendChild(o);});
+    runQuery();
+  }
+
+  selChart.addEventListener("change",runQuery);
+  selPerson.addEventListener("change",runQuery);
+  selTopic.addEventListener("change",runQuery);
+  JA.onChartsChange=refreshChartSel;
+  refreshChartSel();
 })();
 
 /* ===== QUIZ ===== */
