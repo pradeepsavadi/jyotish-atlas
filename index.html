@@ -398,7 +398,42 @@
   .dt-cur-antar{color:#dfe4f6;margin-bottom:4px}
   .dt-cur-next{font-size:11.5px;color:var(--muted)}
   .dt-no-data{padding:22px;text-align:center;color:var(--muted);font-size:13px}
+
+  /* ===== Transit Analysis (Gochara) ===== */
+  .tr-wrap{padding:18px 20px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+  .tr-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+  .tr-hdr h4{margin:0;font-size:14px;font-weight:700;color:var(--gold2)}
+  .tr-date-ctrl{display:flex;gap:7px;align-items:center}
+  .tr-date-ctrl label{font-size:11px;color:var(--muted)}
+  .tr-date-ctrl input[type=date]{background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:5px 9px;font-size:12px;outline:none}
+  .tr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+  @media(max-width:900px){.tr-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:580px){.tr-grid{grid-template-columns:1fr}}
+  .tr-card{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:11px 13px;transition:.12s border-color}
+  .tr-card.tr-good{border-color:rgba(79,208,127,.35)}
+  .tr-card.tr-bad{border-color:rgba(239,106,90,.2)}
+  .tr-card.tr-vedha{border-color:rgba(227,185,78,.3);opacity:.8}
+  .tr-card-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .tr-pname{font-size:13px;font-weight:800;flex:1;line-height:1.2}
+  .tr-hlabel{font-size:10.5px;color:var(--muted);line-height:1.3}
+  .tr-badges{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:5px}
+  .tr-badge{font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:999px;white-space:nowrap;text-transform:uppercase}
+  .tr-badge.good{background:#1d3a20;color:var(--exalt)}
+  .tr-badge.bad{background:#2d1a1a;color:var(--debil)}
+  .tr-badge.vedha{background:#2d2a14;color:var(--gold2);border:1px solid rgba(220,180,60,.25)}
+  .tr-badge.neutral{background:var(--panel);border:1px solid var(--line);color:var(--muted)}
+  .tr-badge.sati{background:#220a3a;color:#c080f0;border:1px solid rgba(160,80,240,.35)}
+  .tr-badge.dhaiya{background:#2d0a1a;color:#f090c8}
+  .tr-badge.guru{background:#0d1e40;color:var(--accent)}
+  .tr-bav{font-size:10px;color:var(--muted);margin-top:3px}
+  .tr-special{margin-top:10px;display:flex;flex-direction:column;gap:7px}
+  .tr-special-note{font-size:12.5px;padding:11px 15px;border-radius:10px;line-height:1.65;color:#dfe4f6}
+  .tr-special-note b{color:var(--ink)}
+  .tr-special-note.sati-note{background:#180828;border:1px solid rgba(160,80,240,.3);color:#d0a8f8}
+  .tr-special-note.dhaiya-note{background:#28081a;border:1px solid rgba(240,80,160,.3);color:#f0a8d0}
+  .tr-special-note.guru-note{background:#08162e;border:1px solid rgba(100,160,255,.25);color:#a0c0ff}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.min.js"></script>
 </head>
 <body>
 <header class="top">
@@ -544,6 +579,7 @@
         <div class="bav-insight" id="bavInsight"></div>
       </div>
       <div class="dt-wrap" id="dashaTimeline" style="display:none;margin-top:14px"></div>
+      <div class="tr-wrap" id="transitPanel" style="display:none;margin-top:14px"></div>
       <div class="sl-section panel" id="specialLagnas" style="display:none;margin-top:14px">
         <h4>Special Lagnas · Image &amp; Wealth</h4>
         <div class="sl-grid">
@@ -1634,6 +1670,181 @@ function renderDashaTimeline(c, La){
     <div class="dt-cur-card">${cardHtml}</div>`;
 }
 
+/* ===== TRANSIT ANALYSIS (Gochara) · BPHS ===== */
+
+// Date → Julian Day Number (UTC)
+function jdFromDate(d){
+  const Y=d.getUTCFullYear(),M=d.getUTCMonth()+1,D=d.getUTCDate();
+  const H=d.getUTCHours()+d.getUTCMinutes()/60+d.getUTCSeconds()/3600;
+  const A=Math.floor((14-M)/12),yr=Y+4800-A,mo=M+12*A-3;
+  return D+Math.floor((153*mo+2)/5)+365*yr+Math.floor(yr/4)-Math.floor(yr/100)+Math.floor(yr/400)-32045+H/24-0.5;
+}
+
+// Lahiri ayanamsa at JD (accurate to ~0.01° for 1950–2050)
+function lahiriAyanamsa(jd){
+  const T=(jd-2451545.0)/36525; // Julian centuries from J2000.0
+  return 23.853048+T*100*(50.2388475/3600);
+}
+
+// Tropical ecliptic longitude → sidereal {lon,sign,deg}
+function tropToSid(trop,ayan){const s=((trop-ayan)%360+360)%360;return{lon:s,sign:Math.floor(s/30),deg:s%30};}
+
+// Compute current sidereal positions of all 9 planets via astronomy-engine + Lahiri
+function getTransitPlanets(date){
+  const AE=window.Astronomy; if(!AE)return null;
+  const jd=jdFromDate(date), T=(jd-2451545.0)/36525, ayan=lahiriAyanamsa(jd);
+  const BODIES={Su:'Sun',Mo:'Moon',Me:'Mercury',Ve:'Venus',Ma:'Mars',Ju:'Jupiter',Sa:'Saturn'};
+  const pos={};
+  for(const[k,b]of Object.entries(BODIES)){
+    try{pos[k]=tropToSid(AE.EclipticLongitude(b,date),ayan);}
+    catch(e){console.warn('transit err',k,e);}
+  }
+  // Mean Rahu (ascending node) via IAU formula — accurate to ~0.5° for modern dates
+  const raT=((125.044522-1934.136261*T+0.0020758*T*T+T*T*T/450000)%360+360)%360;
+  pos.Ra=tropToSid(raT,ayan);
+  pos.Ke=tropToSid((raT+180)%360,ayan);
+  return{pos,ayan};
+}
+
+// BPHS Gochara: good houses counted from natal Moon
+// Source: BPHS ch. on Gochara; confirmed in Phaladeepika
+const GCH_GOOD={
+  Su:[3,6,10,11],   Mo:[1,3,6,7,10,11], Ma:[3,6,11],
+  Me:[2,4,6,8,10,11],Ju:[2,5,7,9,11],
+  Ve:[1,2,3,4,5,8,9,11,12], Sa:[3,6,11],
+  Ra:[3,6,11], Ke:[3,6,11]
+};
+// Vedha: occupying the vedha house cancels the good effect of the matching good house
+const GCH_VEDHA={
+  Su:{3:9,6:12,10:4,11:5},
+  Mo:{1:5,3:9,6:12,7:2,10:4,11:8},
+  Ma:{3:12,6:9,11:5},
+  Me:{2:5,4:3,6:9,8:1,10:8,11:12},
+  Ju:{2:12,5:4,7:3,9:10,11:8},
+  Ve:{1:8,2:7,3:1,4:10,5:9,8:5,9:11,11:6,12:3},
+  Sa:{3:12,6:9,11:5}
+};
+// Exception pairs: these planets never cause vedha to each other (BPHS / Phaladeepika)
+// Sun↔Saturn, Moon↔Mercury, Jupiter↔Mercury
+const GCH_VEXC=new Set(['Su|Sa','Sa|Su','Mo|Me','Me|Mo','Ju|Me','Me|Ju']);
+const GCH_ALL=['Su','Mo','Ma','Me','Ju','Ve','Sa','Ra','Ke'];
+
+function gocharaAnalysis(pos,moonSign,allBAV){
+  // Step 1: house from natal Moon for each transiting planet
+  const hFrMo={};
+  for(const k of GCH_ALL){if(pos[k])hFrMo[k]=houseFromSigns(moonSign,pos[k].sign);}
+  const res={};
+  for(const k of GCH_ALL){
+    if(!pos[k])continue;
+    const h=hFrMo[k];
+    const good=(GCH_GOOD[k]||[]).includes(h);
+    let vedhaBy=null;
+    if(good&&GCH_VEDHA[k]){
+      const vH=GCH_VEDHA[k][h];
+      if(vH){
+        for(const o of GCH_ALL){
+          if(o===k||!pos[o])continue;
+          if(hFrMo[o]===vH&&!GCH_VEXC.has(`${k}|${o}`)){vedhaBy=o;break;}
+        }
+      }
+    }
+    // BAV score: how many natal-chart benefic points does this planet have in its current transit sign
+    const bavSign=(allBAV[k]!=null)?allBAV[k][pos[k].sign]:null;
+    // Saturn special periods (Sade Sati / Dhaiya)
+    let satSpecial=null;
+    if(k==='Sa'){
+      if([12,1,2].includes(h)) satSpecial='sade-sati';
+      else if(h===4||h===8) satSpecial='dhaiya';
+    }
+    res[k]={h,sign:pos[k].sign,deg:pos[k].deg,good,vedha:!!vedhaBy,vedhaBy,bavSign,satSpecial};
+  }
+  return res;
+}
+
+function renderTransitPanel(c,La,allBAV,date){
+  const wrap=document.getElementById('transitPanel');
+  if(!wrap)return;
+  if(!c||!c.planets||!c.planets.Mo){wrap.style.display='none';return;}
+  const moonSign=c.planets.Mo.sign;
+
+  if(!window.Astronomy){
+    wrap.style.display='block';
+    wrap.innerHTML=`<div class="tr-hdr"><h4>◎ Gochara · Transits</h4></div><div class="dt-no-data">Astronomy engine unavailable. Check your internet connection.</div>`;
+    return;
+  }
+
+  date=date||new Date();
+  const tr=getTransitPlanets(date);
+  if(!tr){wrap.style.display='none';return;}
+
+  const ga=gocharaAnalysis(tr.pos,moonSign,allBAV);
+  const fmtDate=d=>d.toISOString().slice(0,10);
+
+  let cards='', specialNotes=[];
+
+  for(const k of GCH_ALL){
+    const a=ga[k]; if(!a)continue;
+    const g=GBYK[k];
+    const status=a.vedha?'vedha':a.good?'good':'bad';
+    const cardCls=a.vedha?'tr-vedha':a.good?'tr-good':'tr-bad';
+    const statusLabel=a.vedha
+      ?`Good + Vedha (${GBYK[a.vedhaBy].name})`
+      :a.good?'Good':'Challenging';
+
+    let extraBadges='';
+    if(a.satSpecial==='sade-sati'){
+      extraBadges+=`<span class="tr-badge sati">Sade Sati</span>`;
+      const phase=a.h===12?'Rising (H12 — preparation)':a.h===1?'Peak (H1 — maximum)':'Departing (H2 — releasing)';
+      specialNotes.unshift({cls:'sati-note',html:`<b>Sade Sati</b> — Saturn in H${a.h} from ${SIGNS[moonSign]}. ${phase}. This 7.5-year cycle brings reality checks and karmic discipline. Best response: steady effort, patience, and spiritual practice.`});
+    }
+    if(a.satSpecial==='dhaiya'){
+      extraBadges+=`<span class="tr-badge dhaiya">Dhaiya</span>`;
+      const area=a.h===4?'home, mother, inner peace':'sudden events, longevity';
+      specialNotes.unshift({cls:'dhaiya-note',html:`<b>Dhaiya (Kantaka Shani)</b> — Saturn in H${a.h} from ${SIGNS[moonSign]} for 2.5 years. Pressures ${area}. Maintain stable foundations; avoid large risks.`});
+    }
+    if(k==='Ju'&&a.good&&!a.vedha){
+      extraBadges+=`<span class="tr-badge guru">Guru ✓</span>`;
+      specialNotes.push({cls:'guru-note',html:`<b>Jupiter transit favourable</b> — H${a.h} from ${SIGNS[moonSign]}. BPHS: Jupiter in H2, H5, H7, H9, H11 from natal Moon brings grace, expansion and opportunity. One of the most auspicious transit configurations.`});
+    }
+
+    const bavNote=a.bavSign!==null
+      ?`<div class="tr-bav">Natal BAV in ${SIGN3[a.sign]}: ${a.bavSign}/8${a.bavSign>=5?' ★ strong':a.bavSign<=2?' ↓ weak':''}</div>`:'';
+
+    cards+=`<div class="tr-card ${cardCls}">
+      <div class="tr-card-top">
+        <span class="gdot" style="background:${g.col};width:23px;height:23px;font-size:11px;flex-shrink:0">${g.gl}</span>
+        <div style="flex:1;min-width:0">
+          <div class="tr-pname">${g.name}</div>
+          <div class="tr-hlabel">H${a.h} from Moon · ${SIGN3[a.sign]} ${a.deg.toFixed(1)}°</div>
+        </div>
+      </div>
+      <div class="tr-badges"><span class="tr-badge ${status}">${statusLabel}</span>${extraBadges}</div>
+      ${bavNote}
+    </div>`;
+  }
+
+  wrap.style.display='block';
+  wrap.innerHTML=`
+    <div class="tr-hdr">
+      <h4>◎ Gochara · Current Transits</h4>
+      <div class="tr-date-ctrl">
+        <label for="trDate">Date</label>
+        <input type="date" id="trDate" value="${fmtDate(date)}">
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:12px">
+      Reference: natal Moon in <b>${SIGNS[moonSign]}</b> (Janma Rashi) · Lahiri ${tr.ayan.toFixed(2)}° ·
+      BPHS Gochara rules with Vedha · Sun↔Saturn, Moon↔Mercury, Jupiter↔Mercury exempt from Vedha
+    </div>
+    <div class="tr-grid">${cards}</div>
+    ${specialNotes.length?`<div class="tr-special">${specialNotes.map(s=>`<div class="tr-special-note ${s.cls}">${s.html}</div>`).join('')}</div>`:''}`;
+
+  document.getElementById('trDate').addEventListener('change',e=>{
+    const nd=new Date(e.target.value+'T12:00:00');
+    renderTransitPanel(c,La,allBAV,nd);
+  });
+}
+
 /* ===== MY CHARTS (parse + persist + apply) ===== */
 (function(){
   const LS="jyotish_charts_v1";
@@ -1776,6 +1987,9 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
 
     // Dasha Timeline
     try{renderDashaTimeline(c,La);}catch(e){console.error("renderDashaTimeline:",e);}
+
+    // Transit Analysis (Gochara)
+    try{renderTransitPanel(c,La,allBAV);}catch(e){console.error("renderTransitPanel:",e);}
 
     // Special Lagnas
     try{renderSpecialLagnas(c,La,allBAV.SAV);}catch(e){console.error("renderSpecialLagnas:",e);}
