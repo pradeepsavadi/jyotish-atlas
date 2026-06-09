@@ -1269,9 +1269,28 @@ function generateStory(c, La, bavForVerdict, allBAV){
 const MOOL={Su:{s:4,lo:0,hi:20},Mo:{s:1,lo:3,hi:30},Ma:{s:0,lo:0,hi:12},Me:{s:5,lo:15,hi:20},Ju:{s:8,lo:0,hi:10},Ve:{s:6,lo:0,hi:15},Sa:{s:10,lo:0,hi:20}};
 function isMooltrikona(k,sign,deg){const m=MOOL[k];return m&&sign===m.s&&deg>=m.lo&&deg<m.hi;}
 
+// Ra/Ke exaltation & debilitation per BPHS (Parashara tradition)
+// Ra: exalted Taurus(1), debilitated Scorpio(7)
+// Ke: exalted Scorpio(7), debilitated Taurus(1)
+const NODAL_DIG={Ra:{exalt:1,debil:7},Ke:{exalt:7,debil:1}};
+
 // Inherent strength tier from D-1 dignity (Sthana Bala order)
 function inherentTier(k,sign,deg){
   if(isMooltrikona(k,sign,deg)) return{cls:"mool",label:"Mooltrikona"};
+  // Ra/Ke: use BPHS nodal exaltation table
+  if(k==="Ra"||k==="Ke"){
+    const nd=NODAL_DIG[k];
+    if(sign===nd.exalt) return{cls:"exalted",label:"Exalted"};
+    if(sign===nd.debil) return{cls:"debil",label:"Debilitated"};
+    // Dispositor sign: Ra/Ke take the nature of the sign lord
+    const dispK=SIGN_LORD[sign];
+    const dispDig=dignityOf(dispK,sign);
+    if(dispDig.score>=1.5) return{cls:"own",label:`Dispositor ${GBYK[dispK].name} (own/exalt)`};
+    if(dispDig.score>=1)   return{cls:"friend",label:`Dispositor ${GBYK[dispK].name} (friend)`};
+    if(dispDig.score<=-2)  return{cls:"debil",label:`Dispositor ${GBYK[dispK].name} (debil)`};
+    if(dispDig.score<=-1)  return{cls:"enemy",label:`Dispositor ${GBYK[dispK].name} (enemy)`};
+    return{cls:"neutral",label:`Dispositor ${GBYK[dispK].name} (neutral)`};
+  }
   const d=dignityOf(k,sign);
   if(d.score>=2) return{cls:"exalted",label:"Exalted"};
   if(d.score>=1.5) return{cls:"own",label:"Own sign"};
@@ -1283,7 +1302,11 @@ function inherentTier(k,sign,deg){
 
 // Functional nature per BPHS based on house lordship for this lagna
 function functionalNature(k,La){
-  if(k==="Ra"||k==="Ke") return{tier:"shadow",label:"Shadow planet",houses:[]};
+  // Ra/Ke: no sign lordship — assess by house position + dispositor
+  if(k==="Ra"||k==="Ke"){
+    // We don't have house info here; caller passes it via the card renderer
+    return{tier:"shadow",label:"No sign lordship",houses:[]};
+  }
   const houses=[];
   for(let h=1;h<=12;h++) if(SIGN_LORD[(La+h-1)%12]===k) houses.push(h);
   if(!houses.length) return{tier:"neutral",label:"No lordship",houses};
@@ -1394,7 +1417,25 @@ function renderStrengthDash(c,La,allBAV,bavForVerdict){
     if(mool) flags.push(`<span class="ps-flag mool">Mooltrikona</span>`);
 
     const nlG=GBYK[ni.l];
-    const fnHouses=fn.houses.length?` · lords H${fn.houses.join(",")}` :"";
+
+    // Functional badge + context line
+    // Ra/Ke: no sign lordship — show house type + dispositor's functional nature
+    let fnBadgeHtml, fnContextLine;
+    if(k==="Ra"||k==="Ke"){
+      const htier=[1,5,9].includes(house)?"benefic":[4,7,10].includes(house)?"neutral":[8,12].includes(house)?"malefic":"neutral";
+      const htShort=HTYPE[house].split("·")[0].trim().split("(")[0].trim();
+      fnBadgeHtml=`<span class="ps-fn ${htier}">H${house} — ${htShort}</span>`;
+      // Dispositor: the lord of the sign Ra/Ke occupies
+      const dispK=SIGN_LORD[p.sign];
+      const dispFn=functionalNature(dispK,La);
+      const dispG=GBYK[dispK];
+      const dispTierLabel=dispFn.tier==="yogakaraka"?"Yogakaraka":dispFn.label;
+      fnContextLine=`${HTYPE[house]}${upaNote}${retroNote} · Dispositor: ${dispG.name} (${dispTierLabel})`;
+    } else {
+      const fnHouses=fn.houses.length?` · lords H${fn.houses.join(",")}`:"";
+      fnBadgeHtml=`<span class="ps-fn ${fn.tier}">${fn.tier==="yogakaraka"?"★ Yogakaraka":fn.label}</span>`;
+      fnContextLine=`${HTYPE[house]}${upaNote}${retroNote}${fnHouses}`;
+    }
 
     const synthCall=`JA.setPlanet('${k}',${p.sign},${p.deg.toFixed(2)},${house})`;
 
@@ -1409,9 +1450,9 @@ function renderStrengthDash(c,La,allBAV,bavForVerdict){
       <hr class="ps-divider">
       <div class="ps-badges">
         <span class="ps-badge ${inh.cls}">${inh.label}</span>
-        <span class="ps-fn ${fn.tier}">${fn.tier==="yogakaraka"?"★ Yogakaraka":fn.label}</span>
+        ${fnBadgeHtml}
       </div>
-      <div style="font-size:10.5px;color:var(--muted);margin-bottom:7px">${HTYPE[house]}${upaNote}${retroNote}${fnHouses}</div>
+      <div style="font-size:10.5px;color:var(--muted);margin-bottom:7px">${fnContextLine}</div>
       <div class="ps-kv">
         <b>D-9</b><span style="color:${d9.col}">${SIGNS[d9i]} · ${d9.full.split("·")[0].trim()}</span>
         <b>Nakshatra</b><span>${ni.n} pd-${ni.pada}</span>
