@@ -1795,14 +1795,18 @@ const GCH_VEDHA={
 const GCH_VEXC=new Set(['Su|Sa','Sa|Su','Mo|Me','Me|Mo','Ju|Me','Me|Ju']);
 const GCH_ALL=['Su','Mo','Ma','Me','Ju','Ve','Sa','Ra','Ke'];
 
-function gocharaAnalysis(pos,moonSign,allBAV){
-  // Step 1: house from natal Moon for each transiting planet
-  const hFrMo={};
-  for(const k of GCH_ALL){if(pos[k])hFrMo[k]=houseFromSigns(moonSign,pos[k].sign);}
+function gocharaAnalysis(pos,moonSign,La,allBAV){
+  // House from natal Moon AND from natal Lagna for each transiting planet
+  const hFrMo={}, hFrLa={};
+  for(const k of GCH_ALL){
+    if(!pos[k])continue;
+    hFrMo[k]=houseFromSigns(moonSign,pos[k].sign);
+    hFrLa[k]=houseFromSigns(La,pos[k].sign);
+  }
   const res={};
   for(const k of GCH_ALL){
     if(!pos[k])continue;
-    const h=hFrMo[k];
+    const h=hFrMo[k], hLa=hFrLa[k];
     const good=(GCH_GOOD[k]||[]).includes(h);
     let vedhaBy=null;
     if(good&&GCH_VEDHA[k]){
@@ -1814,15 +1818,13 @@ function gocharaAnalysis(pos,moonSign,allBAV){
         }
       }
     }
-    // BAV score: how many natal-chart benefic points does this planet have in its current transit sign
     const bavSign=(allBAV[k]!=null)?allBAV[k][pos[k].sign]:null;
-    // Saturn special periods (Sade Sati / Dhaiya)
     let satSpecial=null;
     if(k==='Sa'){
       if([12,1,2].includes(h)) satSpecial='sade-sati';
       else if(h===4||h===8) satSpecial='dhaiya';
     }
-    res[k]={h,sign:pos[k].sign,deg:pos[k].deg,good,vedha:!!vedhaBy,vedhaBy,bavSign,satSpecial};
+    res[k]={h,hLa,sign:pos[k].sign,deg:pos[k].deg,good,vedha:!!vedhaBy,vedhaBy,bavSign,satSpecial};
   }
   return res;
 }
@@ -1836,8 +1838,18 @@ function renderTransitPanel(c,La,allBAV,date){
   date=date||new Date();
   const tr=getTransitPlanets(date);
 
-  const ga=gocharaAnalysis(tr.pos,moonSign,allBAV);
+  const ga=gocharaAnalysis(tr.pos,moonSign,La,allBAV);
   const fmtDate=d=>d.toISOString().slice(0,10);
+
+  // Short house-type label from Lagna perspective
+  const htShort=h=>{
+    if(h===1)return'Lagna';if(h===5)return'5th Trikona';if(h===9)return'9th Trikona';
+    if(h===4||h===7||h===10)return`${h}th Kendra`;
+    if(h===11)return'11th Labha';if(h===6)return'6th Dusthana';
+    if(h===8)return'8th Dusthana';if(h===12)return'12th Dusthana';
+    if(h===3)return'3rd Upachaya';if(h===2)return'2nd Dhana';
+    return`${h}th`;
+  };
 
   let cards='', specialNotes=[];
 
@@ -1847,34 +1859,46 @@ function renderTransitPanel(c,La,allBAV,date){
     const status=a.vedha?'vedha':a.good?'good':'bad';
     const cardCls=a.vedha?'tr-vedha':a.good?'tr-good':'tr-bad';
     const statusLabel=a.vedha
-      ?`Good + Vedha (${GBYK[a.vedhaBy].name})`
+      ?`Vedha (${GBYK[a.vedhaBy].name})`
       :a.good?'Good':'Challenging';
+
+    // Lagna house — show type context
+    const laLabel=`H${a.hLa} · ${htShort(a.hLa)}`;
 
     let extraBadges='';
     if(a.satSpecial==='sade-sati'){
       extraBadges+=`<span class="tr-badge sati">Sade Sati</span>`;
       const phase=a.h===12?'Rising (H12 — preparation)':a.h===1?'Peak (H1 — maximum)':'Departing (H2 — releasing)';
-      specialNotes.unshift({cls:'sati-note',html:`<b>Sade Sati</b> — Saturn in H${a.h} from ${SIGNS[moonSign]}. ${phase}. This 7.5-year cycle brings reality checks and karmic discipline. Best response: steady effort, patience, and spiritual practice.`});
+      specialNotes.unshift({cls:'sati-note',html:`<b>Sade Sati</b> — Saturn in H${a.h} from Moon (${SIGNS[moonSign]}) · H${a.hLa} from Lagna. ${phase}. 7.5-year karmic cycle: reality checks, discipline. Best response: steady effort, patience, spiritual practice.`});
     }
     if(a.satSpecial==='dhaiya'){
       extraBadges+=`<span class="tr-badge dhaiya">Dhaiya</span>`;
       const area=a.h===4?'home, mother, inner peace':'sudden events, longevity';
-      specialNotes.unshift({cls:'dhaiya-note',html:`<b>Dhaiya (Kantaka Shani)</b> — Saturn in H${a.h} from ${SIGNS[moonSign]} for 2.5 years. Pressures ${area}. Maintain stable foundations; avoid large risks.`});
+      specialNotes.unshift({cls:'dhaiya-note',html:`<b>Dhaiya (Kantaka Shani)</b> — Saturn H${a.h} from Moon · H${a.hLa} from Lagna. Pressures ${area}. 2.5-year period — maintain stable foundations.`});
     }
-    if(k==='Ju'&&a.good&&!a.vedha){
-      extraBadges+=`<span class="tr-badge guru">Guru ✓</span>`;
-      specialNotes.push({cls:'guru-note',html:`<b>Jupiter transit favourable</b> — H${a.h} from ${SIGNS[moonSign]}. BPHS: Jupiter in H2, H5, H7, H9, H11 from natal Moon brings grace, expansion and opportunity. One of the most auspicious transit configurations.`});
+    if(k==='Ju'){
+      const juGoodMoon=a.good&&!a.vedha;
+      const juGoodLagna=[2,5,7,9,11].includes(a.hLa);
+      if(juGoodMoon||juGoodLagna){
+        const moonVerdict=juGoodMoon?`H${a.h} from Moon ✓`:`H${a.h} from Moon (Gochara: challenging)`;
+        const lagnaVerdict=juGoodLagna?`H${a.hLa} from Lagna ✓`:`H${a.hLa} from Lagna`;
+        if(juGoodMoon) extraBadges+=`<span class="tr-badge guru">Guru ✓ Moon</span>`;
+        if(juGoodLagna) extraBadges+=`<span class="tr-badge guru">Guru ✓ Lagna</span>`;
+        specialNotes.push({cls:'guru-note',html:`<b>Jupiter transit</b> — ${moonVerdict} · ${lagnaVerdict}. BPHS Gochara good houses from Moon: 2,5,7,9,11. Good Lagna houses (where Jupiter activates the house themes): same list. Read both — Moon-based shows emotional experience; Lagna-based shows which life area is activated.`});
+      }
     }
 
     const bavNote=a.bavSign!==null
-      ?`<div class="tr-bav">Natal BAV in ${SIGN3[a.sign]}: ${a.bavSign}/8${a.bavSign>=5?' ★ strong':a.bavSign<=2?' ↓ weak':''}</div>`:'';
+      ?`<div class="tr-bav">BAV in ${SIGN3[a.sign]}: ${a.bavSign}/8${a.bavSign>=5?' ★':a.bavSign<=2?' ↓':''}</div>`:'';
 
     cards+=`<div class="tr-card ${cardCls}">
       <div class="tr-card-top">
         <span class="gdot" style="background:${g.col};width:23px;height:23px;font-size:11px;flex-shrink:0">${g.gl}</span>
         <div style="flex:1;min-width:0">
-          <div class="tr-pname">${g.name}</div>
-          <div class="tr-hlabel">H${a.h} from Moon · ${SIGN3[a.sign]} ${a.deg.toFixed(1)}°</div>
+          <div class="tr-pname">${g.name} <span style="font-size:10px;font-weight:400;color:var(--muted)">${SIGN3[a.sign]} ${a.deg.toFixed(1)}°</span></div>
+          <div class="tr-hlabel" style="display:flex;gap:8px;margin-top:2px">
+            <span>☾ H${a.h}</span><span style="color:var(--line)">|</span><span>Asc H${a.hLa} · ${htShort(a.hLa)}</span>
+          </div>
         </div>
       </div>
       <div class="tr-badges"><span class="tr-badge ${status}">${statusLabel}</span>${extraBadges}</div>
@@ -1892,8 +1916,9 @@ function renderTransitPanel(c,La,allBAV,date){
       </div>
     </div>
     <div style="font-size:11px;color:var(--muted);margin-bottom:12px">
-      Reference: natal Moon in <b>${SIGNS[moonSign]}</b> (Janma Rashi) · Lahiri ${tr.ayan.toFixed(2)}° ·
-      BPHS Gochara rules with Vedha · Sun↔Saturn, Moon↔Mercury, Jupiter↔Mercury exempt from Vedha
+      ☾ Good/Bad = BPHS Gochara from natal Moon (<b>${SIGNS[moonSign]}</b>) with Vedha ·
+      Asc = house from Lagna (<b>${SIGNS[La]}</b>) showing which life area is activated ·
+      Lahiri ${tr.ayan.toFixed(2)}°
     </div>
     <div class="tr-grid">${cards}</div>
     ${specialNotes.length?`<div class="tr-special">${specialNotes.map(s=>`<div class="tr-special-note ${s.cls}">${s.html}</div>`).join('')}</div>`:''}`;
