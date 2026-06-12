@@ -637,14 +637,21 @@
 /* =============================================
    COSMIC UI ENHANCEMENT
    ============================================= */
-/* Canvas is on top of everything; mix-blend-mode:screen makes black pixels
-   invisible — only bright star pixels add light onto the dark background. */
 body{background:
   radial-gradient(1400px 700px at 78% -8%,#18245c 0%,transparent 55%),
   radial-gradient(900px 600px at 2% 18%,#1a1040 0%,transparent 50%),
   radial-gradient(600px 700px at 50% 105%,#0d1530 0%,transparent 60%),
   #0b0e1a !important}
-#cosmos-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;pointer-events:none;mix-blend-mode:screen}
+/* Star field: fixed-positioned layers with box-shadow stars, CSS animation.
+   No canvas, no blend-mode, no z-index fight. */
+#cosmos-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.star-layer{position:absolute;top:0;left:0;width:1px;height:1px;background:transparent;border-radius:50%}
+#sl1{animation:st-twinkle 3.2s ease-in-out infinite alternate}
+#sl2{animation:st-twinkle 5.1s ease-in-out infinite alternate;animation-delay:.9s}
+#sl3{animation:st-twinkle 4.4s ease-in-out infinite alternate;animation-delay:1.7s}
+#sl4{animation:st-twinkle 2.9s ease-in-out infinite alternate;animation-delay:2.5s}
+@keyframes st-twinkle{from{opacity:.25}to{opacity:1}}
+html.light #cosmos-bg{display:none}
 
 /* Glassmorphic header */
 header.top{
@@ -806,7 +813,7 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
 </style>
 </head>
 <body>
-<canvas id="cosmos-bg"></canvas>
+<div id="cosmos-bg"><div class="star-layer" id="sl1"></div><div class="star-layer" id="sl2"></div><div class="star-layer" id="sl3"></div><div class="star-layer" id="sl4"></div></div>
 <header class="top">
   <div class="brand">✦ Jyotish Atlas<small>Parashara's grammar, made interactive</small></div>
   <nav>
@@ -1094,51 +1101,27 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
 <script>
 "use strict";
 
-/* ===== COSMOS CANVAS BACKGROUND ===== */
+/* ===== STAR FIELD GENERATOR ===== */
 (function(){
-  const cv=document.getElementById('cosmos-bg');
-  if(!cv)return;
-  const ctx=cv.getContext('2d');
-  let W,H,stars,nebulae;
-  function resize(){
-    W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;
-    stars=Array.from({length:240},()=>({
-      x:Math.random()*W,y:Math.random()*H,
-      r:Math.random()*1.3+0.15,
-      a:Math.random()*0.65+0.15,
-      ph:Math.random()*Math.PI*2,
-      sp:Math.random()*0.007+0.003
-    }));
-    nebulae=[
-      {x:W*.18,y:H*.27,r:310,c:'28,48,145'},
-      {x:W*.83,y:H*.62,r:260,c:'58,18,105'},
-      {x:W*.51,y:H*.9, r:370,c:'14,68,135'},
-      {x:W*.36,y:H*.1, r:220,c:'48,28,90'},
-    ];
+  const W=window.innerWidth,H=window.innerHeight;
+  // Each layer gets a different subset of stars so 4 animation phases
+  // produce convincing individual-star twinkle without JS RAF.
+  function mkShadows(count,maxBlur,minAlpha,maxAlpha){
+    return Array.from({length:count},()=>{
+      const x=(Math.random()*W)|0, y=(Math.random()*H)|0;
+      const blur=maxBlur>0?(Math.random()*maxBlur).toFixed(1)+'px':'0';
+      const a=(minAlpha+Math.random()*(maxAlpha-minAlpha)).toFixed(2);
+      return `${x}px ${y}px ${blur} rgba(210,225,255,${a})`;
+    }).join(',');
   }
-  let t=0;
-  function frame(){
-    t+=.006;
-    // With mix-blend-mode:screen, black=invisible. Clear to black so only
-    // stars and nebulae glow through onto the dark page background.
-    ctx.clearRect(0,0,W,H);
-    // Drifting nebulae (subtle colored clouds)
-    nebulae.forEach(n=>{
-      const dx=Math.sin(t*.25+n.r*.01)*18,dy=Math.cos(t*.18+n.r*.01)*11;
-      const g=ctx.createRadialGradient(n.x+dx,n.y+dy,0,n.x+dx,n.y+dy,n.r);
-      g.addColorStop(0,`rgba(${n.c},0.18)`);g.addColorStop(.5,`rgba(${n.c},0.07)`);g.addColorStop(1,'transparent');
-      ctx.fillStyle=g;ctx.beginPath();ctx.arc(n.x+dx,n.y+dy,n.r,0,Math.PI*2);ctx.fill();
-    });
-    // Twinkling stars
-    stars.forEach(s=>{
-      const a=s.a*(0.5+0.5*Math.sin(t*s.sp*80+s.ph));
-      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      ctx.fillStyle=`rgba(220,230,255,${a.toFixed(3)})`;ctx.fill();
-    });
-    requestAnimationFrame(frame);
-  }
-  resize();frame();
-  window.addEventListener('resize',resize);
+  const sl1=document.getElementById('sl1');
+  const sl2=document.getElementById('sl2');
+  const sl3=document.getElementById('sl3');
+  const sl4=document.getElementById('sl4');
+  if(sl1) sl1.style.boxShadow=mkShadows(120,0,0.3,0.85);  // small dim stars
+  if(sl2) sl2.style.boxShadow=mkShadows(80, 0,0.4,1.0);   // medium stars
+  if(sl3) sl3.style.boxShadow=mkShadows(40, 1,0.5,1.0);   // bright stars with soft bloom
+  if(sl4) sl4.style.boxShadow=mkShadows(20, 2,0.7,1.0);   // a few large glowing stars
 })();
 
 /* ===== BHAVA MANDALA SVG RENDERER ===== */
