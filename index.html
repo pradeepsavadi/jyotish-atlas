@@ -18,6 +18,10 @@
     --r:14px;
     --ease:cubic-bezier(.2,.8,.2,1);
     --dur:150ms;
+    --shadow-1:0 1px 2px rgba(0,0,0,.12);
+    --shadow-2:0 4px 16px rgba(0,0,0,.18);
+    --text-xs:12px; --text-sm:13px; --text-base:14px; --text-md:16px; --text-lg:20px; --text-xl:26px;
+    --section-y:64px;
   }
   *{box-sizing:border-box}
   :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -31,21 +35,33 @@
       radial-gradient(900px 500px at 0% 10%, #16193a 0%, transparent 55%), var(--bg);
     color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55}
   a{color:var(--gold2);text-decoration:none}
-  header.top{position:sticky;top:0;z-index:30;backdrop-filter:blur(10px);background:rgba(11,14,26,.8);
+  header.top{position:sticky;top:0;z-index:30;backdrop-filter:blur(10px);background:rgba(11,14,26,.92);
     border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:center;padding:10px 20px;flex-wrap:wrap}
-  header.top .brand{font-weight:700;letter-spacing:.4px;margin-right:8px}
-  header.top .brand small{display:block;font-size:10px;color:var(--muted);font-weight:400}
-  nav{display:flex;flex-wrap:wrap}
-  nav a{font-size:12.5px;color:var(--muted);padding:6px 10px;border-radius:8px}
-  nav a:hover{color:var(--ink);background:var(--panel2)}
+  header.top .brand{font-weight:700;letter-spacing:.4px;margin-right:8px;color:var(--ink)}
+  header.top .brand small{display:block;font-size:var(--text-xs);color:var(--muted);font-weight:400}
+  .nav-toggle{display:none;margin-left:auto;background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+    border-radius:8px;padding:6px 12px;font-size:var(--text-sm);font-weight:600;cursor:pointer}
+  nav.site-nav{display:flex;flex-wrap:wrap;gap:2px;flex:1}
+  nav.site-nav a{font-size:var(--text-sm);color:var(--muted);padding:6px 10px;border-radius:8px;transition:color var(--dur) var(--ease),background var(--dur) var(--ease)}
+  nav.site-nav a:hover,nav.site-nav a.nav-active{color:var(--ink);background:var(--panel2)}
+  @media(max-width:640px){
+    .nav-toggle{display:block}
+    nav.site-nav{display:none;width:100%;flex-direction:column;padding:8px 0 4px;border-top:1px solid var(--line);margin-top:4px}
+    nav.site-nav.open{display:flex}
+    header.top .brand{margin-right:0;flex:1}
+  }
+  .theme-toggle{margin-left:auto;background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:5px 11px;cursor:pointer;font-size:15px;line-height:1;flex-shrink:0}
+  @media(max-width:640px){.theme-toggle{margin-left:0}}
   .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
-  section{padding:54px 0 12px;border-bottom:1px solid rgba(42,51,96,.5)}
+  section{padding:var(--section-y) 0 16px;border-bottom:1px solid rgba(42,51,96,.5)}
+  section.section-reveal{opacity:0;transform:translateY(10px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+  section.section-reveal.visible{opacity:1;transform:none}
   h1.hero{font-size:clamp(28px,5vw,40px);line-height:1.15;margin:46px 0 10px;font-weight:800;
     color:var(--ink);max-width:820px;text-wrap:balance}
   h1.hero .accent{color:var(--gold2)}
   .lede{font-size:18px;color:var(--muted);max-width:720px}
-  .eyebrow{color:var(--gold);font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700}
-  h2{font-size:26px;margin:6px 0 4px}
+  .eyebrow{color:var(--gold);font-size:var(--text-xs);letter-spacing:2px;text-transform:uppercase;font-weight:700}
+  h2{font-size:var(--text-xl);margin:6px 0 4px}
   .sub{color:var(--muted);margin:0 0 20px;max-width:780px}
   .grammar{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:26px 0 6px}
   @media(max-width:780px){.grammar{grid-template-columns:repeat(2,1fr)}}
@@ -57,8 +73,13 @@
   .chip{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-weight:600}
   .chip.op{background:none;border:none;color:var(--gold);font-size:20px}
   .tokens{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 18px}
-  .tok{cursor:pointer;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:8px 12px;display:flex;align-items:center;gap:8px;font-size:13.5px;
+  .tok{cursor:pointer;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:8px 12px;display:flex;align-items:center;gap:8px;font-size:var(--text-sm);
     transition:border-color var(--dur) var(--ease),transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease),background var(--dur) var(--ease)}
+  button.tok,button.ctab,button.opt,button.hs-cell,button.ps-card-btn,button.nakband-btn{font:inherit;font-family:inherit;text-align:inherit}
+  button.tok,button.opt,button.nakband-btn{width:auto}
+  button.ctab{border:none}
+  button.hs-cell{width:100%}
+  button.ps-card-btn{width:100%;text-align:left}
   .tok:hover{transform:translateY(-2px);border-color:var(--gold)}
   .tok.active{background:var(--panel2);border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
   .tok .gl{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:13px;color:#0b0e1a}
@@ -80,7 +101,7 @@
   .controlbar{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-end;background:var(--panel);
     border:1px solid var(--line);border-radius:var(--r);padding:14px 18px;margin-bottom:16px}
   .ctrl{display:flex;flex-direction:column;gap:6px;min-width:0}
-  .ctrl>label{font-size:10.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;align-items:center}
+  .ctrl>label{font-size:var(--text-xs);letter-spacing:.6px;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;align-items:center}
   select{background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:14px;min-width:150px}
   input[type=range]{width:160px;accent-color:var(--gold);vertical-align:middle}
   .degval{font-weight:700;color:var(--gold2)}
@@ -96,8 +117,8 @@
   /* ---- balanced result grid (fills the row, no dead space) ---- */
   .result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:start}
   @media(max-width:900px){.result-grid{grid-template-columns:1fr}}
-  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px}
-  .panel h4{margin:0 0 12px;font-size:11.5px;letter-spacing:1px;text-transform:uppercase;color:var(--gold)}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow-1)}
+  .panel h4{margin:0 0 12px;font-size:var(--text-xs);letter-spacing:1px;text-transform:uppercase;color:var(--gold)}
   .steps .step{display:flex;gap:11px;margin-bottom:13px}
   .steps .step:last-child{margin-bottom:0}
   .steps .sn{flex:0 0 22px;height:22px;border-radius:7px;background:var(--panel2);border:1px solid var(--line);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--gold2)}
@@ -110,6 +131,8 @@
   .vrow .vdig{font-size:11.5px;font-weight:700;color:#0b0e1a;padding:4px 11px;border-radius:999px;white-space:nowrap}
   .houses{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-top:6px}
   .hcell{aspect-ratio:1/1.05;border:1px solid var(--line);border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;color:var(--muted);background:var(--panel2)}
+  button.hcell{border:none;font:inherit;color:inherit}
+  button.hcell:disabled{cursor:default;opacity:1}
   .hcell .hn{font-weight:700;color:var(--ink);font-size:13px}
   .hcell.occ{background:var(--gold);color:#0b0e1a;border-color:var(--gold2)}.hcell.occ .hn{color:#0b0e1a}
   .hcell.asp{background:#28407a;border-color:var(--accent)}.hcell.asp .hn{color:#cfe0ff}
@@ -141,6 +164,7 @@
   .modal input[type=text]{width:100%;background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px}
   .row-actions{display:flex;gap:10px;align-items:center;margin-top:14px}
   button.btn{background:var(--gold);color:#0b0e1a;border:none;border-radius:10px;padding:10px 18px;font-weight:700;cursor:pointer}
+  button.btn:disabled{opacity:.55;cursor:wait}
   button.ghost{background:none;color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:10px 16px;cursor:pointer}
 
   /* ---- quiz ---- */
@@ -148,7 +172,7 @@
   .qq{font-size:18px;font-weight:600;margin-bottom:14px}
   .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   @media(max-width:600px){.opts{grid-template-columns:1fr}}
-  .opt{cursor:pointer;border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:11px 14px;font-size:14px}
+  .opt{cursor:pointer;border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:11px 14px;font-size:var(--text-base);width:100%}
   .opt:hover{border-color:var(--gold)}
   .opt.right{background:rgba(79,208,127,.18);border-color:var(--exalt)}
   .opt.wrong{background:rgba(239,106,90,.18);border-color:var(--debil)}
@@ -422,6 +446,9 @@
   .lp-hdr h4{margin:0;font-size:14px;font-weight:700;color:var(--gold2)}
   .lp-hdr-note{font-size:11.5px;color:var(--muted);max-width:520px;line-height:1.45}
   .lp-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+  .lp-goal-lbl{font-size:var(--text-xs);color:var(--muted);display:flex;align-items:center;gap:6px}
+  .lp-goal-sel{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:5px 8px;font-size:var(--text-xs);max-width:220px}
+  .lp-row.lp-smart{height:32px}
   .lp-btn{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;
     transition:background var(--dur) var(--ease),border-color var(--dur) var(--ease)}
   .lp-btn:hover{border-color:var(--gold)}
@@ -711,7 +738,7 @@ body{background:
 #sl2{animation:st-twinkle 5.1s ease-in-out infinite alternate;animation-delay:.9s}
 #sl3{animation:st-twinkle 4.4s ease-in-out infinite alternate;animation-delay:1.7s}
 #sl4{animation:st-twinkle 2.9s ease-in-out infinite alternate;animation-delay:2.5s}
-@keyframes st-twinkle{from{opacity:.25}to{opacity:1}}
+@keyframes st-twinkle{from{opacity:.08}to{opacity:.35}}
 html.light #cosmos-bg{display:none}
 
 /* Glassmorphic header */
@@ -871,6 +898,26 @@ html.light .nakband{background:linear-gradient(120deg,#f0f4ff,#e8ecf8)!important
 html.light .bav-insight{background:var(--panel2)!important;border-color:var(--line)!important}
 html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0.97)!important;border-color:rgba(80,100,200,0.14)!important;box-shadow:0 20px 60px rgba(0,0,0,0.15)!important}
 
+/* Calm overrides — flatter, quieter surfaces */
+#cosmos-bg{opacity:.4}
+.brand{background:none!important;-webkit-background-clip:unset!important;background-clip:unset!important;
+  color:var(--ink)!important;filter:none!important}
+.brand:hover{filter:none!important}
+.eyebrow{text-shadow:none!important}
+.panel{background:var(--panel)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  box-shadow:var(--shadow-1)!important;border-color:var(--line)!important}
+.panel h4{background:none!important;-webkit-text-fill-color:unset!important;color:var(--gold)!important}
+.ps-card{background:var(--panel2)!important;backdrop-filter:none!important;box-shadow:none!important}
+.ps-card:hover{transform:translateY(-1px)!important;box-shadow:var(--shadow-1)!important}
+.gdot{box-shadow:none!important;filter:none!important}
+.gdot:hover{transform:none!important}
+.charts-sidebar{background:var(--panel)!important;backdrop-filter:none!important;box-shadow:var(--shadow-1)!important}
+header.top{background:rgba(11,14,26,.94)!important;box-shadow:var(--shadow-1)!important}
+html.light header.top{background:rgba(244,246,251,.96)!important;box-shadow:var(--shadow-1)!important}
+html.light .brand{color:var(--ink)!important}
+#bhavaMandala::before{animation:none!important;opacity:0!important}
+.ps-fn.yogakaraka{animation:none!important}
+
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -883,7 +930,8 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
 <div id="cosmos-bg"><div class="star-layer" id="sl1"></div><div class="star-layer" id="sl2"></div><div class="star-layer" id="sl3"></div><div class="star-layer" id="sl4"></div></div>
 <header class="top">
   <div class="brand">✦ Jyotish Atlas<small>Parashara's grammar, made interactive</small></div>
-  <nav>
+  <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="siteNav">Menu</button>
+  <nav id="siteNav" class="site-nav">
     <a href="#why">The idea</a>
     <a href="#grahas">Grahas</a>
     <a href="#rashis">Rashis</a>
@@ -895,7 +943,7 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
     <a href="#lifepredictor">Life Predictor</a>
     <a href="#quiz">Practice</a>
   </nav>
-  <button id="themeToggle" title="Toggle light / dark theme" onclick="toggleTheme()" style="margin-left:auto;background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:5px 11px;cursor:pointer;font-size:15px;line-height:1;flex-shrink:0">☾</button>
+  <button type="button" id="themeToggle" class="theme-toggle" title="Toggle light / dark theme" onclick="toggleTheme()">☾</button>
 </header>
 
 <div class="wrap" id="main">
@@ -903,7 +951,7 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
   <h1 class="hero">Astrology isn't a list to memorize. <span class="accent">It's a grammar you can learn.</span></h1>
   <p class="lede">The <i>Brihat Parashara Hora Shastra</i> looks like 100 chapters of riddles. Underneath, it's a tiny set of building blocks that <b>recombine</b> — like letters into words. Learn the blocks, learn how they combine, and the sky starts to read like a sentence.</p>
 
-  <section id="why">
+  <section id="why" class="section-reveal">
     <div class="eyebrow">The core idea</div>
     <h2>Three alphabets, one grammar</h2>
     <p class="sub">Almost everything in a horoscope is generated from three small sets and a few "states." You don't memorize meanings — you <b>build</b> them.</p>
@@ -922,7 +970,7 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
     <p class="note">9 × 12 × 12 = 1,296 base placements — each shifting again with dignity, divisional charts and aspect. You can't memorize that. You <b>derive</b> it. Try the <a href="#synth">Synthesizer</a>.</p>
   </section>
 
-  <section id="grahas">
+  <section id="grahas" class="section-reveal">
     <div class="eyebrow">Alphabet 1 · the actors</div>
     <h2>The 9 Grahas</h2>
     <p class="sub">Each planet is a <b>character</b> with a fixed nature and a bundle of significations (<i>karakatvas</i>). Click one to meet it.</p>
@@ -930,7 +978,7 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
     <div class="detail" id="grahaDetail"></div>
   </section>
 
-  <section id="rashis">
+  <section id="rashis" class="section-reveal">
     <div class="eyebrow">Alphabet 2 · the costumes</div>
     <h2>The 12 Rashis</h2>
     <p class="sub">A sign doesn't <i>do</i> things — it <b>colors</b> whatever planet stands in it, through its element, modality and ruler.</p>
@@ -938,7 +986,7 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
     <div class="detail" id="rashiDetail"></div>
   </section>
 
-  <section id="bhavas">
+  <section id="bhavas" class="section-reveal">
     <div class="eyebrow">Alphabet 3 · the stages</div>
     <h2>The 12 Bhavas</h2>
     <p class="sub">Houses are <b>areas of life</b>. Whatever planet sits here pours its nature into these themes.</p>
@@ -947,7 +995,7 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
   </section>
 
   <!-- SYNTHESIZER -->
-  <section id="synth">
+  <section id="synth" class="section-reveal">
     <div class="eyebrow">The grammar engine</div>
     <h2>The Synthesizer</h2>
     <p class="sub">Read a planet across <b>D-1 (the promise)</b> and <b>D-9 / Navamsa (the delivery)</b> — or read an <b>empty house</b> through its lord. Everything updates live.</p>
@@ -960,13 +1008,13 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
     <!-- PLANET MODE -->
     <div id="planetMode">
       <div class="controlbar">
-        <div class="ctrl"><label>Graha</label><select id="sGraha"></select></div>
-        <div class="ctrl"><label>D-1 Sign</label><select id="sRashi"></select></div>
-        <div class="ctrl"><label>Degree <span class="degval" id="sDegVal">14.0°</span></label><input type="range" id="sDeg" min="0" max="29.9" step="0.5" value="14"></div>
-        <div class="ctrl"><label>House</label><select id="sBhava"></select></div>
+        <div class="ctrl"><label for="sGraha">Graha</label><select id="sGraha" aria-label="Graha"></select></div>
+        <div class="ctrl"><label for="sRashi">D-1 Sign</label><select id="sRashi" aria-label="D-1 sign"></select></div>
+        <div class="ctrl"><label for="sDeg">Degree <span class="degval" id="sDegVal">14.0°</span></label><input type="range" id="sDeg" min="0" max="29.9" step="0.5" value="14" aria-label="Degree in sign"></div>
+        <div class="ctrl"><label for="sBhava">House</label><select id="sBhava" aria-label="House"></select></div>
       </div>
       <div class="hero-verdict"><div class="badge" id="pBadge">≈</div><div><div class="ht" id="pTitle"></div><div class="hx" id="pText"></div></div></div>
-      <div class="nakband" id="pNak"></div>
+      <div class="nakband" id="pNak" role="button" tabindex="0" aria-label="Open nakshatra details"></div>
       <div class="result-grid">
         <div class="panel"><h4>Strength · D-1 → D-9</h4><div id="pVargas"></div></div>
         <div class="panel"><h4>How the meaning is built</h4><div class="steps" id="pSteps"></div></div>
@@ -978,11 +1026,11 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
     <!-- HOUSE MODE -->
     <div id="houseMode" style="display:none">
       <div class="controlbar">
-        <div class="ctrl"><label>Lagna</label><select id="hLagna"></select></div>
-        <div class="ctrl"><label>House to read</label><select id="hNum"></select></div>
+        <div class="ctrl"><label for="hLagna">Lagna</label><select id="hLagna" aria-label="Lagna"></select></div>
+        <div class="ctrl"><label for="hNum">House to read</label><select id="hNum" aria-label="House to read"></select></div>
         <div class="ctrl"><label>Its lord (auto)</label><div class="lordauto" id="hLordName">—</div></div>
-        <div class="ctrl"><label>Lord sits in — sign</label><select id="hLordSign"></select></div>
-        <div class="ctrl"><label>Lord's degree <span class="degval" id="hLordDegVal">15.0°</span></label><input type="range" id="hLordDeg" min="0" max="29.9" step="0.5" value="15"></div>
+        <div class="ctrl"><label for="hLordSign">Lord sits in — sign</label><select id="hLordSign" aria-label="Lord sign"></select></div>
+        <div class="ctrl"><label for="hLordDeg">Lord's degree <span class="degval" id="hLordDegVal">15.0°</span></label><input type="range" id="hLordDeg" min="0" max="29.9" step="0.5" value="15" aria-label="Lord degree"></div>
       </div>
       <div class="hero-verdict"><div class="badge" id="hBadge">⌂</div><div><div class="ht" id="hTitle"></div><div class="hx" id="hText"></div></div></div>
       <div class="result-grid">
@@ -994,7 +1042,7 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
   </section>
 
   <!-- MY CHARTS -->
-  <section id="charts">
+  <section id="charts" class="section-reveal">
     <div class="eyebrow">Apply it to a real chart</div>
     <h2>My Charts</h2>
     <p class="sub">Paste any natal chart (the planetary table from JHora / Parashara's Light — exactly like your <code>.txt</code> files) and the whole chart gets the D-1 → D-9 + lord treatment. Click any row to open it in the Synthesizer. Charts are saved in your browser.</p>
@@ -1009,8 +1057,8 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
         </div>
         <div id="chartView" style="display:none">
       <div class="chart-view-toggle">
-        <button class="cvt-btn active" id="btnGridView" onclick="document.getElementById('bhavaMandala').style.display='none';document.getElementById('houseStripPanel').style.display='block';this.classList.add('active');document.getElementById('btnMandalaView').classList.remove('active')">⊞ Grid</button>
-        <button class="cvt-btn" id="btnMandalaView" onclick="document.getElementById('bhavaMandala').style.display='block';document.getElementById('houseStripPanel').style.display='none';this.classList.add('active');document.getElementById('btnGridView').classList.remove('active')">◎ Bhava Mandala</button>
+        <button type="button" class="cvt-btn active" id="btnGridView">⊞ Grid</button>
+        <button type="button" class="cvt-btn" id="btnMandalaView">◎ Bhava Mandala</button>
         <span style="font-size:11px;color:var(--muted);margin-left:4px">— 3D zodiac wheel</span>
       </div>
       <div id="bhavaMandala" style="display:none;margin-bottom:14px"></div>
@@ -1079,7 +1127,7 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
     </div>
   </section>
 
-  <section id="bbavam">
+  <section id="bbavam" class="section-reveal">
     <div class="eyebrow">Advanced technique · bhavat bhavam</div>
     <h2>Relationship decoder</h2>
     <p class="sub">Every person in your life maps to a specific house. Any topic about that person maps to another house counted forward from there — <i>bhavat bhavam</i>, "from house to house." Select who you're asking about and what you want to know — the app shows exactly where to look in D-1 and the relevant divisional chart.</p>
@@ -1107,7 +1155,7 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
     </div>
   </section>
 
-  <section id="lifepredictor">
+  <section id="lifepredictor" class="section-reveal">
     <div class="eyebrow">Full-life timeline</div>
     <h2>Life Predictor</h2>
     <p class="sub">A scrollable life map — each Antardasha colored by the same 4-layer Dasha Prediction Engine (natal dignity, functional role, Gochara, yogas). <b style="color:var(--exalt)">Green</b> favors delivery; <b style="color:var(--debil)">red</b> signals friction. Click any segment for details.</p>
@@ -1127,7 +1175,7 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
     </div>
   </section>
 
-  <section id="outlook">
+  <section id="outlook" class="section-reveal">
     <div class="eyebrow">Life outlook · 2025 – 2029</div>
     <h2>When is the right time?</h2>
     <p class="sub">Jupiter and Saturn move slowly — roughly one sign per year and 2.5 years respectively. Where they land against your natal houses, crossed with SAV, reveals your strongest windows for each goal.</p>
@@ -1151,7 +1199,7 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
     </div>
   </section>
 
-  <section id="quiz">
+  <section id="quiz" class="section-reveal">
     <div class="eyebrow">Make it stick</div>
     <h2>Practice — decode the sky</h2>
     <p class="sub">Quick questions drawn from the blocks you just met. Reasoning beats memorizing — every answer shows why.</p>
@@ -1185,7 +1233,7 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
 </div>
 
 <!-- NAKSHATRA PROFILE MODAL -->
-<div class="modal" id="nakModal"><div class="card" id="nakCard"></div></div>
+<div class="modal" id="nakModal" role="dialog" aria-modal="true" aria-labelledby="nakModalTitle" aria-hidden="true"><div class="card" id="nakCard"></div></div>
 
 <script>
 "use strict";
@@ -1501,9 +1549,10 @@ const DASHA_SEQ_K=["Ke","Ve","Su","Mo","Ma","Ra","Ju","Sa","Me"];
 function fmtDeg(d){const s=Math.floor(d/30)%12;const dd=d-Math.floor(d/30)*30;const deg=Math.floor(dd);const min=Math.round((dd-deg)*60);return SIGN3[s]+" "+deg+"°"+(min?(" "+(min<10?"0":"")+min+"'"):"");}
 function openNak(idx){
   const n=NAK[idx],lord=GBYK[n.l],span=40/3,start=idx*span;
+  nakModalTrigger=document.activeElement;
   document.getElementById("nakCard").innerHTML=`
-    <button class="ghost" style="float:right;border:none;background:none;font-size:22px;cursor:pointer;color:var(--muted)" onclick="closeNak()">×</button>
-    <h3 style="margin:0 0 2px;font-size:22px">✦ ${n.n}</h3>
+    <button type="button" class="ghost" style="float:right;border:none;background:none;font-size:22px;cursor:pointer;color:var(--muted)" onclick="closeNak()" aria-label="Close">×</button>
+    <h3 id="nakModalTitle" style="margin:0 0 2px;font-size:22px">✦ ${n.n}</h3>
     <div class="note" style="margin-bottom:14px">Nakshatra ${idx+1} of 27 · ${fmtDeg(start)} – ${fmtDeg(start+span)}</div>
     <div class="kv">
       <b>Star-lord</b><span>${lord.gl} ${lord.name} — runs ${VIMY[n.l]} years of Vimsottari dasha</span>
@@ -1516,14 +1565,33 @@ function openNak(idx){
     <p style="margin:16px 0 0;color:#dfe4f6;font-size:14.5px;border-top:1px dashed var(--line);padding-top:14px">${n.st}</p>
     <div class="chapref">A planet in ${n.n} is coloured by this star, and its star-lord <b>${lord.name}</b> also runs that planet's Vimsottari dasha — the bridge from <i>meaning</i> to <i>timing</i>.</div>`;
   document.getElementById("nakModal").classList.add("show");
+  document.getElementById("nakModal").setAttribute("aria-hidden","false");
+  const closeBtn=document.querySelector("#nakCard button");
+  if(closeBtn) closeBtn.focus();
 }
-function closeNak(){document.getElementById("nakModal").classList.remove("show");}
+let nakModalTrigger=null;
+function closeNak(){
+  document.getElementById("nakModal").classList.remove("show");
+  document.getElementById("nakModal").setAttribute("aria-hidden","true");
+  if(nakModalTrigger&&typeof nakModalTrigger.focus==="function") nakModalTrigger.focus();
+  nakModalTrigger=null;
+}
 document.getElementById("nakModal").addEventListener("click",e=>{if(e.target.id==="nakModal")closeNak();});
+document.getElementById("nakModal").querySelector(".card").addEventListener("keydown",e=>{
+  if(e.key!=="Tab") return;
+  const card=document.getElementById("nakCard");
+  const f=[...card.querySelectorAll('button,[href],input,select,textarea')];
+  if(!f.length) return;
+  const first=f[0],last=f[f.length-1];
+  if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+  else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+});
 document.addEventListener("keydown",e=>{
   if(e.key!=="Escape")return;
   const add=document.getElementById("addModal");
   if(add&&add.classList.contains("show"))return;
-  closeNak();
+  const nak=document.getElementById("nakModal");
+  if(nak&&nak.classList.contains("show")){closeNak();return;}
 });
 
 /* ===== shared engine ===== */
@@ -1679,7 +1747,7 @@ function vrow(label,sign,dg){
 function explorer(tokensId,detailId,items,renderTok,renderDetail){
   const tEl=document.getElementById(tokensId),dEl=document.getElementById(detailId);
   items.forEach((it,i)=>{
-    const t=document.createElement("div");t.className="tok"+(i===0?" active":"");t.innerHTML=renderTok(it);
+    const t=document.createElement("button");t.type="button";t.className="tok"+(i===0?" active":"");t.innerHTML=renderTok(it);
     t.onclick=()=>{[...tEl.children].forEach(c=>c.classList.remove("active"));t.classList.add("active");dEl.innerHTML=renderDetail(it);};
     tEl.appendChild(t);
   });
@@ -1735,6 +1803,7 @@ const JA={};
     const pnk=document.getElementById("pNak");
     pnk.innerHTML=`<span class="nstar">✦</span><div><b>Nakshatra ${ni.n}</b> · pada ${ni.pada} · star-lord ${nl.gl} ${nl.name} &nbsp;—&nbsp; deity <b>${ni.d}</b>, symbol “<i>${ni.s}</i>” — ${ni.t}.</div><span class="note" style="margin-left:auto;white-space:nowrap;color:var(--gold2)">details ›</span>`;
     pnk.onclick=()=>openNak(ni.idx);
+    pnk.onkeydown=e=>{if(e.key==="Enter"||e.key===" ") {e.preventDefault();openNak(ni.idx);}};
     document.getElementById("pVargas").innerHTML=
       vrow("D-1 · Rasi",r.name,d1)+vrow("D-9 · Navamsa",r9.name,d9)+
       (vg?`<div class="note" style="text-align:center;color:var(--gold2);font-weight:700">✦ Vargottama — same sign in both</div>`:"");
@@ -1746,7 +1815,7 @@ const JA={};
       <div class="step"><div class="sn">4</div><div class="st"><b>Navamsa (D-9):</b> sign ${r9.name} → it ${d9.score>=1?"holds its strength":d9.score<=-1?"loses strength":"stays even"} in delivering.</div></div>`;
     document.getElementById("aspText").innerHTML=`From house ${bn}, <b>${g.name}</b> aspects house${asp.length>1?"s":""} <b>${asp.join(", ")}</b>${(gk==="Ma"||gk==="Ju"||gk==="Sa")?` (incl. special aspects)`:""} — influencing ${asp.map(h=>BHAVAS[h-1].en.toLowerCase()).join(", ")}.`;
     const hc=document.getElementById("aspHouses");hc.innerHTML="";
-    for(let h=1;h<=12;h++){const cls=h===bn?"occ":asp.includes(h)?"asp":"";const d=document.createElement("div");d.className="hcell "+cls;d.innerHTML=`<span class="hn">${h}</span><span>${BHAVAS[h-1].en.split(" ")[0]}</span>`;hc.appendChild(d);}
+    for(let h=1;h<=12;h++){const cls=h===bn?"occ":asp.includes(h)?"asp":"";const b=document.createElement("button");b.type="button";b.className="hcell "+cls;b.disabled=true;b.innerHTML=`<span class="hn">${h}</span><span>${BHAVAS[h-1].en.split(" ")[0]}</span>`;hc.appendChild(b);}
   }
   [sG,sR,sB].forEach(s=>s.onchange=render);sD.oninput=render;render();
   JA.setPlanet=(gk,sign,deg,house)=>{sG.value=gk;sR.value=sign;sD.value=Math.min(29.5,Math.round(deg*2)/2);sB.value=house;setMode("planet");render();document.getElementById("synth").scrollIntoView({behavior:"smooth"});};
@@ -2145,7 +2214,7 @@ function renderStrengthDash(c,La,allBAV,bavForVerdict){
 
     const synthCall=`JA.setPlanet('${k}',${p.sign},${p.deg.toFixed(2)},${house})`;
 
-    cards.push(`<div class="ps-card" data-planet="${k}" onclick="${synthCall}" title="Open in Synthesizer">
+    cards.push(`<button type="button" class="ps-card ps-card-btn" data-planet="${k}" onclick="${synthCall}" title="Open in Synthesizer">
       <div class="ps-top">
         <span class="gdot" style="background:${g.col};width:26px;height:26px;font-size:13px;flex-shrink:0">${g.gl}</span>
         <div style="flex:1;min-width:0">
@@ -2166,7 +2235,7 @@ function renderStrengthDash(c,La,allBAV,bavForVerdict){
       </div>
       ${bavRow}
       ${flags.length?`<div class="ps-flags">${flags.join("")}</div>`:""}
-    </div>`);
+    </button>`);
   }
 
   grid.innerHTML=cards.join("");
@@ -2199,12 +2268,13 @@ function renderHouseStrip(c,La){
         inner=`<span class="hs-empty">${GBYK[lordK].gl}</span>`;
       }
     }
-    const isClk=!here.length&&c.planets[lordK];
-    const lp=c.planets[lordK];
-    const synthAttr=isClk?`class="hs-cell hs-clk" onclick="JA.setHouse(${La},${h},${lp.sign},${lp.deg.toFixed(2)})"
-      title="H${h} empty — open lord ${GBYK[lordK].name} in Synthesizer"`
-      :`class="hs-cell"`;
-    html+=`<div ${synthAttr}>
+    html+=isClk
+      ?`<button type="button" class="hs-cell hs-clk" onclick="JA.setHouse(${La},${h},${lp.sign},${lp.deg.toFixed(2)})" title="H${h} empty — open lord ${GBYK[lordK].name} in Synthesizer">
+      <div class="hs-hn">${h}</div>
+      <div class="hs-sign">${SIGN3[sgn]}</div>
+      <div class="hs-occ">${inner}</div>
+    </button>`
+      :`<div class="hs-cell">
       <div class="hs-hn">${h}</div>
       <div class="hs-sign">${SIGN3[sgn]}</div>
       <div class="hs-occ">${inner}</div>
@@ -3315,14 +3385,114 @@ function lpBuildBAV(c,La){
   return allBAV;
 }
 
+/* ===== OUTLOOK GOALS (shared with Life Outlook + Life Predictor) ===== */
+const OUTLOOK_GOALS=[
+  {id:"career",   label:"Career change / promotion",    houses:[10,6,2],  vn:"D-10 Dasamsha",
+   hd:{10:"profession & authority",6:"job change & service",2:"income & status"}},
+  {id:"wealth",   label:"Wealth / income growth",        houses:[2,11,5],  vn:"D-2 Hora",
+   hd:{2:"savings & wealth",11:"income & gains",5:"investments"}},
+  {id:"property", label:"Property / home purchase",     houses:[4,12,11], vn:"D-4 Chaturthamsha",
+   hd:{4:"home & fixed assets",12:"large expenditure",11:"acquisition"}},
+  {id:"vehicle",  label:"Vehicle / comforts",           houses:[4,11],    vn:"D-16 Shodashamsha",
+   hd:{4:"vehicles & comforts",11:"purchase timing"}},
+  {id:"marriage", label:"Marriage / relationship",       houses:[7,2,11],  vn:"D-9 Navamsa",
+   hd:{7:"spouse & partnership",2:"family formation",11:"desire fulfilment"}},
+  {id:"child",    label:"Child / fertility",             houses:[5,9],     vn:"D-7 Saptamsha",
+   hd:{5:"children & progeny",9:"second child / fortune"}},
+  {id:"business", label:"Business / entrepreneurship",   houses:[7,10,11], vn:"D-10 Dasamsha",
+   hd:{7:"partnerships & clients",10:"brand & authority",11:"profit & network"}},
+  {id:"health",   label:"Health / recovery",             houses:[1,6,8],   vn:null,
+   hd:{1:"vitality & body",6:"illness & recovery",8:"chronic deep issues"}},
+];
+
+function liveTrSign(planet,year,month){
+  const tRes=getTransitPlanets(new Date(year,month-1,15));
+  return tRes.pos[planet]?tRes.pos[planet].sign:0;
+}
+function liveTrChangeInYear(planet,year){
+  const jan=liveTrSign(planet,year,1),dec=liveTrSign(planet,year,12);
+  if(jan===dec) return null;
+  for(let m=2;m<=12;m++){if(liveTrSign(planet,year,m)!==jan) return{from:jan,to:dec,mon:m};}
+  return null;
+}
+function dashaScoreForYear(c,year){
+  if(!c.dashas?.mahas) return 0;
+  const mid=new Date(year,6,1).getTime(), bav=lpBuildBAV(c,c.La.sign);
+  for(const md of c.dashas.mahas){
+    for(const ad of (md.antars||[])){
+      if(ad.start<=mid&&ad.end>=mid){
+        const sc=lpComputePeriodScore(c,c.La.sign,bav,md,ad);
+        if(sc.total>=4) return 1.5;
+        if(sc.total>=2) return 0.75;
+        if(sc.total<-2.5) return -1.25;
+        if(sc.total<-0.5) return -0.5;
+        return 0;
+      }
+    }
+  }
+  return 0;
+}
+
+function lpSyncToDPE(c,p){
+  const panel=document.getElementById("dashaPanel");
+  if(!panel||panel.style.display==="none"||!c.dashas?.mahas) return;
+  const mahas=c.dashas.mahas;
+  let mi=0,ai=0;
+  for(let i=0;i<mahas.length;i++){
+    for(let j=0;j<(mahas[i].antars||[]).length;j++){
+      if(mahas[i].antars[j]===p.antar){mi=i;ai=j;break;}
+    }
+  }
+  const mSel=document.getElementById("dpMahaSelect"),aSel=document.getElementById("dpAntarSelect");
+  if(!mSel||!aSel) return;
+  mSel.value=String(mi);
+  mSel.dispatchEvent(new Event("change"));
+  aSel.value=String(ai);
+  dpAnalyze();
+  panel.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function lpTransitGoalBoost(La,houses,y,m){
+  const juS=liveTrSign("Ju",y,m),saS=liveTrSign("Sa",y,m);
+  const juH=houseFromSigns(La,juS),saH=houseFromSigns(La,saS);
+  const juHit=new Set([juH,((juH-1+4)%12)+1,((juH-1+6)%12)+1,((juH-1+8)%12)+1]);
+  const saHit=new Set([saH,((saH-1+2)%12)+1,((saH-1+6)%12)+1,((saH-1+9)%12)+1]);
+  let boost=0;
+  for(const h of houses){if(juHit.has(h))boost+=0.45;if(saHit.has(h))boost+=0.2;}
+  return boost;
+}
+
+function lpBuildSmartHtml(c,La,periods,toX,segW,goalIdx){
+  let html='';
+  periods.forEach((p,i)=>{
+    const ms=p.antar.start,me=p.antar.end;
+    let cur=new Date(new Date(ms).getFullYear(),new Date(ms).getMonth(),1);
+    while(cur.getTime()<me){
+      const moEnd=new Date(cur.getFullYear(),cur.getMonth()+1,0,23,59,59,999).getTime();
+      const s=Math.max(cur.getTime(),ms),e=Math.min(moEnd,me);
+      const left=toX(s),width=segW(s,e);
+      if(width>=0.015){
+        let score=p.total;
+        if(goalIdx>=0) score+=lpTransitGoalBoost(La,OUTLOOK_GOALS[goalIdx].houses,cur.getFullYear(),cur.getMonth()+1);
+        const col=lpScoreColor(score,p.hardCap);
+        html+=`<div class="lp-seg" data-idx="${i}" style="left:${left.toFixed(3)}%;width:${width.toFixed(3)}%;background:${col.bar}" title="${GBYK[p.mahaK].name}/${GBYK[p.antarK].name} · ${p.verdict.label}"></div>`;
+      }
+      cur.setMonth(cur.getMonth()+1);
+    }
+  });
+  return html;
+}
+
 function lpShowDetail(wrap,idx){
   const periods=wrap._lpPeriods; if(!periods||!periods[idx]) return;
-  const p=periods[idx];
+  const p=periods[idx], c=wrap._lpChart;
   wrap.querySelectorAll('.lp-seg').forEach(el=>el.classList.toggle('lp-active',parseInt(el.dataset.idx,10)===idx));
   const detail=wrap.querySelector('.lp-detail'); if(!detail) return;
   const thTags=p.themes.themes.slice(0,6).map(t=>`<span class="lp-tag">${t.label}</span>`).join('');
   const dtNote=p.transitDate?`Transit snapshot: ${_fD(p.transitDate.getTime())} (mid-period)`:'';
-  const peak=p.l3.doubleTransit?' · ★ Double transit window':p.l3.juScore>0&&p.l3.saScore>0?'':p.l3.juScore>0?' · Jupiter supportive':p.l3.saScore>0?' · Saturn supportive':'';
+  const peak=p.l3.doubleTransit?' · Double transit window':p.l3.juScore>0&&p.l3.saScore>0?'':p.l3.juScore>0?' · Jupiter supportive':p.l3.saScore>0?' · Saturn supportive':'';
+  const goalNote=wrap._lpGoalIdx>=0&&OUTLOOK_GOALS[wrap._lpGoalIdx]
+    ?`<div class="lp-detail-note" style="margin-top:8px">Goal filter: ${OUTLOOK_GOALS[wrap._lpGoalIdx].label} — houses ${OUTLOOK_GOALS[wrap._lpGoalIdx].houses.map(h=>'H'+h).join(', ')}</div>`:'';
   detail.className='lp-detail show';
   detail.innerHTML=`
     <div class="lp-detail-hdr">
@@ -3331,10 +3501,11 @@ function lpShowDetail(wrap,idx){
         <div class="lp-detail-title">${GBYK[p.mahaK].gl} ${GBYK[p.mahaK].name} / ${GBYK[p.antarK].gl} ${GBYK[p.antarK].name}</div>
         <div class="lp-detail-sub">${_fD(p.antar.start)} — ${_fD(p.antar.end)} · score ${p.total.toFixed(1)}</div>
         <div class="lp-detail-note">${p.verdict.sub}${peak?'. '+peak.replace(/^ · /,''):''}. ${dtNote}</div>
+        ${goalNote}
       </div>
     </div>
-    ${thTags?`<div class="lp-tags">${thTags}</div>`:''}`;
-  detail.scrollIntoView({behavior:'smooth',block:'nearest'});
+    ${thTags?`<div class="lp-tags">${thTags}</div>`:''}
+    <div style="margin-top:12px"><button type="button" class="lp-btn" data-lp-dpe="${idx}">Open in Dasha Prediction Engine</button></div>`;
 }
 
 function renderLifePredictor(c,La,allBAV,targetId){
@@ -3377,11 +3548,12 @@ function renderLifePredictor(c,La,allBAV,targetId){
   }
 
   let smartHtml='',antarHtml='',mahaHtml='';
+  const goalIdx=typeof wrap._lpGoalIdx==="number"?wrap._lpGoalIdx:-1;
+  smartHtml=lpBuildSmartHtml(c,La,periods,toX,segW,goalIdx);
   periods.forEach((p,i)=>{
     const left=toX(p.antar.start),width=segW(p.antar.start,p.antar.end);
     if(width<0.05) return;
     const col=lpScoreColor(p.total,p.hardCap);
-    smartHtml+=`<div class="lp-seg" data-idx="${i}" style="left:${left.toFixed(3)}%;width:${width.toFixed(3)}%;background:${col.bar}" title="${GBYK[p.mahaK].name}/${GBYK[p.antarK].name} · ${p.verdict.label}"></div>`;
     antarHtml+=`<div class="lp-seg" data-idx="${i}" style="left:${left.toFixed(3)}%;width:${width.toFixed(3)}%;background:${col.fill}" title="${GBYK[p.mahaK].name}/${GBYK[p.antarK].name} · ${p.verdict.label}"><span class="lp-seg-lbl">${width>3?GBYK[p.antarK].name:width>1.2?GBYK[p.antarK].gl:''}</span></div>`;
   });
 
@@ -3417,7 +3589,7 @@ function renderLifePredictor(c,La,allBAV,targetId){
     <div class="lp-hdr">
       <div>
         <h4>🔮 Life Predictor · ${c.name||'Chart'}</h4>
-        <div class="lp-hdr-note">Smart Summary colors each Antardasha by the Dasha Prediction Engine score. Mahadasha row shows planet lords. Uses your existing natal + Gochara logic — no separate rule set.</div>
+        <div class="lp-hdr-note">Smart Summary uses monthly stripes colored by DPE score (+ goal transit boost when filtered). Mahadasha row shows planet lords.</div>
       </div>
     </div>
     <div class="lp-legend">
@@ -3427,12 +3599,18 @@ function renderLifePredictor(c,La,allBAV,targetId){
       <span><i style="background:#fff;border:1px solid var(--line)"></i>Now</span>
     </div>
     <div class="lp-toolbar">
+      <label class="lp-goal-lbl">Goal
+        <select class="lp-goal-sel" data-lp-goal aria-label="Filter timeline by life goal">
+          <option value="-1"${goalIdx<0?" selected":""}>All themes</option>
+          ${OUTLOOK_GOALS.map((g,i)=>`<option value="${i}"${goalIdx===i?" selected":""}>${g.label}</option>`).join("")}
+        </select>
+      </label>
       <button type="button" class="lp-btn" data-lp-action="now">Scroll to now</button>
       <button type="button" class="lp-btn" data-lp-action="start">Scroll to birth</button>
     </div>
     <div class="lp-scroll" data-lp-scroll>
       <div class="lp-track" style="min-width:${Math.max(960,Math.round(span/MS_Y)*14)}px">
-        <div class="lp-row-label">SMART SUMMARY</div>
+        <div class="lp-row-label">SMART SUMMARY · monthly</div>
         <div class="lp-row lp-smart">${smartHtml}${nowNeedle}</div>
         <div class="lp-row-label">ANTARDASHA · prediction color</div>
         <div class="lp-row">${antarHtml}</div>
@@ -3445,15 +3623,28 @@ function renderLifePredictor(c,La,allBAV,targetId){
   </div>`;
 
   wrap._lpPeriods=periods;
+  wrap._lpChart=c;
+  wrap._lpGoalIdx=goalIdx;
+  wrap._lpNowLeft=nowLeft;
   const scroller=wrap.querySelector('[data-lp-scroll]');
   wrap.onclick=e=>{
+    const dpeBtn=e.target.closest('[data-lp-dpe]');
+    if(dpeBtn){lpSyncToDPE(c,periods[parseInt(dpeBtn.dataset.lpDpe,10)]);return;}
     const seg=e.target.closest('.lp-seg[data-idx]');
-    if(seg) lpShowDetail(wrap,parseInt(seg.dataset.idx,10));
+    if(seg){lpShowDetail(wrap,parseInt(seg.dataset.idx,10));return;}
     const btn=e.target.closest('[data-lp-action]');
     if(!btn||!scroller) return;
     const track=scroller.querySelector('.lp-track');
-    const pct=btn.dataset.lpAction==='now'?nowLeft/100:0;
+    const pct=btn.dataset.lpAction==='now'?wrap._lpNowLeft/100:0;
     scroller.scrollLeft=Math.max(0,pct*track.offsetWidth-scroller.clientWidth/2);
+  };
+  wrap.onchange=e=>{
+    if(!e.target.matches('[data-lp-goal]')) return;
+    wrap._lpGoalIdx=parseInt(e.target.value,10);
+    const smartRow=wrap.querySelector('.lp-smart');
+    if(smartRow) smartRow.innerHTML=lpBuildSmartHtml(c,La,periods,toX,segW,wrap._lpGoalIdx)+nowNeedle;
+    const active=wrap.querySelector('.lp-seg.lp-active');
+    if(active) lpShowDetail(wrap,parseInt(active.dataset.idx,10));
   };
   lpShowDetail(wrap,defIdx);
   requestAnimationFrame(()=>{
@@ -3507,14 +3698,13 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
   function renderTabs(){
     tabs.innerHTML="";
     charts.forEach((c,i)=>{
-      const t=document.createElement("div"); t.className="ctab"+(i===active?" active":"");
+      const t=document.createElement("button"); t.type="button"; t.className="ctab"+(i===active?" active":"");
       t.innerHTML=`<span>${c.name}</span><span class="x" title="remove">✕</span>`;
-      t.querySelector("span").onclick=()=>{active=i;draw();};
-      t.onclick=(e)=>{if(!e.target.classList.contains("x")){active=i;draw();}};
+      t.onclick=(e)=>{if(e.target.classList.contains("x"))return;active=i;draw();};
       t.querySelector(".x").onclick=(e)=>{e.stopPropagation();charts.splice(i,1);if(active>=charts.length)active=charts.length-1;save(charts);draw();JA.onChartsChange&&JA.onChartsChange();};
       tabs.appendChild(t);
     });
-    const add=document.createElement("div"); add.className="ctab add"; add.textContent="＋ Add chart"; add.onclick=()=>openModal(add); tabs.appendChild(add);
+    const add=document.createElement("button"); add.type="button"; add.className="ctab add"; add.textContent="＋ Add chart"; add.onclick=()=>openModal(add); tabs.appendChild(add);
   }
   function draw(){
     renderTabs();
@@ -3671,12 +3861,24 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
   document.getElementById("addFirst").onclick=e=>{e.preventDefault();openModal(e.currentTarget);};
   document.getElementById("demoFirst").onclick=e=>{e.preventDefault();charts.push({name:"Demo chart",...parse(DEMO)});active=charts.length-1;save(charts);draw();JA.onChartsChange&&JA.onChartsChange();};
   document.getElementById("addSave").onclick=()=>{
-    const parsed=parse(textEl.value); const np=Object.keys(parsed.planets).length;
-    if(!parsed.La||np<7){msg.style.color="var(--debil)";msg.textContent=`Couldn't read it — found Lagna:${parsed.La?"yes":"no"}, planets:${np}/9. Make sure you pasted the longitude table (Lagna, Sun…Ketu with sign & degree).`;return;}
-    const bd=parsed.birthDate||null;
-    const dashas=parsed.dashas||(bd&&parsed.planets.Mo?computeVimDashas(parsed.planets.Mo,bd):null);
-    charts.push({name:(nameEl.value.trim()||`Chart ${charts.length+1}`),La:parsed.La,planets:parsed.planets,birthDate:bd,dashas});
-    active=charts.length-1; save(charts); closeModal(); draw(); JA.onChartsChange&&JA.onChartsChange();
+    const btn=document.getElementById("addSave");
+    btn.disabled=true;
+    const prev=btn.textContent;
+    btn.textContent="Parsing…";
+    msg.textContent="";
+    setTimeout(()=>{
+      try{
+        const parsed=parse(textEl.value); const np=Object.keys(parsed.planets).length;
+        if(!parsed.La||np<7){msg.style.color="var(--debil)";msg.textContent=`Couldn't read it — found Lagna:${parsed.La?"yes":"no"}, planets:${np}/9. Make sure you pasted the longitude table (Lagna, Sun…Ketu with sign & degree).`;return;}
+        const bd=parsed.birthDate||null;
+        const dashas=parsed.dashas||(bd&&parsed.planets.Mo?computeVimDashas(parsed.planets.Mo,bd):null);
+        charts.push({name:(nameEl.value.trim()||`Chart ${charts.length+1}`),La:parsed.La,planets:parsed.planets,birthDate:bd,dashas});
+        active=charts.length-1; save(charts); closeModal(); draw(); JA.onChartsChange&&JA.onChartsChange();
+      }finally{
+        btn.disabled=false;
+        btn.textContent=prev;
+      }
+    },0);
   };
   draw();
 })();
@@ -4243,45 +4445,7 @@ function computeVimDashas(mo,birthDateStr){
   const LS_KEY="jyotish_charts_v1";
   function getCharts(){try{return JSON.parse(localStorage.getItem(LS_KEY))||[];}catch(e){return[];}}
 
-  const GOALS=[
-    {id:"career",   label:"Career change / promotion",    houses:[10,6,2],  vn:"D-10 Dasamsha",
-     hd:{10:"profession & authority",6:"job change & service",2:"income & status"}},
-    {id:"wealth",   label:"Wealth / income growth",        houses:[2,11,5],  vn:"D-2 Hora",
-     hd:{2:"savings & wealth",11:"income & gains",5:"investments"}},
-    {id:"property", label:"Property / home purchase",     houses:[4,12,11], vn:"D-4 Chaturthamsha",
-     hd:{4:"home & fixed assets",12:"large expenditure",11:"acquisition"}},
-    {id:"vehicle",  label:"Vehicle / comforts",           houses:[4,11],    vn:"D-16 Shodashamsha",
-     hd:{4:"vehicles & comforts",11:"purchase timing"}},
-    {id:"marriage", label:"Marriage / relationship",       houses:[7,2,11],  vn:"D-9 Navamsha",
-     hd:{7:"spouse & partnership",2:"family formation",11:"desire fulfilment"}},
-    {id:"child",    label:"Child / fertility",             houses:[5,9],     vn:"D-7 Saptamsha",
-     hd:{5:"children & progeny",9:"second child / fortune"}},
-    {id:"business", label:"Business / entrepreneurship",   houses:[7,10,11], vn:"D-10 Dasamsha",
-     hd:{7:"partnerships & clients",10:"brand & authority",11:"profit & network"}},
-    {id:"health",   label:"Health / recovery",             houses:[1,6,8],   vn:null,
-     hd:{1:"vitality & body",6:"illness & recovery",8:"chronic deep issues"}},
-  ];
-
-  // Sidereal (Lahiri) transit segments: [year, month(1-12), sign(0=Ar..11=Pi)]
-  const TR={
-    Ju:[[2024,5,1],[2025,5,2],[2026,6,3],[2027,7,4],[2028,8,5],[2030,1,6]],
-    //    Taurus     Gemini   Cancer(ex)  Leo         Virgo
-    Sa:[[2023,1,10],[2025,3,11],[2027,6,0],[2030,1,1]],
-    //   Aquarius    Pisces     Aries
-    Ra:[[2023,10,11],[2025,5,10],[2026,11,9],[2028,5,8],[2030,1,7]]
-    //   Pisces      Aquarius   Capricorn  Sagittarius
-  };
-  function trSign(p,y,m){
-    const s=TR[p]; let sg=s[0][2];
-    for(const[sy,sm,ss]of s){if(y>sy||(y===sy&&m>=sm))sg=ss; else break;}
-    return sg;
-  }
-  function trChangeInYear(p,y){
-    const jan=trSign(p,y,1),dec=trSign(p,y,12);
-    if(jan===dec)return null;
-    for(let m=2;m<=12;m++){if(trSign(p,y,m)!==jan)return{from:jan,to:dec,mon:m};}
-    return null;
-  }
+  const GOALS=OUTLOOK_GOALS;
 
   function juAsp(h){return new Set([h,((h-1+4)%12)+1,((h-1+6)%12)+1,((h-1+8)%12)+1]);}
   function saAsp(h){return new Set([h,((h-1+2)%12)+1,((h-1+6)%12)+1,((h-1+9)%12)+1]);}
@@ -4349,7 +4513,7 @@ function computeVimDashas(mo,birthDateStr){
   }
 
   function analyzeYear(c,La,goal,year){
-    const juS=trSign("Ju",year,7),saS=trSign("Sa",year,7),raS=trSign("Ra",year,7);
+    const juS=liveTrSign("Ju",year,7),saS=liveTrSign("Sa",year,7),raS=liveTrSign("Ra",year,7);
     const juH=houseFromSigns(La,juS),saH=houseFromSigns(La,saS),raH=houseFromSigns(La,raS);
     const moSign=c.planets.Mo?.sign;
     const juMo=moSign!==undefined?houseFromSigns(moSign,juS):null;
@@ -4389,12 +4553,13 @@ function computeVimDashas(mo,birthDateStr){
     const sadeSati=saMo!==null&&[12,1,2].includes(saMo);
     if(sadeSati)score-=1;
     if(juExalt)score+=0.2;
+    score+=dashaScoreForYear(c,year);
     if(msgs.length===0)msgs.push(`<b>Background year</b> — Jupiter (H${juH}) and Saturn (H${saH}) are not directly activating the key houses for this goal. Consolidate existing progress rather than initiating major moves.`);
 
     const rating=score>=3.5?"Excellent":score>=2?"Strong":score>=0.8?"Moderate":score>=-0.5?"Mixed":"Challenging";
     const rcls=score>=2?"ol-good":score>=0.8?"":"ol-weak";
     // Detect sign change mid-year
-    const juChg=trChangeInYear("Ju",year),saChg=trChangeInYear("Sa",year);
+    const juChg=liveTrChangeInYear("Ju",year),saChg=liveTrChangeInYear("Sa",year);
     return{year,juH,saH,raH,juS,saS,juExalt,acts,msgs,sadeSati,saMo,juMo,score,rating,rcls,sav,juChg,saChg};
   }
 
@@ -4744,10 +4909,10 @@ Reference actual planets, house numbers, and BPHS principles throughout.`;
   }
   let cur=makeQ();
   function draw(){
-    box.innerHTML=`<div class="qq">Q${qi+1}. ${cur.q}</div><div class="opts">${cur.opts.map(o=>`<div class="opt" data-o="${o}">${o}</div>`).join("")}</div><div class="qmeta"><span>Score: ${score} / ${qi+(answered?1:0)}</span><span id="qfb"></span></div>`;
+    box.innerHTML=`<div class="qq">Q${qi+1}. ${cur.q}</div><div class="opts">${cur.opts.map((o,j)=>`<button type="button" class="opt" data-o="${j}">${o}</button>`).join("")}</div><div class="qmeta"><span>Score: ${score} / ${qi+(answered?1:0)}</span><span id="qfb"></span></div>`;
     box.querySelectorAll(".opt").forEach(el=>el.onclick=()=>{
-      if(answered)return;answered=true;const chosen=el.dataset.o;
-      box.querySelectorAll(".opt").forEach(o=>{if(o.dataset.o===cur.a)o.classList.add("right");else if(o.dataset.o===chosen)o.classList.add("wrong");});
+      if(answered)return;answered=true;const chosen=cur.opts[+el.dataset.o];
+      box.querySelectorAll(".opt").forEach(o=>{const v=cur.opts[+o.dataset.o];if(v===cur.a)o.classList.add("right");else if(v===chosen)o.classList.add("wrong");});
       if(chosen===cur.a)score++;
       document.getElementById("qfb").innerHTML=`<button class="btn" id="nextq">${qi>=9?"Restart":"Next →"}</button>`;
       const wy=document.createElement("p");wy.className="note";wy.style.marginTop="10px";wy.innerHTML="💡 "+cur.why;box.appendChild(wy);
@@ -4769,6 +4934,57 @@ function toggleTheme(){
     const btn=document.getElementById("themeToggle");
     if(btn) btn.textContent="☉";
   }
+})();
+
+/* ===== Site chrome: mobile nav, scrollspy, section reveal, chart view ===== */
+(function(){
+  const navToggle=document.getElementById("navToggle");
+  const siteNav=document.getElementById("siteNav");
+  if(navToggle&&siteNav){
+    navToggle.addEventListener("click",()=>{
+      const open=siteNav.classList.toggle("open");
+      navToggle.setAttribute("aria-expanded",open?"true":"false");
+    });
+    siteNav.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{
+      siteNav.classList.remove("open");
+      navToggle.setAttribute("aria-expanded","false");
+    }));
+  }
+
+  const sections=[...document.querySelectorAll("section.section-reveal")];
+  const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(reduced) sections.forEach(s=>s.classList.add("visible"));
+  else if("IntersectionObserver" in window){
+    const revealIo=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");revealIo.unobserve(e.target);}});
+    },{threshold:0.08,rootMargin:"0px 0px -32px 0px"});
+    sections.forEach(s=>revealIo.observe(s));
+  }else sections.forEach(s=>s.classList.add("visible"));
+
+  const navLinks=siteNav?[...siteNav.querySelectorAll('a[href^="#"]')]:[];
+  if(navLinks.length&&sections.length&&"IntersectionObserver" in window){
+    const spy=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(!e.isIntersecting) return;
+        const id=e.target.id;
+        navLinks.forEach(a=>a.classList.toggle("nav-active",a.getAttribute("href")==="#"+id));
+      });
+    },{rootMargin:"-42% 0px -42% 0px",threshold:0});
+    sections.forEach(s=>{if(s.id) spy.observe(s);});
+  }
+
+  const btnGrid=document.getElementById("btnGridView");
+  const btnMandala=document.getElementById("btnMandalaView");
+  const mandala=document.getElementById("bhavaMandala");
+  const strip=document.getElementById("houseStripPanel");
+  function setChartView(grid){
+    if(mandala) mandala.style.display=grid?"none":"block";
+    if(strip) strip.style.display=grid?"block":"none";
+    btnGrid?.classList.toggle("active",grid);
+    btnMandala?.classList.toggle("active",!grid);
+  }
+  btnGrid?.addEventListener("click",()=>setChartView(true));
+  btnMandala?.addEventListener("click",()=>setChartView(false));
 })();
 </script>
 </body>
