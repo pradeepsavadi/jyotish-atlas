@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Jyotish Atlas — an interactive primer to Parashara's grammar. Learn the 9 Grahas, 12 Rashis, and 12 Bhavas, synthesize placements, and paste real natal charts."/>
+<meta name="theme-color" content="#0b0e1a"/>
+<meta property="og:title" content="Jyotish Atlas"/>
+<meta property="og:description" content="Parashara's grammar, made interactive — grahas, rashis, bhavas, synthesizer, and chart analysis."/>
+<meta property="og:type" content="website"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' x='5' font-size='22' fill='%23e7b94e'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E"/>
 <title>Jyotish Atlas — a living primer to Parashara's grammar</title>
 <style>
   :root{
@@ -10,8 +16,15 @@
     --ink:#eef1fb; --muted:#9aa4c8; --gold:#e7b94e; --gold2:#f4d27a; --accent:#7aa2ff;
     --exalt:#4fd07f; --debil:#ef6a5a; --own:#e7b94e; --friend:#7fc4ff; --enemy:#ff9a8a; --neutral:#b9c0dd;
     --r:14px;
+    --ease:cubic-bezier(.2,.8,.2,1);
+    --dur:150ms;
   }
   *{box-sizing:border-box}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  a:focus:not(:focus-visible),button:focus:not(:focus-visible){outline:none}
+  .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+  .skip-link:focus-visible{position:fixed;left:16px;top:16px;width:auto;height:auto;overflow:visible;z-index:100;
+    padding:10px 16px;background:var(--panel);border:1px solid var(--line);border-radius:8px;font-weight:600;color:var(--ink)}
   html{scroll-behavior:smooth}
   body{margin:0;background:
       radial-gradient(1200px 600px at 80% -10%, #1a2150 0%, transparent 60%),
@@ -27,8 +40,9 @@
   nav a:hover{color:var(--ink);background:var(--panel2)}
   .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
   section{padding:54px 0 12px;border-bottom:1px solid rgba(42,51,96,.5)}
-  h1.hero{font-size:40px;line-height:1.1;margin:46px 0 10px;font-weight:800;
-    background:linear-gradient(120deg,#fff,#f4d27a 55%,#7aa2ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  h1.hero{font-size:clamp(28px,5vw,40px);line-height:1.15;margin:46px 0 10px;font-weight:800;
+    color:var(--ink);max-width:820px;text-wrap:balance}
+  h1.hero .accent{color:var(--gold2)}
   .lede{font-size:18px;color:var(--muted);max-width:720px}
   .eyebrow{color:var(--gold);font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700}
   h2{font-size:26px;margin:6px 0 4px}
@@ -43,7 +57,8 @@
   .chip{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-weight:600}
   .chip.op{background:none;border:none;color:var(--gold);font-size:20px}
   .tokens{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 18px}
-  .tok{cursor:pointer;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:8px 12px;display:flex;align-items:center;gap:8px;font-size:13.5px;transition:.12s}
+  .tok{cursor:pointer;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:8px 12px;display:flex;align-items:center;gap:8px;font-size:13.5px;
+    transition:border-color var(--dur) var(--ease),transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease),background var(--dur) var(--ease)}
   .tok:hover{transform:translateY(-2px);border-color:var(--gold)}
   .tok.active{background:var(--panel2);border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
   .tok .gl{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:13px;color:#0b0e1a}
@@ -103,7 +118,8 @@
 
   /* ---- my charts ---- */
   .chartbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
-  .ctab{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 15px;cursor:pointer;font-size:13px;display:flex;gap:8px;align-items:center}
+  .ctab{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 15px;cursor:pointer;font-size:13px;display:flex;gap:8px;align-items:center;
+    transition:background var(--dur) var(--ease),border-color var(--dur) var(--ease),color var(--dur) var(--ease),box-shadow var(--dur) var(--ease),transform var(--dur) var(--ease)}
   .ctab.active{background:var(--gold);color:#0b0e1a;border-color:var(--gold);font-weight:600}
   .ctab .x{opacity:.5;font-weight:700}.ctab .x:hover{opacity:1}
   .ctab.add{border-style:dashed;color:var(--gold2)}
@@ -334,7 +350,8 @@
   .ps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
   @media(max-width:900px){.ps-grid{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:600px){.ps-grid{grid-template-columns:1fr}}
-  .ps-card{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;transition:.12s border-color}
+  .ps-card{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;
+    transition:border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease),transform var(--dur) var(--ease)}
   .ps-card:hover{border-color:var(--gold)}
   .ps-top{display:flex;align-items:center;gap:9px;margin-bottom:8px}
   .ps-name{font-size:14px;font-weight:800;flex:1;line-height:1.2}
@@ -541,7 +558,8 @@
   }
   html.light body{background:var(--bg);color:var(--ink)}
   html.light header.top{background:rgba(244,246,251,.92)}
-  html.light h1.hero{background:linear-gradient(120deg,#1a1d35,#9a7010 55%,#2850c8);-webkit-background-clip:text;background-clip:text;color:transparent}
+  html.light h1.hero{color:var(--ink)}
+  html.light h1.hero .accent{color:var(--gold)}
   html.light a{color:var(--gold)}
   html.light select,html.light .modal textarea,html.light .modal input[type=text]{background:var(--panel2);color:var(--ink)}
   html.light .ol-prompt-ta{background:var(--panel2);color:var(--ink)}
@@ -667,7 +685,6 @@ header.top{
 }
 .brand:hover{filter:drop-shadow(0 0 20px rgba(231,185,78,0.4))}
 nav a:hover{background:rgba(122,162,255,0.08) !important;color:var(--ink);text-shadow:0 0 10px rgba(122,162,255,0.35)}
-h1.hero{filter:drop-shadow(0 0 28px rgba(100,130,255,0.18))}
 .eyebrow{text-shadow:0 0 14px rgba(231,185,78,0.4)}
 
 /* Glassmorphic sidebar */
@@ -698,7 +715,7 @@ h1.hero{filter:drop-shadow(0 0 28px rgba(100,130,255,0.18))}
 .ps-card{
   background:rgba(18,24,52,0.78) !important;
   border-color:rgba(55,75,165,0.28) !important;
-  transition:.18s border-color,.18s box-shadow,.18s transform !important;
+  transition:border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease),transform var(--dur) var(--ease) !important;
   position:relative;overflow:hidden;
 }
 .ps-card::before{
@@ -810,9 +827,16 @@ html.light .dt-wrap{background:rgba(255,255,255,0.88)!important;backdrop-filter:
 html.light .nakband{background:linear-gradient(120deg,#f0f4ff,#e8ecf8)!important;backdrop-filter:none}
 html.light .bav-insight{background:var(--panel2)!important;border-color:var(--line)!important}
 html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0.97)!important;border-color:rgba(80,100,200,0.14)!important;box-shadow:0 20px 60px rgba(0,0,0,0.15)!important}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  #cosmos-bg{display:none}
+}
 </style>
 </head>
 <body>
+<a href="#main" class="skip-link">Skip to content</a>
 <div id="cosmos-bg"><div class="star-layer" id="sl1"></div><div class="star-layer" id="sl2"></div><div class="star-layer" id="sl3"></div><div class="star-layer" id="sl4"></div></div>
 <header class="top">
   <div class="brand">✦ Jyotish Atlas<small>Parashara's grammar, made interactive</small></div>
@@ -830,9 +854,9 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
   <button id="themeToggle" title="Toggle light / dark theme" onclick="toggleTheme()" style="margin-left:auto;background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:5px 11px;cursor:pointer;font-size:15px;line-height:1;flex-shrink:0">☾</button>
 </header>
 
-<div class="wrap">
+<div class="wrap" id="main">
 
-  <h1 class="hero">Astrology isn't a list to memorize.<br>It's a grammar you can learn.</h1>
+  <h1 class="hero">Astrology isn't a list to memorize. <span class="accent">It's a grammar you can learn.</span></h1>
   <p class="lede">The <i>Brihat Parashara Hora Shastra</i> looks like 100 chapters of riddles. Underneath, it's a tiny set of building blocks that <b>recombine</b> — like letters into words. Learn the blocks, learn how they combine, and the sky starts to read like a sentence.</p>
 
   <section id="why">
@@ -1075,9 +1099,9 @@ html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0
 </div>
 
 <!-- ADD-CHART MODAL -->
-<div class="modal" id="addModal">
+<div class="modal" id="addModal" role="dialog" aria-modal="true" aria-labelledby="addModalTitle" aria-hidden="true">
   <div class="card">
-    <h3>Add a chart</h3>
+    <h3 id="addModalTitle">Add a chart</h3>
     <p class="note" style="margin:0 0 12px">Paste the planetary longitude table from your chart software — the lines listing <b>Lagna, Sun … Ketu</b> with sign &amp; degree. The parser reads the rest.</p>
     <input type="text" id="chartName" placeholder="Name (e.g. Mine, or a relative's)"/>
     <div style="display:flex;gap:12px;align-items:center;margin:12px 0">
@@ -1430,7 +1454,12 @@ function openNak(idx){
 }
 function closeNak(){document.getElementById("nakModal").classList.remove("show");}
 document.getElementById("nakModal").addEventListener("click",e=>{if(e.target.id==="nakModal")closeNak();});
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeNak();});
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Escape")return;
+  const add=document.getElementById("addModal");
+  if(add&&add.classList.contains("show"))return;
+  closeNak();
+});
 
 /* ===== shared engine ===== */
 const NAV_START=[0,9,6,3];
@@ -3227,7 +3256,7 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
       t.querySelector(".x").onclick=(e)=>{e.stopPropagation();charts.splice(i,1);if(active>=charts.length)active=charts.length-1;save(charts);draw();JA.onChartsChange&&JA.onChartsChange();};
       tabs.appendChild(t);
     });
-    const add=document.createElement("div"); add.className="ctab add"; add.textContent="＋ Add chart"; add.onclick=openModal; tabs.appendChild(add);
+    const add=document.createElement("div"); add.className="ctab add"; add.textContent="＋ Add chart"; add.onclick=()=>openModal(add); tabs.appendChild(add);
   }
   function draw(){
     renderTabs();
@@ -3345,11 +3374,32 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
   }
 
   // modal
-  const modal=document.getElementById("addModal"),nameEl=document.getElementById("chartName"),textEl=document.getElementById("chartText"),msg=document.getElementById("parseMsg");
-  function openModal(){nameEl.value="";textEl.value="";msg.textContent="";modal.classList.add("show");nameEl.focus();}
-  function closeModal(){modal.classList.remove("show");}
+  const modal=document.getElementById("addModal"),modalCard=modal.querySelector(".card"),nameEl=document.getElementById("chartName"),textEl=document.getElementById("chartText"),msg=document.getElementById("parseMsg");
+  let modalTrigger=null;
+  function modalFocusables(){return[...modalCard.querySelectorAll('a[href],button:not([disabled]),textarea,input:not([disabled]),select:not([disabled])')];}
+  function openModal(trigger){
+    modalTrigger=trigger||document.activeElement;
+    nameEl.value="";textEl.value="";msg.textContent="";
+    modal.classList.add("show");modal.setAttribute("aria-hidden","false");
+    nameEl.focus();
+  }
+  function closeModal(){
+    modal.classList.remove("show");modal.setAttribute("aria-hidden","true");
+    if(modalTrigger&&typeof modalTrigger.focus==="function")modalTrigger.focus();
+    modalTrigger=null;
+  }
   document.getElementById("addCancel").onclick=closeModal;
   modal.onclick=e=>{if(e.target===modal)closeModal();};
+  modalCard.addEventListener("keydown",e=>{
+    if(e.key!=="Tab")return;
+    const f=modalFocusables(); if(!f.length)return;
+    const first=f[0],last=f[f.length-1];
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+  });
+  document.addEventListener("keydown",e=>{
+    if(e.key==="Escape"&&modal.classList.contains("show"))closeModal();
+  });
   document.getElementById("fillDemo").onclick=e=>{e.preventDefault();nameEl.value="Demo chart";textEl.value=DEMO;};
   document.getElementById("chartFile").onchange=e=>{
     const f=e.target.files[0]; if(!f)return;
@@ -3357,7 +3407,7 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
     rd.onload=()=>{textEl.value=rd.result; if(!nameEl.value.trim())nameEl.value=f.name.replace(/\.[^.]+$/,""); msg.style.color="var(--muted)"; msg.textContent="File loaded — click “Parse & save”."; e.target.value="";};
     rd.readAsText(f);
   };
-  document.getElementById("addFirst").onclick=e=>{e.preventDefault();openModal();};
+  document.getElementById("addFirst").onclick=e=>{e.preventDefault();openModal(e.currentTarget);};
   document.getElementById("demoFirst").onclick=e=>{e.preventDefault();charts.push({name:"Demo chart",...parse(DEMO)});active=charts.length-1;save(charts);draw();JA.onChartsChange&&JA.onChartsChange();};
   document.getElementById("addSave").onclick=()=>{
     const parsed=parse(textEl.value); const np=Object.keys(parsed.planets).length;
