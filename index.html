@@ -4536,7 +4536,7 @@ function renderSpecialLagnas(c,La,sav){
     emptyDiv.style.display="none";
     resultDiv.style.display="block";
     try{
-      document.getElementById("bbPromptText").value=buildBBPrompt(c,La,person,topic,resultH,varga);
+      document.getElementById("bbPromptText").value=(JA.buildBBPrompt||function(){return"";})(c,La,person,topic,resultH,varga);
       document.getElementById("bbAiWrap").style.display="block";
     }catch(e){console.error("buildBBPrompt:",e);}
   }
@@ -4782,7 +4782,7 @@ function computeVimDashas(mo,birthDateStr){
     }
   };
 
-  function buildBBPrompt(c,La,person,topic,resultH,varga){
+  JA.buildBBPrompt=function(c,La,person,topic,resultH,varga){
     const avPos={La:c.La.sign};
     for(const k of["Su","Mo","Ma","Me","Ju","Ve","Sa"])if(c.planets[k])avPos[k]=c.planets[k].sign;
     const sav=computeSAV(avPos);
