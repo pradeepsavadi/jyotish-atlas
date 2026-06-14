@@ -3272,14 +3272,38 @@ function dpThemeSpace(mahaK,antarK,c,La){
   return{themes:themes.slice(0,12),kars:GBYK[mahaK].karakas.slice(0,3)};
 }
 
-// Maha × Antardasha relationship
+// Maha × Antardasha relationship — house distance table (Step 3 of 4-step framework)
+// A weak CEO cannot fund ambitious project-manager plans; even two benefics cause friction in 6-8.
 function dpRelation(mahaK,antarK,c){
   const fr=FRIEND[mahaK]||{f:[],e:[],n:[]};
   const nat=fr.f.includes(antarK)?'friend':fr.e.includes(antarK)?'enemy':'neutral';
   const mp=c.planets[mahaK], ap=c.planets[antarK];
-  if(!mp||!ap) return{nat,hFrMaha:null};
+  if(!mp||!ap) return{nat,hFrMaha:null,relScore:0,relVerdict:'—',relCat:'neutral',volatile:false};
   const h=houseFromSigns(mp.sign,ap.sign);
-  return{nat,hFrMaha:h,difficult:[6,8,12].includes(h),supportive:[2,5,9,11].includes(h)};
+  let relScore,relVerdict,relCat,volatile=false;
+  if(h===1||h===7){
+    relScore=1;relCat='favorable';
+    relVerdict=`H${h} — together/opposing: direct high-energy manifestation of mutual portfolios`;
+  } else if(h===3||h===11){
+    relScore=1.5;relCat='excellent';
+    relVerdict=`H${h} — Upachaya axis (3-11): effort and gains in smooth coordination`;
+  } else if(h===4||h===10){
+    relScore=0.5;relCat='productive';
+    relVerdict=`H${h} — Kendra axis (4-10): structural change; home/career focus — productive but demanding`;
+  } else if(h===2||h===12){
+    relScore=-1;relCat='challenging';
+    relVerdict=`H${h} — Dvirdwadash (2-12): loss, expense and transition relative to MD agenda`;
+    if(nat==='enemy'){volatile=true;relScore=-1.5;}
+  } else if(h===6||h===8){
+    relScore=-1.5;relCat='disruptive';
+    relVerdict=`H${h} — Shashtashtaka (6-8): conflict and upheaval; even benefics cause friction here`;
+    if(nat==='enemy'){volatile=true;relScore=-2;}
+  } else {
+    relScore=0;relCat='neutral';
+    relVerdict=`H${h} from MD lord — neutral distance`;
+  }
+  return{nat,hFrMaha:h,difficult:[6,8,12].includes(h),supportive:[2,5,9,11].includes(h),
+         relScore,relVerdict,relCat,volatile};
 }
 
 // Verdict tier from total score
@@ -3350,12 +3374,21 @@ function dpAnalyze(){
   if(antarK==='Ke') wilds.push({text:'Ketu Antardasha: withdrawal, detachment, spiritual pull on the Mahadasha themes; loss that enables liberation'});
   const hasVR=yogas.some(y=>y.cat==='Viparita Raj Yoga'&&y.ps&&(y.ps.includes(mahaK)||y.ps.includes(antarK)));
   if(hasVR&&l3.score<0) wilds.push({text:'Viparita Raj Yoga present + difficult transits = classic trigger condition; hardship may catalyze the rise'});
+  // Volatile rule: natural enemies in Shashtashtaka or Dvirdwadash = most disruptive sub-period
+  if(rel.volatile) wilds.push({text:`${GBYK[mahaK].name} and ${GBYK[antarK].name} are natural enemies in a ${[6,8].includes(rel.hFrMaha)?'Shashtashtaka (6-8)':'Dvirdwadash (2-12)'} relationship — most volatile sub-period of the entire dasha; competing agendas amplify disruption`});
+  // Jupiter protection: transit Jupiter aspecting or occupying houses ruled by the AD lord
+  if(tRes.pos.Ju&&l2A.fn.houses&&l2A.fn.houses.length){
+    const juTrH=houseFromSigns(La,tRes.pos.Ju.sign);
+    const juCoverage=[juTrH,...aspectsFromHouse('Ju',juTrH)];
+    const protH=(l2A.fn.houses).find(h=>juCoverage.includes(h));
+    if(protH) wilds.push({text:`Transit Jupiter ${protH===juTrH?'occupies':'aspects'} H${protH} — ruled by ${GBYK[antarK].name} (AD lord): protective umbrella over this sub-period's primary portfolio`});
+  }
 
   const hardCap=(l1M&&l1M.d1.score===-2&&!l1M.nb);
   const antarDamp=(l1A&&l1A.d1.score===-2&&!l1A.nb)?-1:0;
   const l1Score=(l1M?l1M.score:0)*0.65+(l1A?l1A.score:0)*0.35;
   const l2Score=(l2M?l2M.score:0)*0.65+(l2A?l2A.score:0)*0.35;
-  const total=l1Score+l2Score+l3.score+l4.score+antarDamp;
+  const total=l1Score+l2Score+l3.score+l4.score+antarDamp+rel.relScore;
   const verdict=dpVerdict(total,hardCap);
 
   function lordCard(l1,l2,role){
@@ -3412,9 +3445,10 @@ function dpAnalyze(){
     ...rahuF.map(f=>`<div class="dp-wildcard ${f.cls}">◈ ${f.text}</div>`)
   ];
 
-  const relCls=rel.nat==='friend'?'pos1':rel.nat==='enemy'?'neg1':'neu';
-  const relText=rel.nat==='friend'?'Natural friends — harmonious sub-period':rel.nat==='enemy'?'Natural enemies — competing energies':'Neutral — workmanlike sub-period';
-  const relH=rel.hFrMaha?` · Antara lord in H${rel.hFrMaha} from Maha lord's sign${rel.difficult?' (6/8/12 — difficult)':rel.supportive?' (supportive)':''}`:' ';
+  const relCls=rel.relCat==='excellent'?'pos2':rel.relCat==='favorable'||rel.relCat==='productive'?'pos1':rel.relCat==='challenging'?'neg1':rel.relCat==='disruptive'?'neg2':'neu';
+  const natCls=rel.nat==='friend'?'pos1':rel.nat==='enemy'?'neg1':'neu';
+  const relText=rel.relVerdict;
+  const relH=rel.hFrMaha?` · <span class="dp-fval ${natCls}" style="display:inline-block">${rel.nat==='friend'?'Natural friends':rel.nat==='enemy'?'Natural enemies':'Neutral'}</span>`:'';
 
   const peakHtml=`<div class="dp-peak ${l3.doubleTransit?'peak-on':'peak-off'}">
     ${l3.doubleTransit
