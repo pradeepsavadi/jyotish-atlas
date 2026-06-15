@@ -4356,6 +4356,64 @@ function computeUL(c,La){
   return{sign:ul,lord,lordSign:ls,dist,rule,h12sign};
 }
 
+// ── Indu Lagna sign data — wealth domain by sign ──
+const IL_SIGN_DATA=[
+  {domain:"bold enterprise, technical initiative, and first-mover advantage",note:"Wealth flows through competitive action, engineering, real estate, construction, or any domain where speed and courage produce a decisive financial advantage. You accumulate through initiative before others have acted."},
+  {domain:"steady accumulation, land, luxury, and durable tangible assets",note:"Prosperity builds through patient investment in land, luxury goods, creative or agricultural industries, and financial assets with tangible, enduring value. Quality and consistency are your primary wealth instruments."},
+  {domain:"communication, commerce, multiple income streams, and intellectual services",note:"Wealth flows through trading, writing, consulting, and business networks. Versatility, information advantage, and the ability to manage multiple income channels simultaneously drive financial growth throughout life."},
+  {domain:"family business, emotional intelligence, hospitality, and real estate",note:"Prosperity accumulates through family enterprises, maternal inheritance, emotional intelligence applied commercially, real estate, or hospitality industries. Nurturing and public connection naturally generate financial return."},
+  {domain:"authority, creative enterprise, governmental connections, and leadership roles",note:"Wealth through confident, large-scale ventures backed by solar authority. Creative and speculative investments succeed through boldness and governmental backing. Leadership roles attract financial recognition."},
+  {domain:"analytical precision, health services, and detailed financial management",note:"Wealth through technical excellence, healthcare, detailed accounting, or data-driven service industries. Medical, analytical, and systematically excellent professions are the primary financial channels for this native."},
+  {domain:"partnerships, luxury goods, creative arts, diplomacy, and joint ventures",note:"Prosperity through alliances, co-ventures, luxury or aesthetic industries, and financial dealings requiring charm and refinement. Partnerships and joint financial instruments are the most natural wealth-building vehicles."},
+  {domain:"research, inheritance, joint assets, insurance, and transformative industries",note:"Wealth through deep investment in complex domains — research, insurance, mining, surgery, or psychological services. Hidden financial instruments, joint assets, and inherited wealth are primary sources of prosperity."},
+  {domain:"higher learning, publishing, law, international business, and advisory roles",note:"Fortune through teaching, publishing, law, or international commerce. Philosophical, advisory, or dharmic professions attract abundant prosperity, especially through foreign connections and cross-cultural financial ventures."},
+  {domain:"disciplined corporate authority, government positions, and long-term structural investment",note:"Wealth earned through patient, structured effort — corporate leadership, government roles, engineering, or long-term institutional investment. Prosperity arrives more slowly but becomes immovable and institutionally respected."},
+  {domain:"technology, innovation, humanitarian networks, and forward-looking financial instruments",note:"Prosperity through technology ventures, innovative financial instruments, social enterprises, or group investments. Unconventional, forward-looking approaches to wealth generation outperform traditional methods."},
+  {domain:"spiritual services, creative arts, international trade, healing, and hidden wealth",note:"Wealth through spiritual services, creative arts, international commerce, or healing professions. Hidden generosity and spiritual merit attract unexpected financial abundance; foreign connections are particularly rewarding."}
+];
+
+// ── Upapada Lagna sign data — marriage/spouse nature by sign ──
+const UL_SIGN_DATA=[
+  {nature:"active, pioneering, and fiercely independent",note:"The marriage dynamic carries Martian energy — assertive, driven, and courageously initiating. The spouse or the relationship requires independence, mutual respect for boldness, and space for individual initiative. Dynamic and energising."},
+  {nature:"stable, sensual, and materially grounded",note:"The marriage carries Taurean energy — enduring, comfort-oriented, and built on tangible mutual investment. The spouse values loyalty, beauty, and steady material building. A relationship of lasting, sensory richness and practical stability."},
+  {nature:"intellectually vibrant, communicative, and socially versatile",note:"The marriage carries Mercurial energy — intellectually stimulating, communicative, and socially dynamic. The spouse is sharp, versatile, and engaging. The relationship thrives on shared ideas, wit, and evolving intellectual partnership."},
+  {nature:"nurturing, emotionally deep, and domestically devoted",note:"The marriage carries lunar energy — protective, emotionally resonant, and family-oriented. The spouse or partnership dynamic centres on nurturing, emotional attunement, and creating a deeply personal domestic sanctuary."},
+  {nature:"dignified, authoritative, and creatively expressive",note:"The marriage carries solar energy — the spouse carries authority, confidence, and creative expression. The relationship has a regal, dignified quality. Partnership may involve a leader, artist, or government-connected individual."},
+  {nature:"analytically precise, service-oriented, and practically focused",note:"The marriage carries Mercurial precision — the spouse is analytical, detail-oriented, and service-minded. The relationship is built on practical competence, mutual usefulness, and a shared commitment to structured, excellent functioning."},
+  {nature:"harmonious, diplomatically balanced, and aesthetically refined",note:"The marriage carries Venusian balance — the partnership is characterised by charm, mutual fairness, and aesthetic refinement. The spouse is diplomatic, artistically inclined, and deeply oriented toward relational harmony and beauty."},
+  {nature:"intensely deep, transformative, and powerfully bonded",note:"The marriage carries Scorpionic energy — the partnership is deep, magnetically bonded, and often transformative for both parties. The spouse is intense, perceptive, and strategically powerful. Deep mutual loyalty and psychological depth define the union."},
+  {nature:"philosophically expansive, dharmic, and freedom-loving",note:"The marriage carries Jupiterian expansion — the spouse is wise, dharmic, and philosophically oriented. The relationship is spacious, optimistic, and built on shared higher values. Adventure, learning, and spiritual growth are central themes."},
+  {nature:"disciplined, responsible, and built for long-term commitment",note:"The marriage carries Saturnine structure — the spouse is serious, responsible, and committed to long-term partnership. The relationship may begin later in life or with some delay, but once formed, it carries exceptional durability and mutual respect."},
+  {nature:"unconventional, socially conscious, and intellectually independent",note:"The marriage carries Aquarian energy — the spouse or relationship is ahead of its time, unconventional, and driven by humanitarian or collective ideals. Partnership may be unusual by social standards but genuinely progressive and mutually liberating."},
+  {nature:"compassionately fluid, spiritually attuned, and creatively imaginative",note:"The marriage carries Piscean fluidity — the spouse is imaginative, spiritually sensitive, and compassionately giving. The relationship has a mystical, transcendent quality. Boundaries are porous; deep empathy and shared spiritual life are the union's strengths."}
+];
+
+// ── Planets in Indu Lagna — wealth effects ──
+const PLANET_IN_IL={
+  Su:"The Sun in the wealth seat amplifies financial authority and governmental support for wealth. Income through leadership, executive roles, or government-linked enterprises. Wealth carries prestige but may fluctuate with political and authority dynamics.",
+  Mo:"The Moon in IL creates fluctuating but populace-driven wealth — income from public-facing businesses, hospitality, emotional services, or the masses. Wealth grows with public favour and emotional resonance; financial highs and lows track with life's emotional cycles.",
+  Ma:"Mars in IL generates wealth through vigorous enterprise, real estate, technical industries, or competition. Financial gains through boldness and first-mover initiative. Income is earned actively and can be substantial, though financial expenditure through risk must be managed.",
+  Me:"Mercury in IL produces wealth through commerce, communication, consultancy, and multiple simultaneous income channels. Financial intelligence and analytical precision make this a strong placement — income through intellectual services, trade, and documentation.",
+  Ju:"Jupiter in the wealth seat is among the most auspicious financial placements possible. Wealth flows through dharmic professions, teaching, advisory roles, and good fortune. Financial abundance arrives with relatively little friction when Jupiter's dasha runs.",
+  Ve:"Venus in IL brings wealth through creative arts, luxury goods, beauty, and harmonious enterprises. Aesthetic refinement generates income. Financial gains through partnerships, creative collaboration, and any domain associated with Venusian pleasure and beauty.",
+  Sa:"Saturn in IL builds wealth slowly and methodically through sustained effort, structured investment, and service to institutions. Financial prosperity arrives later in life but becomes exceptionally stable. Wealth through labour, engineering, or long-term asset building.",
+  Ra:"Rahu in IL amplifies wealth desires and creates unconventional income sources. Wealth through foreign channels, technology, or unprecedented ventures. Financial gains can be large and sudden, though instability and overreach must be consciously managed.",
+  Ke:"Ketu in IL de-materialises the wealth seat — financial attachment is weak, and wealth may arrive unexpectedly or through spiritual and non-conventional means. Past-life merit may create hidden financial resources that surface unexpectedly."
+};
+
+// ── Planets in Upapada Lagna — marriage/partner effects ──
+const PLANET_IN_UL={
+  Su:"The Sun in the marriage seat confers a spouse of authority, dignity, and strong social standing. The partner is confident and leader-like. Marriage carries a solar, formal quality — respect and status are key pillars. There may be a tendency toward dominance in the partnership.",
+  Mo:"The Moon in UL brings a deeply nurturing, emotionally accessible, and publicly popular partner. Marriage is emotionally fulfilling and centred on family and domestic life. The spouse carries a warm, receptive nature and may be beloved in their social circle.",
+  Ma:"Mars in UL brings an energetic, driven, and assertive partner. Marriage may involve some friction or bold energy between partners. The spouse is technically skilled, courageous, and action-oriented. Mutual respect for independence keeps the partnership vital.",
+  Me:"Mercury in UL brings an intellectually sharp, communicative, and commercially oriented partner. Marriage is characterised by wit, shared ideas, and engaging verbal exchange. The spouse may be in business, writing, or analytics. Intellectual compatibility is essential.",
+  Ju:"Jupiter in UL is highly auspicious for marriage — the partner is wise, educated, generous, and dharmic. The marriage is spiritually elevating and mutually beneficial. This is a blessing on the partnership and on the institution of marriage in the native's life.",
+  Ve:"Venus in UL is one of the strongest indicators of a beautiful, harmonious, and aesthetically refined marriage. The spouse is charming, artistically gifted, and relationally graceful. The partnership is loving, pleasurable, and socially admired.",
+  Sa:"Saturn in UL brings a serious, responsible, and dutiful partner — possibly older, more experienced, or carrying significant responsibilities. Marriage may take time to establish but proves extremely durable. The partnership deepens through disciplined mutual commitment.",
+  Ra:"Rahu in UL brings an unconventional, boundary-crossing, or foreign partner. The marriage may be unusual, cross-cultural, or socially unexpected. The spouse is ambitious, magnetic, and outside the native's usual social circle.",
+  Ke:"Ketu in UL creates a spiritualising or de-materialising influence on the marriage — the partnership may have a past-life flavour, a spiritual quality, or involve significant detachment. One partner may prioritise inner life over conventional partnership roles."
+};
+
 // ── AL Sign public-persona data (for each of 12 signs) ──
 const AL_SIGN_DATA=[
   {persona:"dynamic, pioneering, and action-driven",traits:"bold initiative, courage, and competitive energy",archetype:"warrior, entrepreneur, or trailblazer",impression:"The world perceives you as someone who acts first — a self-starter whose energy is unmistakably assertive. People associate your name with initiative and the courage to begin what others only contemplate."},
@@ -4501,51 +4559,71 @@ function renderSpecialLagnas(c,La,sav){
     const ilLHn=ilLP?houseFromSigns(La,ilLP.sign):null;
     const ilSav=sav[il.sign];
     const pInIl=Object.entries(c.planets).filter(([k,p])=>p.sign===il.sign).map(([k])=>k);
-
-    let wNote="";
-    if(ilDig){
-      if(ilDig.score>=2) wNote=`${GBYK[ilLord].name} exalted — wealth potential is at its peak. Financial abundance flows with relatively little friction once the right dasha runs.`;
-      else if(ilDig.score>=1.5) wNote=`${GBYK[ilLord].name} in own sign — steady, self-sustaining wealth. Assets build reliably from the planet's natural domains.`;
-      else if(ilDig.score===1) wNote=`${GBYK[ilLord].name} in friendly sign — cooperative environment for wealth. Prosperity arrives through alliance and the right associations.`;
-      else if(ilDig.score===0) wNote=`${GBYK[ilLord].name} in neutral sign — moderate wealth potential. Neither exceptional abundance nor significant obstruction.`;
-      else if(ilDig.score===-1) wNote=`${GBYK[ilLord].name} in enemy sign — friction in wealth generation. Income exists but converting it to lasting assets requires conscious effort.`;
-      else wNote=`${GBYK[ilLord].name} debilitated — wealth faces consistent challenge. Dasha timing and remedial focus matter significantly here.`;
-    }
-
+    const ilAspecting=planetsAspecting(c,il.sign);
+    const isd=IL_SIGN_DATA[il.sign];
+    const chain=Array.from({length:il.rem},(_,i)=>SIGNS[(il.moonSign+i)%12]).join(" → ");
     const savCls=ilSav>=30?"sav-hi":ilSav>=25?"sav-mid":"sav-lo";
     const lordLine=ilDig?`${GBYK[ilLord].gl} ${GBYK[ilLord].name} · ${ilDig.full} (H${ilLHn})`:`${GBYK[ilLord].gl} ${GBYK[ilLord].name}`;
-    const chain=Array.from({length:il.rem},(_,i)=>SIGNS[(il.moonSign+i)%12]).join(" → ");
 
-    return`<div class="sl-eyebrow">Indu Lagna <span>IL · H${ilH}</span></div>
+    let lordNote="";
+    if(ilDig){
+      if(ilDig.score>=2) lordNote=`${GBYK[ilLord].name} is exalted — the wealth seat's lord is at peak strength. Financial abundance flows with remarkable ease once the relevant dasha activates. This is among the strongest indicators of substantial, enduring prosperity.`;
+      else if(ilDig.score>=1.5) lordNote=`${GBYK[ilLord].name} is in its own sign — steady, self-sustaining wealth. The IL lord generates income reliably from its natural domains throughout the life, with minimal external dependence.`;
+      else if(ilDig.score===1) lordNote=`${GBYK[ilLord].name} is in a friendly sign — cooperative environment for wealth. Prosperity arrives through allies, collaborative ventures, and the lord's natural associations rather than solo effort.`;
+      else if(ilDig.score===0) lordNote=`${GBYK[ilLord].name} is in a neutral sign — moderate, workable wealth potential. Neither exceptional abundance nor significant obstruction; results depend heavily on dasha timing and transits.`;
+      else if(ilDig.score===-1) lordNote=`${GBYK[ilLord].name} is in an enemy sign — friction in wealth generation. Income exists but converting it to lasting assets requires disciplined effort, correct dasha timing, and conscious financial strategy.`;
+      else lordNote=`${GBYK[ilLord].name} is debilitated — the IL lord faces significant challenge. Wealth requires persistent, determined effort and correct timing. Remedial focus on this planet and its dasha windows is especially important.`;
+    }
+
+    let savText="";
+    if(ilSav>=30) savText=`<b>SAV ${ilSav} — Strong financial support.</b> Above the average of 28 — this house receives good ashtakavarga bindus, meaning transits through the IL sign consistently activate and deliver wealth. Financial milestones arrive with reasonable regularity.`;
+    else if(ilSav>=25) savText=`<b>SAV ${ilSav} — Moderate financial support.</b> Near average. Wealth activates primarily during strong Maha/Antardasha periods and major transits — timing is the critical variable. Consistent effort bridges the gap between cycles.`;
+    else savText=`<b>SAV ${ilSav} — Below-average financial support.</b> Transits through the IL sign rarely deliver results on their own — dasha activation of the IL lord is the primary wealth trigger. Strategic timing and the lord's dasha windows are critical to financial milestones.`;
+
+    const houseThemes={1:"your personal self-expression and physical vitality",2:"family inheritance, speech, and accumulated family wealth",3:"self-effort, bold initiative, and communication-driven enterprise",4:"property, domestic investments, and maternal lineage",5:"intelligence, speculation, and merit from past lives and current creative effort",6:"competitive service, health industries, and overcoming financial obstacles",7:"partnerships, joint ventures, and commercial alliances",8:"hidden assets, inheritance, joint property, and transformative financial events",9:"fortune, dharmic professions, and the father's financial contribution",10:"career achievements, professional status, and public financial recognition",11:"gains, networks, aspirations, and fulfilled financial ambitions",12:"foreign income, private wealth, and spiritually earned prosperity"};
+
+    return`<div class="sl-eyebrow">Indu Lagna <span class="note" style="font-style:italic;font-size:10px">Seat of Wealth</span> <span>IL · H${ilH}</span></div>
       <div class="sl-sign">${SIGNS[il.sign]}</div>
       <div class="sl-house">${BHAVAS[ilH-1].skt} · ${BHAVAS[ilH-1].en}</div>
-      <div class="sl-what">
-        <b>What Indu Lagna reveals</b>
-        <ul>
-          <li>The <b>seat of wealth</b> — where material abundance naturally accumulates</li>
-          <li>Planets here or aspecting IL form <b>dhana yogas</b> (wealth combinations)</li>
-          <li>The IL lord shows <b>how and through what domain</b> money flows to you</li>
-          <li>Dashas activating IL or its lord bring key <b>financial milestones</b></li>
-        </ul>
-        <span class="note">Named "Indu" (Moon) as the calculation is anchored to the Moon's position.</span>
+      <div class="sl-persona">
+        <b>Wealth Domain — ${isd.domain}</b>
+        ${isd.note}
+        <span class="note" style="display:block;margin-top:5px">IL in H${ilH} — wealth concentrates through ${houseThemes[ilH]||"this domain of life"}.</span>
       </div>
-      ${wNote?`<div class="sl-gap">${wNote}</div>`:""}
+      <div class="sl-gap">${lordNote}</div>
       <div class="sl-meta">
         <span class="sl-badge">${lordLine}</span>
         <span class="sl-badge ${savCls}">SAV ${ilSav}</span>
       </div>
-      <div class="sl-pls">${pInIl.length?pInIl.map(k=>`${GBYK[k].gl} ${GBYK[k].name} in IL`).join(" · "):"No planets in IL — lord's condition is the primary indicator"}</div>
+      ${pInIl.length?`<div class="sl-planets-block">
+        <b>Planets in your IL (${SIGNS[il.sign]}) — Dhana Yoga indicators</b>
+        ${pInIl.map(k=>{const gp=GBYK[k];return`<div class="sl-planet-row"><span class="sl-planet-lbl" style="color:${gp.col}">${gp.gl} ${gp.name}</span><span>${PLANET_IN_IL[k]||''}</span></div>`;}).join('')}
+      </div>`:`<div class="sl-pls">No planets in IL — the IL lord (${GBYK[ilLord].name}) is the sole driver. Its dasha windows are the primary financial milestones to watch.</div>`}
+      ${ilAspecting.length?`<div class="sl-planets-block">
+        <b>Planets aspecting your IL — additional wealth inputs</b>
+        ${ilAspecting.map(({pk,fromH})=>{const gp=GBYK[pk];const lp=c.planets[pk];const dig=lp?dignityOf(pk,lp.sign):null;return`<div class="sl-planet-row"><span class="sl-planet-lbl" style="color:${gp.col}">${gp.gl} ${gp.name} (H${fromH})</span><span>${PLANET_ASPECT_AL[pk]?PLANET_ASPECT_AL[pk](fromH):''} ${dig?`<em style="color:var(--muted)">(${dig.full})</em>`:''}</span></div>`;}).join('')}
+      </div>`:''}
+      <div class="sl-sav-block">${savText}</div>
+      <div class="sl-takeaways">
+        <b>How to work with your Indu Lagna</b>
+        <ul>
+          <li><b>Your wealth domain is ${isd.domain}</b> — invest time, skill, and resources in these specific channels. The IL reveals WHERE prosperity naturally flows; directing effort here amplifies returns far beyond what effort elsewhere can produce.</li>
+          <li><b>IL lord ${GBYK[ilLord].name} (H${ilLHn}) is your primary financial planet</b> — ${ilDig&&ilDig.score>=1?`it is well-placed and reliably delivers wealth through its dasha windows.`:`monitor its condition carefully; strengthening it through appropriate actions and remedies unlocks the wealth seat.`}</li>
+          <li><b>SAV ${ilSav} tells you about timing</b> — ${ilSav>=28?"strong transits through "+SIGNS[il.sign]+" consistently trigger financial events; watch Jupiter and Saturn transiting this sign for key milestones.":"prioritise Maha/Antardasha periods of the IL lord over transit timing alone — the bindus alone are not sufficient triggers."}</li>
+          <li><b>Planets in or aspecting IL form Dhana Yogas</b> — any dasha of a planet connected to the IL (sitting in it, aspecting it, or ruling it) is a potential period of financial breakthrough worth conscious preparation.</li>
+        </ul>
+      </div>
       <span class="sl-toggle" onclick="this.nextElementSibling.classList.toggle('open');this.textContent=this.nextElementSibling.classList.contains('open')?'▾ Hide calculation':'▸ How this was calculated'">▸ How this was calculated</span>
       <div class="sl-calc">
         <div class="sl-ival">
           <span>☉ Sun <b>30</b></span><span>☽ Moon <b>16</b></span><span>♃ Jupiter <b>10</b></span>
           <span>♀ Venus <b>12</b></span><span>♂ Mars <b>6</b></span><span>☿ Mercury <b>8</b></span><span>♄ Saturn <b>1</b></span>
         </div>
-        <div class="sl-step"><span class="sl-step-n">1</span><span>D-1 H9 from ${SIGNS[La]} = <b>${SIGNS[(La+8)%12]}</b> · lord <b>${GBYK[il.d1_9].name}</b> · value <b>${il.d1v}</b></span></div>
-        <div class="sl-step"><span class="sl-step-n">2</span><span>D-9 Lagna = <b>${SIGNS[il.d9La]}</b> · H9 = <b>${SIGNS[(il.d9La+8)%12]}</b> · lord <b>${GBYK[il.d9_9].name}</b> · value <b>${il.d9v}</b></span></div>
+        <div class="sl-step"><span class="sl-step-n">1</span><span>D-1 H9 from ${SIGNS[La]} = <b>${SIGNS[(La+8)%12]}</b> · lord <b>${GBYK[il.d1_9].name}</b> · Indu value <b>${il.d1v}</b></span></div>
+        <div class="sl-step"><span class="sl-step-n">2</span><span>D-9 Lagna = <b>${SIGNS[il.d9La]}</b> · H9 = <b>${SIGNS[(il.d9La+8)%12]}</b> · lord <b>${GBYK[il.d9_9].name}</b> · Indu value <b>${il.d9v}</b></span></div>
         <div class="sl-step"><span class="sl-step-n">3</span><span>${il.d1v} + ${il.d9v} = <b>${il.sum}</b> · ${il.sum} ÷ 12 = remainder <b>${il.rem}</b></span></div>
         <div class="sl-step"><span class="sl-step-n">4</span><span>Moon in <b>${SIGNS[il.moonSign]}</b> · count ${il.rem} forward: <b style="color:var(--gold2)">${chain}</b></span></div>
-        <div class="sl-step"><span class="sl-step-n">✓</span><span>Indu Lagna = <b style="color:var(--gold2)">${SIGNS[il.sign]}</b></span></div>
+        <div class="sl-step"><span class="sl-step-n">✓</span><span>Indu Lagna = <b style="color:var(--gold2)">${SIGNS[il.sign]}</b> · H${ilH} from Lagna</span></div>
       </div>`;
   }
 
@@ -4558,56 +4636,74 @@ function renderSpecialLagnas(c,La,sav){
     const ulLHn=ulLP?houseFromSigns(La,ulLP.sign):null;
     const ulSav=sav[ul.sign];
     const pInUl=Object.entries(c.planets).filter(([k,p])=>p.sign===ul.sign).map(([k])=>k);
+    const ulAspecting=planetsAspecting(c,ul.sign);
+    const usd=UL_SIGN_DATA[ul.sign];
+    const chain=Array.from({length:ul.dist},(_,i)=>SIGNS[(ul.lordSign+i)%12]).join(" → ");
+    const savCls=ulSav>=30?"sav-hi":ulSav>=25?"sav-mid":"sav-lo";
+    const lordLine=ulDig?`${GBYK[ulLord].gl} ${GBYK[ulLord].name} · ${ulDig.full} (H${ulLHn})`:`${GBYK[ulLord].gl} ${GBYK[ulLord].name}`;
 
-    // 2nd from UL — classical key to the sustenance/longevity of marriage
+    // 2nd from UL — classical key to marriage sustenance/longevity
     const sec2sign=(ul.sign+1)%12;
     const pIn2=Object.entries(c.planets).filter(([k,p])=>p.sign===sec2sign).map(([k])=>k);
     const ben2=pIn2.filter(k=>!MALEFIC_PLANETS.has(k));
     const mal2=pIn2.filter(k=>MALEFIC_PLANETS.has(k));
     let marNote="",marCls="";
-    if(!pIn2.length){marNote=`2nd from UL (${SIGNS[sec2sign]}) is empty — judge marital sustenance from its lord ${GBYK[SIGN_LORD[sec2sign]].name}. No direct planetary pressure on longevity.`;}
-    else if(mal2.length&&!ben2.length){marNote=`Malefic${mal2.length>1?"s":""} ${mal2.map(k=>GBYK[k].name).join(", ")} in the 2nd from UL — classical caution on the marriage's continuity; strain, distance, or delay possible. Strength of the UL lord and benefic aspects can soften this.`;marCls="opp";}
-    else if(ben2.length&&!mal2.length){marNote=`Benefic${ben2.length>1?"s":""} ${ben2.map(k=>GBYK[k].name).join(", ")} in the 2nd from UL — a classical signature of a stable, sustained marriage and a supportive partner.`;marCls="tri";}
-    else{marNote=`Mixed planets ${pIn2.map(k=>GBYK[k].name).join(", ")} in the 2nd from UL — marital sustenance is supported and tested both; outcome depends on which side is more dignified.`;}
+    if(!pIn2.length){marNote=`2nd from UL (${SIGNS[sec2sign]}) is empty — judge marital sustenance from its lord ${GBYK[SIGN_LORD[sec2sign]].name}. No direct planetary pressure on the marriage's continuity.`;}
+    else if(mal2.length&&!ben2.length){marNote=`Malefic${mal2.length>1?"s":""} ${mal2.map(k=>GBYK[k].name).join(", ")} in the 2nd from UL (${SIGNS[sec2sign]}) — classical caution on the marriage's continuity. Strain, distance, separation, or a second relationship is possible. The UL lord's strength and benefic aspects on the 2nd can soften this considerably.`;marCls="opp";}
+    else if(ben2.length&&!mal2.length){marNote=`Benefic${ben2.length>1?"s":""} ${ben2.map(k=>GBYK[k].name).join(", ")} in the 2nd from UL (${SIGNS[sec2sign]}) — a classical signature of a stable, sustained, and mutually supportive marriage. The relationship is likely to endure through challenges.`;marCls="tri";}
+    else{marNote=`Mixed planets ${pIn2.map(k=>GBYK[k].name).join(", ")} in the 2nd from UL (${SIGNS[sec2sign]}) — marital sustenance is both supported and tested. The relative dignity of the benefic vs. malefic influences determines which tendency dominates.`;}
 
-    let spouseNote="";
+    let lordNote="";
     if(ulDig){
-      if(ulDig.score>=1.5) spouseNote=`${GBYK[ulLord].name} (UL lord) strong — a dignified, fortunate partner and an elevated relationship.`;
-      else if(ulDig.score<=-1) spouseNote=`${GBYK[ulLord].name} (UL lord) weak — the partnership asks for conscious effort; choose timing and partner with care.`;
-      else spouseNote=`${GBYK[ulLord].name} (UL lord) moderate — a workable, ordinary partnership shaped more by the wider chart.`;
+      if(ulDig.score>=2) lordNote=`${GBYK[ulLord].name} is exalted — the UL lord is at peak strength. This indicates a spouse of exceptional quality, dharmic alignment, and an elevated, genuinely fortunate partnership. One of the most auspicious placements for marriage.`;
+      else if(ulDig.score>=1.5) lordNote=`${GBYK[ulLord].name} is in its own sign — a dignified, reliable spouse and a self-sustaining, stable partnership. The lord's natural domains describe the spouse's primary qualities and professional character.`;
+      else if(ulDig.score===1) lordNote=`${GBYK[ulLord].name} is in a friendly sign — a cooperative, warm-natured spouse and a generally supportive partnership. Prosperity in the relationship arrives through shared values and allied environments.`;
+      else if(ulDig.score===0) lordNote=`${GBYK[ulLord].name} is in a neutral sign — a workable, ordinary partnership. The spouse's quality and the marriage's texture depend primarily on the wider chart and dasha timing rather than exceptional natal support.`;
+      else if(ulDig.score===-1) lordNote=`${GBYK[ulLord].name} is in an enemy sign — the partnership requires conscious effort and careful partner selection. Timing of marriage (especially running a benefic dasha) and compatible chart matching are important considerations.`;
+      else lordNote=`${GBYK[ulLord].name} is debilitated — the UL lord is challenged. This is not a prohibition on marriage but a strong indication that timing, partner selection, and remedial work on this planet matter significantly. A neecha bhanga (debility cancellation) would fundamentally alter this assessment.`;
     }
 
-    const savCls=ulSav>=30?"sav-hi":ulSav>=25?"sav-mid":"sav-lo";
-    const lordLine=ulDig?`${GBYK[ulLord].gl} ${GBYK[ulLord].name} · ${ulDig.full} (H${ulLHn})`:`${GBYK[ulLord].gl} ${GBYK[ulLord].name}`;
-    const chain=Array.from({length:ul.dist},(_,i)=>SIGNS[(ul.lordSign+i)%12]).join(" → ");
+    const ulHouseThemes={1:"Marriage becomes part of your core personal identity — the partnership is inseparable from how others perceive you as an individual.",2:"Marriage connects directly to family wealth, lineage prestige, and speech. The partner integrates into the family financial structure.",3:"The partnership energises courage, communication, and initiative. The spouse may be a collaborator, co-creator, or active in sibling-related domains.",4:"Marriage is closely tied to home, property, and domestic life. The partnership centres on creating domestic harmony and shared property.",5:"The marriage carries a creative, dharmic, and intellectually fulfilling quality — children, creativity, and past-life merit are intertwined with the union.",6:"Marriage may involve service, health-related domains, or competitive environments. The partnership tests and strengthens through practical challenges.",7:"Marriage sits in its natural house — partnership, agreement, and the 1:1 relationship are the central axis of the life.",8:"Marriage involves transformation, depth, and navigating the hidden dimensions together. The partnership is intensely bonded and psychologically significant.",9:"A dharmic, fortunate marriage. The partnership elevates spiritual, philosophical, and fortunate dimensions of life. The spouse may carry a guru-like role.",10:"Marriage defines the professional and public identity. The partnership is publicly visible, often career-connected, and part of the social reputation.",11:"Marriage fulfils ambitions and expands social networks. The spouse contributes to gains, aspirations, and the realisation of long-held desires.",12:"Marriage involves sacrifice, foreign connections, or retreat from conventional life. The partnership has a spiritually oriented or private, deeply personal quality."};
 
-    return`<div class="sl-eyebrow">Upapada Lagna <span>UL · H${ulH}</span></div>
+    return`<div class="sl-eyebrow">Upapada Lagna <span class="note" style="font-style:italic;font-size:10px">Marriage Image</span> <span>UL · H${ulH}</span></div>
       <div class="sl-sign">${SIGNS[ul.sign]}</div>
       <div class="sl-house">${BHAVAS[ulH-1].skt} · ${BHAVAS[ulH-1].en}</div>
-      <div class="sl-what">
-        <b>What Upapada Lagna reveals</b>
-        <ul>
-          <li><b>Marriage &amp; the spouse</b> — nature, character, and quality of the life-partner</li>
-          <li>The <b>health and continuity</b> of the marriage (read the 2nd from UL)</li>
-          <li><b>Dharma through partnership</b> — values and commitments brought via union</li>
-          <li>Its lord and sign colour <b>how the spouse appears and behaves</b></li>
-        </ul>
-        <span class="note">UL = the Arudha (image) of the 12th house — the "garment" of partnership. The 2nd from UL governs whether the marriage lasts.</span>
+      <div class="sl-persona">
+        <b>Marriage &amp; Spouse Nature — ${usd.nature}</b>
+        ${usd.note}
+        <span class="note" style="display:block;margin-top:5px">UL is the Arudha (material image) of H12 — the "garment" of partnership projected into the world. The 2nd from UL governs whether the marriage endures.</span>
       </div>
-      <div class="sl-gap ${marCls}">${marNote}</div>
-      ${spouseNote?`<div class="sl-gap">${spouseNote}</div>`:""}
+      <div class="sl-gap">${lordNote}</div>
+      ${ulHouseThemes[ulH]?`<div class="sl-gap tri" style="border-left-color:var(--gold2)">${ulHouseThemes[ulH]}</div>`:""}
+      <div class="sl-gap ${marCls}"><b>2nd from UL (${SIGNS[sec2sign]}) — Marriage Sustenance:</b> ${marNote}</div>
       <div class="sl-meta">
         <span class="sl-badge">${lordLine}</span>
         <span class="sl-badge ${savCls}">SAV ${ulSav}</span>
       </div>
-      <div class="sl-pls">${pInUl.length?pInUl.map(k=>`${GBYK[k].gl} ${GBYK[k].name} in UL`).join(" · "):"No planets in UL — lord's condition is the primary indicator"}</div>
+      ${pInUl.length?`<div class="sl-planets-block">
+        <b>Planets in your UL (${SIGNS[ul.sign]}) — direct influence on spouse &amp; marriage</b>
+        ${pInUl.map(k=>{const gp=GBYK[k];return`<div class="sl-planet-row"><span class="sl-planet-lbl" style="color:${gp.col}">${gp.gl} ${gp.name}</span><span>${PLANET_IN_UL[k]||''}</span></div>`;}).join('')}
+      </div>`:`<div class="sl-pls">No planets in UL — the UL lord (${GBYK[ulLord].name}) and the 2nd from UL are the primary indicators. Also assess Venus (natural karaka of marriage) and Jupiter (for females) independently.</div>`}
+      ${ulAspecting.length?`<div class="sl-planets-block">
+        <b>Planets aspecting UL — modifying the marriage dynamic</b>
+        ${ulAspecting.map(({pk,fromH})=>{const gp=GBYK[pk];const lp=c.planets[pk];const dig=lp?dignityOf(pk,lp.sign):null;return`<div class="sl-planet-row"><span class="sl-planet-lbl" style="color:${gp.col}">${gp.gl} ${gp.name} (H${fromH})</span><span>${PLANET_ASPECT_AL[pk]?PLANET_ASPECT_AL[pk](fromH):''} ${dig?`<em style="color:var(--muted)">(${dig.full})</em>`:''}</span></div>`;}).join('')}
+      </div>`:''}
+      <div class="sl-takeaways">
+        <b>How to work with your Upapada Lagna</b>
+        <ul>
+          <li><b>The marriage archetype is ${usd.nature}</b> — seek a partner whose character and natural energy aligns with this quality. Compatibility is strongest when the partner's Lagna or Moon resonates with ${SIGNS[ul.sign]} themes.</li>
+          <li><b>UL lord ${GBYK[ulLord].name} (H${ulLHn})</b> — ${ulDig&&ulDig.score>=1?"well-placed and indicates a quality partnership. Activate its dasha for significant relationship events and milestones.":"monitor carefully; timing marriage (or major partnership decisions) during a benefic dasha reduces friction and improves outcomes."}</li>
+          <li><b>The 2nd from UL (${SIGNS[sec2sign]})</b> is the key to marriage longevity — ${ben2.length?"benefics here support endurance; actively invest in the relationship's sustaining rituals and commitments.":mal2.length?"malefics here ask for extra care, honest communication, and conscious effort in maintaining the partnership's stability.":"assess its lord carefully for the deeper sustenance picture."}</li>
+          <li><b>Also assess Venus and H7</b> — UL gives the projected image of marriage; Venus and the 7th house confirm or contradict the deeper promise. All three indicators together give the complete picture.</li>
+        </ul>
+      </div>
       <span class="sl-toggle" onclick="this.nextElementSibling.classList.toggle('open');this.textContent=this.nextElementSibling.classList.contains('open')?'▾ Hide calculation':'▸ How this was calculated'">▸ How this was calculated</span>
       <div class="sl-calc">
-        <div class="sl-step"><span class="sl-step-n">1</span><span>12th house from ${SIGNS[La]} = <b>${SIGNS[ul.h12sign]}</b> · lord = <b>${GBYK[ul.lord].name}</b></span></div>
-        <div class="sl-step"><span class="sl-step-n">2</span><span>${GBYK[ul.lord].name} is in <b>${SIGNS[ul.lordSign]}</b> = <b>${ul.dist}</b> signs from the 12th house</span></div>
+        <div class="sl-step"><span class="sl-step-n">1</span><span>H12 from ${SIGNS[La]} = <b>${SIGNS[ul.h12sign]}</b> · lord = <b>${GBYK[ul.lord].name}</b></span></div>
+        <div class="sl-step"><span class="sl-step-n">2</span><span>${GBYK[ul.lord].name} is in <b>${SIGNS[ul.lordSign]}</b> = <b>${ul.dist}</b> signs from H12 (inclusive count)</span></div>
         <div class="sl-step"><span class="sl-step-n">3</span><span>Count ${ul.dist} forward from ${SIGNS[ul.lordSign]}: <b style="color:var(--gold2)">${chain}</b></span></div>
         ${ul.rule?`<div class="sl-step"><span class="sl-step-n" style="color:var(--debil)">!</span><span style="color:var(--debil)">${ul.rule}</span></div>`:""}
-        <div class="sl-step"><span class="sl-step-n">✓</span><span>Upapada Lagna = <b style="color:var(--gold2)">${SIGNS[ul.sign]}</b></span></div>
+        <div class="sl-step"><span class="sl-step-n">✓</span><span>Upapada Lagna = <b style="color:var(--gold2)">${SIGNS[ul.sign]}</b> · H${ulH} from Lagna</span></div>
       </div>`;
   }
 
@@ -4972,11 +5068,110 @@ function renderSpecialLagnas(c,La,sav){
         body:"Saturn's two Graha Arudhas reveal the domains where Saturnine energy — responsibility, karmic lessons, patient effort, and the servant/elder archetype — manifests as external circumstances. In the houses where they fall, sustained discipline and structural responsibility define how others most concretely experience you."}
   };
 
-  // House-specific interpretive note for a Graha Arudha
+  // Planet × House specific Graha Arudha interpretations (BPHS principles)
+  const GA_INTERP={
+    Su:{
+      1:"Solar authority materialises as your most visible personal trait. Leadership, confidence, and command are inseparable from how the world encounters you — you carry a natural kingly presence. Authority figures and governmental connections define your personal brand.",
+      2:"Solar energy solidifies through wealth, family prestige, and powerful speech. Prosperity is linked to authority and governmental channels. The family lineage carries solar dignity, and your word in financial dealings carries unusual institutional weight.",
+      3:"Courage and initiative are amplified by solar force. Bold, authoritative communication — writing, speaking, or competitive media — defines your public impact. Self-effort guided by solar confidence produces visible results in initiative-driven domains.",
+      4:"Domestic life and property carry solar authority. Home is a place of command — perhaps a prestigious residence linked to governmental or paternal influence. The mother's standing is elevated, and real estate is acquired through authority-backed positions.",
+      5:"Solar energy flows into creativity, intelligence, and children. Speculative ventures succeed when backed by authority and boldness. Children tend toward leadership roles. Creative or educational expression carries natural solar visibility and recognition.",
+      6:"Solar force enters the competitive arena. Government service, leadership in healthcare, or decisive victory over adversaries through authoritative action. Obstacles are overcome through confidence and institutional backing — enemies are outranked.",
+      7:"Partnerships and marriage are defined by solar authority. The spouse or key business partners carry significant status, governmental connection, or command. Contracts and formal agreements bear an authoritative stamp that carries social weight.",
+      8:"Solar energy operates through hidden power and transformation. Authority figures appear in research or occult domains. Sudden elevations come through crises resolved by leadership. Inheritance or institutional legacy from paternal figures.",
+      9:"The most expansive solar position — authority aligns with dharma, fortune, and higher knowledge. The father or guru is a pivotal, authoritative figure. Fame flows through philosophy, governance, or law. Fortune arrives through bold, dharmic solar action.",
+      10:"Solar authority defines career and public legacy. The professional identity is inseparable from leadership, governance, and command — this is the Sun's most natural material home. Career in executive, governmental, or authority-defining roles.",
+      11:"Solar energy drives large-scale gains through networks of authority. Income and ambitions are fulfilled through association with leaders and governmental structures. Social networks revolve around influential, authority-holding figures.",
+      12:"Solar energy withdraws into hidden or foreign domains. Authority operates in retreat, isolation, or abroad. Foreign governmental connections or private institutional power. The father or authority figure may be geographically or spiritually distant."
+    },
+    Mo:{
+      1:"Lunar energy materialises in your personal identity and physical presence. You are perceived as emotionally accessible, nurturing, and publicly popular — your face and demeanour carry emotional resonance. The masses are naturally drawn toward you.",
+      2:"Emotional intelligence flows into family wealth and nourishment. Financial prosperity is linked to the mother, family lineage, and emotionally-driven investments. Speech carries mass appeal and emotional persuasion that opens doors commercially.",
+      3:"Lunar energy manifests through emotionally-driven communication and writing. Media, public outreach, and connection with the masses through emotionally resonant content. Courage expressed through emotional intelligence creates large-scale public impact.",
+      4:"The Moon's natural domain — domestic life is emotionally rich, nurturing, and populated by family connections. A strong, emotionally present mother. Home is a place of emotional safety, and property investments tied to land and family heritage flourish.",
+      5:"Emotional depth flows into creativity, learning, and children. Popularity through artistic, educational, or emotionally resonant creative expression. Children are emotionally sensitive and publicly visible. Speculative ventures succeed through emotional intuition.",
+      6:"Lunar energy enters health and competitive domains. Emotional healing, public health services, or maternal-care roles define public visibility. Emotional fluctuations influence health and service — disciplined emotional regulation amplifies competitive outcomes.",
+      7:"Partnerships are emotionally deep and publicly visible. The spouse or key partner is nurturing, emotionally intelligent, and publicly popular. Marriage is a deeply felt, emotionally fulfilling union with significant social resonance.",
+      8:"Emotional intelligence navigates hidden domains and transformation. Psychic sensitivity and emotional depth in research or occult study. The mother may carry a transformative or complex role. Hidden emotional resources are a persistent strength.",
+      9:"Fortune and dharma amplified by public emotional resonance. Popularity in spiritual, philosophical, or educational circles. Emotional attunement to teachers, pilgrimage, and higher learning consistently brings fortune and good timing.",
+      10:"Public career defined by mass appeal, emotional intelligence, and popularity. Career in public service, hospitality, politics, or any field requiring emotional connection with the masses. The public follows and favours your emotional presence.",
+      11:"Gains flow through emotional networks, women's associations, and popular movements. Income from emotionally resonant activities, public media, or hospitality. Social circles are warm and emotionally connected; financial gains through public popularity.",
+      12:"Lunar energy retreats to inner spiritual life, foreign lands, or hidden sacrifice. The mother figure may be spiritually oriented or geographically distant. Dream life and emotional processing in private solitude are significant sources of renewal."
+    },
+    Ma:{
+      1:"Martian energy materialises in your personal identity — you are perceived as driven, competitive, and action-oriented. Your public persona radiates courage and an unmistakable readiness to compete. Conflict and bold assertion define your visible brand; passivity is never attributed to you.",
+      2:"Mars drives wealth through enterprise, physical effort, and competitive industry. Financial gains through technical skills, real estate, or sectors involving metals, machinery, and construction. Family dynamics may carry Martian friction or bold ambition.",
+      3:"The most natural domain for Mars — courage, self-effort, and competitive communication are maximally amplified. Initiative, technical writing, or athletic achievement define public visibility. Siblings or younger relatives are bold and competitive.",
+      4:"Martian energy in the domestic sphere — property, construction, and real estate are primary vehicles for wealth. Home may be a place of Martian activity or occasional tension. Bold, competitive acquisition of property through determined action.",
+      5:"Mars drives creative ambition, speculative risk-taking, and competitive intelligence. Children may be athletic, bold, or competitive. Speculative ventures succeed through aggressive, risk-embracing action when backed by technical discipline.",
+      6:"Enemies are defeated through sustained Martian effort — H6 is one of Mars's most powerful positions. Victory in competitive, legal, or medical arenas. Health challenges are overcome through physical vigour and disciplined training regimens.",
+      7:"Partnerships and marriage carry Martian energy — an active, assertive, or occasionally combative dynamic. The spouse is driven, technically skilled, and physically strong. Contracts and business alliances involve vigorous negotiation and competitive dynamics.",
+      8:"Martian force penetrates hidden and transformative domains. Bold action in surgical, research, or occult settings. Longevity through physical vigour and controlled risk. Sudden transformations through encounters requiring decisive, courageous action.",
+      9:"Fortune flows through bold, initiative-driven, dharmic action. The father or teacher figure is assertive and action-oriented. Military, athletic, or technical expertise elevates dharmic standing and attracts good fortune through competitive dharmic service.",
+      10:"Mars defines professional identity through engineering, military, law enforcement, surgery, or any field requiring technical boldness and competitive excellence. Career built on initiative, physical courage, and the ability to lead under pressure.",
+      11:"Gains through competitive networks, technical associations, or martial enterprises. Income from engineering, military, sports, or bold financial ventures. Ambitions are large and actively pursued through peer networks of equally driven individuals.",
+      12:"Martian energy operates in hidden, foreign, or sacrificial domains. Courage in private missions or foreign competitive environments. Secret competitive activity or bold expenditure in long-distance ventures brings eventual, larger returns."
+    },
+    Me:{
+      1:"Mercurial energy manifests in your personal identity — you are perceived as sharp, articulate, and analytically gifted. Intellectual versatility, communicative precision, and commercial awareness define your public brand. Others seek you out for analysis, advice, and clever navigation of complex problems.",
+      2:"Mercury materialises wealth through commerce, writing, and speech. Financial prosperity through business, trade, and intellectual services. Family wealth is linked to communication or documentation industries. Speech is precise, persuasive, and commercially effective.",
+      3:"Mercury's most natural domain — communication, writing, and media excellence are maximally amplified. Analytical courage and intellectual boldness in information-sharing, documentation, and local commerce. Siblings may be intellectually gifted or commercially oriented.",
+      4:"Mercurial energy colours domestic life with intellectual activity — home is a hub of communication, documentation, and analytical work. Education and commerce thrive from home. The mother may be intellectually sharp or commercially oriented.",
+      5:"Mercury drives creative and intellectual expression — intelligence applied to speculation, creative writing, and children's education creates visible results. Children may be highly intelligent or communicatively gifted. Analytical thinking in speculative investments succeeds.",
+      6:"Analytical intelligence overcomes obstacles — Mercury in H6 excels at problem-solving, legal documentation, medical analysis, and competitive communication. Enemies are defeated through sharp analytical strategy and well-documented competitive positioning.",
+      7:"Partnerships and contracts are defined by communication, analytical agreement, and commercial exchange. The spouse or business partner is intellectually sharp and commercially oriented. Contracts are central to all partnerships; verbal and written agreements are critical.",
+      8:"Mercurial intelligence penetrates hidden and transformative domains — research, astrology, occult writing, or investigative journalism. Analytical depth in unravelling mysteries and documenting hidden knowledge. Hidden wealth through intellectual property and research.",
+      9:"Fortune through writing, teaching, and intellectual dharma. Publishing, legal expertise, or analytical philosophy attracts good fortune. The father or guru may be a scholar or communicator. Dharmic alignment comes through intellectual service and the sharing of knowledge.",
+      10:"Career defined by communication, commerce, and intellectual mastery. Journalism, writing, finance, data analytics, law, or any field requiring Mercury's sharp commercial intellect. The world recognises you as an analytically excellent professional.",
+      11:"Gains through networks of communication, commerce, and intellectual collaboration. Income from writing, consulting, data services, or trade. Social circles revolve around intellectually driven, commercially oriented associates who value sharp, versatile intelligence.",
+      12:"Mercurial energy retreats into foreign commerce, private writing, or hidden analytical work. Foreign language skills, translation, or international communication are private assets. Intellectual property and documentation are managed discreetly in foreign or private contexts."
+    },
+    Ju:{
+      1:"Jupiter's grace materialises in your personal identity — you are perceived as wise, principled, and inherently trustworthy. A dharmic, generous, and philosophically inclined public presence defines your external brand. Others naturally seek your guidance and counsel.",
+      2:"Jupiterian wisdom flows into wealth and family — financial abundance through teaching, advisory roles, or dharmic professions. Family is cultured, educated, and generous. Speech carries learned, philosophical authority that opens institutional and social doors.",
+      3:"Wisdom expressed through courageous communication — writing, teaching, or advisory media carries philosophical weight. Siblings may be intellectual and philosophically inclined. Dharmic courage in communication amplifies public respect and initiates prosperous ventures.",
+      4:"Jupiter blesses domestic life — home is a place of wisdom, generosity, and cultural richness. Property and real estate bring fortune. Mother is wise, educated, or spiritually oriented. Home is a sanctuary of dharmic values that others seek out for counsel.",
+      5:"Wisdom and creativity flourish — children are wise, scholarly, or spiritually gifted. Speculative ventures guided by dharmic wisdom and philosophical clarity succeed. Creative expression carries philosophical depth and attracts fortune through accumulated merit.",
+      6:"Wisdom overcomes adversity — Jupiter in H6 is a powerful cancellation of enemy influence. Obstacles are resolved through counsel, dharmic strategy, and compassionate legal wisdom. Health challenges are addressed through natural remedies and philosophical equanimity.",
+      7:"Partnerships and marriage are defined by wisdom, dharma, and spiritual compatibility. The spouse is educated, generous, and philosophically oriented. Business partnerships flourish through mutual respect, ethical dealing, and shared higher learning.",
+      8:"Jupiterian grace operates through transformation and hidden knowledge — occult wisdom, spiritual research, or philosophical inquiry into life's mysteries. Longevity and fortune through dharmic exploration of hidden domains. Generous inheritance or institutional legacy.",
+      9:"The most natural placement for Jupiter — dharma, fortune, and higher learning are amplified to their fullest. The father or guru is a truly significant, wise, and expansive figure. Fortune flows freely, the native is genuinely blessed, and dharmic actions multiply rewards.",
+      10:"Jupiter defines career through wisdom, teaching, advisory authority, and dharmic leadership. The professional identity is associated with scholarship, law, spirituality, or expansive guidance of others. High public regard and recognised institutional wisdom.",
+      11:"Gains flow abundantly through wise networks and dharmic financial management. Income from teaching, consulting, publishing, or advisory services. Social circles are learned, generous, and philosophically oriented. Ambitions are fulfilled through wisdom and dharmic association.",
+      12:"Jupiterian grace operates in foreign lands or spiritual retreat — wisdom in isolated study, foreign scholarship, or ashram-like environments. Spiritual liberation through expansive surrender. Secret generosity or hidden dharmic work that ultimately multiplies fortune."
+    },
+    Ve:{
+      1:"Venus materialises in your personal identity — you are perceived as charming, beautiful, and aesthetically refined. Your public brand radiates grace, sophistication, and relational warmth. Artistic talent and personal charisma are your most visible and consistently rewarded assets.",
+      2:"Venusian beauty flows into wealth — prosperity through luxury goods, aesthetics, creative arts, or finance. Family life is harmonious and refined. Speech is charming, diplomatic, and commercially persuasive. Material comforts and aesthetic pleasures accumulate naturally.",
+      3:"Charm and diplomacy define communication — you are perceived as a graceful, creative communicator. Artistic, relationship-focused writing and media succeed. Sibling relationships are warm and mutually enriching. Aesthetic courage opens creative and commercial opportunities.",
+      4:"Domestic life is beautiful, harmonious, and comfort-filled. Home carries Venusian elegance — art, music, and beauty are present. Mother is loving, refined, and aesthetically sensitive. Property is beautiful or linked to creative, aesthetic, or hospitality domains.",
+      5:"Venus amplifies creativity, love, and romantic expression. Children are beautiful, talented, or artistically gifted. Creative and romantic ventures succeed through charm and aesthetic grace. Love affairs or creative speculative investments carry a natural advantage.",
+      6:"Charm overcomes opposition — Venus in H6 resolves conflicts through diplomacy, beauty, and relational grace. Aesthetic medicine, beauty industries, or holistic healing are public domains. Enemies are charmed rather than fought; obstacles dissolve through grace.",
+      7:"Partnerships and marriage are especially prominent — Venus in H7 is a strong indication of relationship excellence. The spouse is beautiful, charming, and artistically talented. Marriage is loving and emotionally fulfilling; business partnerships are characterised by aesthetic and diplomatic harmony.",
+      8:"Venusian energy operates through hidden beauty and transformative relationships — secret love, artistic depth in research, or beauty in occult domains. Hidden financial assets or inheritance through creative or artistic connections. Deep aesthetic transformation through intimate partnerships.",
+      9:"Fortune flows through beauty, art, and dharmic partnerships. A graceful, aesthetically enriched spiritual life. The father or guru may be artistically sensitive or relationship-oriented. Dharmic expansion through artistic, diplomatic, and aesthetically oriented channels brings lasting fortune.",
+      10:"Career defined by aesthetics, diplomacy, and relational excellence. Professions in art, design, fashion, diplomacy, finance, or any field requiring charm and aesthetic authority. The world recognises you as a creative, refined professional of enduring public appeal.",
+      11:"Gains through aesthetic networks, artistic collaborations, and harmonious alliances. Income from creative arts, beauty industries, or relationship-based services. Social circles are charming, artistically oriented, and socially sophisticated. Financial ambitions fulfilled through beauty and partnership.",
+      12:"Venusian grace operates in private retreat — artistic inspiration from solitude, foreign aesthetic life, or spiritual beauty practice. Luxury or creative expenditure abroad enriches the inner life. Hidden or private romantic connections carry deep personal significance."
+    },
+    Sa:{
+      1:"Saturn materialises in your personal identity — you are perceived as serious, disciplined, and authoritative through sustained effort. Your public persona carries gravitas and earned credibility. Others respect your durability and precision, though you may appear austere or demanding.",
+      2:"Saturnine discipline drives wealth through sustained effort, structured saving, and long-term investment. Financial prosperity is earned slowly but becomes very durable. Family life carries responsibility and structure; material constraints early in life transform into lasting security.",
+      3:"Discipline and persistent effort define communication — you write, speak, and act with deliberate, structured precision. Technical or systemic communication is your strength. Siblings or younger relatives may carry karmic responsibility or disciplinary dynamics.",
+      4:"Saturn in H4 often delays domestic stability — home and property arrive through patient effort and mature action, but provide lasting, durable security. Mother carries responsibility or burden. Real estate success through disciplined, long-term structural investment.",
+      5:"Saturnine discipline applied to creativity and speculation — careful, structured creative work over impulsive risk. Children may arrive late or carry responsibility in their character. Speculative success comes through calculated, patient, disciplined risk-taking.",
+      6:"Saturn in H6 is a powerful placement — enemies are systematically defeated through sustained effort, legal discipline, and structural persistence. Health is maintained through disciplined routine. Long-term service orientation yields enduring respect and steady social standing.",
+      7:"Partnerships and marriage are defined by structure, duty, and long-term commitment. The spouse may be older, experienced, or carry significant responsibilities. Marriage comes with maturity or some delay, but when it arrives, it is resilient and built to last.",
+      8:"Saturnine energy in the transformative domain — longevity through disciplined lifestyle and karmic awareness. Systematic confrontation with deep structural changes. Research, astrology, or occult study through long-term, disciplined exploration of hidden knowledge.",
+      9:"Fortune comes through sustained dharmic discipline, systematic higher learning, and patient service to teachers. The father or guru may be strict, authoritative, or carry significant karmic weight. Fortune arrives later in life but with lasting, structural solidity.",
+      10:"Career defined by discipline, structured authority, and long-term professional achievement. Success through engineering, administration, law, government service, or any field requiring systematic excellence. Late-career recognition is exceptionally strong and enduring.",
+      11:"Gains come steadily through disciplined, structured enterprises, institutional networks, and long-term investment. Financial aspirations are systematically and patiently pursued. Eventual income is very stable, though it builds more slowly than for other planetary arudhas.",
+      12:"Saturn in H12 is a natural placement — discipline applied to retreat, spiritual practice, or institutional settings (hospitals, prisons, monasteries). Karma resolved through disciplined sacrifice and service in hidden arenas. Long-term prosperity through structured foreign engagement."
+    }
+  };
+
   function gaHouseNote(pk,hn){
-    const pw={Su:"Solar authority and paternal archetypes",Mo:"Emotional depth and public popularity",Ma:"Martian ambition and competitive drive",Me:"Mercurial intellect and commerce",Ju:"Jupiterian wisdom and grace",Ve:"Venusian beauty and relationship skill",Sa:"Saturnine discipline and karma"}[pk]||"planetary energy";
-    const hd={1:"project directly onto your self-image and physical form — inseparable from your personal identity",2:"materialise through wealth, family reputation, and speech — others encounter this energy in financial and family dealings",3:"manifest through courage, self-effort, communication, and sibling dynamics — visible through competitive initiatives and bold action",4:"colour domestic life, property, and the mother's standing — home circumstances and emotional security are shaped by this archetype",5:"flow into intelligence, creativity, children, and past-life merit — your intellectual and speculative reputation carry this energy outward",6:"enter the adversarial arena of enemies, health, debts, and service — this archetype creates visible friction or determined victory in competitive contexts",7:"project into partnerships, marriage, and significant one-on-one relationships — key partners and contracts carry this energy directly into your life",8:"operate through sudden events, transformation, hidden knowledge, and longevity — the archetype manifests in crisis, depth, and the occult",9:"elevate through fortune, dharma, and the father/teacher figure — good luck, higher learning, and philosophical circles carry this energy",10:"define your professional authority, public recognition, and career karma — this is the most visible expression: the world sees this planetary energy as your primary professional identity",11:"drive gains, income, fulfilled desires, and social networks — financial flows and large-group dynamics are where the archetype consistently delivers results",12:"operate through loss, retreat, foreign domains, and liberation — this energy manifests through voluntary expenditure, sabbatical, or transcendence"}[hn]||"shape this domain of life";
-    return `${pw} ${hd}.`;
+    return GA_INTERP[pk]?.[hn]||`${pk} Graha Arudha in H${hn} — planetary energy shapes this domain of life.`;
   }
 
   // Compute one Graha Arudha from a single ruled sign (Jaimini formula)
