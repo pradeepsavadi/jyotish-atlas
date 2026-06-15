@@ -329,6 +329,38 @@
   .sl-ival span{color:var(--muted)}
   .sl-ival b{color:var(--gold2)}
   @media(max-width:600px){.sl-grid{grid-template-columns:1fr}}
+  /* === Graha Arudhas (A1–A12) === */
+  .ar-controls{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px;align-items:flex-end}
+  .ar-summary-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:20px}
+  @media(max-width:700px){.ar-summary-grid{grid-template-columns:repeat(4,1fr)}}
+  @media(max-width:450px){.ar-summary-grid{grid-template-columns:repeat(3,1fr)}}
+  .ar-cell{border:1px solid var(--line);border-radius:10px;padding:10px 6px;text-align:center;background:var(--panel2);cursor:pointer;transition:border-color var(--dur) var(--ease),background var(--dur) var(--ease);user-select:none}
+  .ar-cell:hover{border-color:var(--gold);background:var(--panel)}
+  .ar-cell.ar-active{border-color:var(--gold);background:var(--panel);box-shadow:0 0 0 1px var(--gold) inset}
+  .ar-cell-code{font-size:10.5px;font-weight:700;color:var(--gold2);letter-spacing:.04em;margin-bottom:3px}
+  .ar-cell-sign{font-size:12px;font-weight:700;margin-bottom:2px}
+  .ar-cell-hn{font-size:10.5px;color:var(--muted)}
+  .ar-cell-lord{font-size:11px;margin-top:3px}
+  .ar-cell-sav{font-size:9.5px;margin-top:2px}
+  .ar-sav-hi{color:var(--exalt)}
+  .ar-sav-lo{color:var(--debil)}
+  .ar-detail{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:8px}
+  .ar-detail-hd{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+  .ar-detail-code{font-size:13px;font-weight:800;color:var(--gold2);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:3px 10px;flex-shrink:0}
+  .ar-detail-name{font-size:16px;font-weight:700}
+  .ar-detail-name small{font-size:11.5px;font-weight:400;color:var(--muted);display:block;margin-top:1px}
+  .ar-detail-sign{font-size:22px;font-weight:800;margin-left:auto}
+  .ar-theme{font-size:12.5px;color:var(--gold2);margin-bottom:10px;font-style:italic}
+  .ar-body{font-size:13.5px;line-height:1.7;margin-bottom:14px;color:#dfe4f6}
+  .ar-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+  .ar-badge{font-size:12px;padding:4px 11px;border-radius:999px;font-weight:600;background:var(--panel);border:1px solid var(--line)}
+  .ar-pls{font-size:13px;padding:10px 14px;background:var(--panel);border-radius:8px;border-left:3px solid var(--gold2);margin-bottom:12px;line-height:1.6}
+  .ar-note{margin-top:10px;padding:11px 14px;background:var(--panel);border-radius:8px;border:1px solid var(--line);font-size:12.5px;line-height:1.6;color:var(--muted)}
+  .ar-calc-toggle{font-size:12px;color:var(--gold2);cursor:pointer;margin:10px 0 0;display:inline-block;background:none;border:none;padding:0}
+  .ar-calc{display:none;padding:11px 14px;background:var(--panel);border-radius:8px;font-size:12px;line-height:1.9;border:1px solid var(--line);color:#dfe4f6;margin-top:6px}
+  .ar-calc.open{display:block}
+  .ar-step{display:flex;align-items:flex-start;gap:8px;margin-bottom:4px}
+  .ar-step-n{flex:0 0 20px;height:20px;border-radius:6px;background:var(--panel2);border:1px solid var(--line);display:grid;place-items:center;font-size:10px;font-weight:700;color:var(--gold2);flex-shrink:0}
   /* === life outlook === */
   .ol-controls{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px}
   .ol-houses{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:6px}
@@ -1066,6 +1098,7 @@ html.light .brand{color:var(--ink)!important}
     <a href="#synth">Synthesizer</a>
     <a href="#charts">My Charts</a>
     <a href="#bbavam">Bhavat Bhavam</a>
+    <a href="#arudhas">Arudha Padas</a>
     <a href="#outlook">Life Outlook</a>
     <a href="#lifepredictor">Life Predictor</a>
     <a href="#compare">Compare</a>
@@ -1299,6 +1332,22 @@ html.light .brand{color:var(--ink)!important}
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section id="arudhas" class="section-reveal">
+    <div class="eyebrow">Jaimini · Bhava Padas</div>
+    <h2>Graha Arudhas · A1–A12</h2>
+    <p class="sub">In Jaimini Jyotish, every house has an <i>Arudha Pada</i> — the "image" or outer projection of that house's themes in the material world. Lagna shows the soul's inner truth; the Arudha Padas show how that truth is perceived and manifests externally. All 12 are calculated using the same BPHS rule: count from the bhava to its lord, then count that same distance forward from the lord. Click any cell to see the full interpretation and step-by-step calculation.</p>
+    <div class="panel" style="padding:22px">
+      <div class="ar-controls">
+        <div class="bb-sel-grp">
+          <label>Chart</label>
+          <select id="arChart" class="bb-sel"></select>
+        </div>
+      </div>
+      <div id="arEmpty" style="text-align:center;color:var(--muted);padding:30px 0;font-size:13.5px">Add a chart in <b>My Charts</b> above to see all 12 Arudha Padas.</div>
+      <div id="arResult" style="display:none"></div>
     </div>
   </section>
 
@@ -4772,6 +4821,212 @@ function renderSpecialLagnas(c,La,sav){
   selPerson.addEventListener("change",runQuery);
   selTopic.addEventListener("change",runQuery);
   JA.onChartsChange=refreshChartSel;
+  refreshChartSel();
+})();
+
+/* ===== GRAHA ARUDHAS — A1 through A12 ===== */
+// BPHS Ch.32: for each bhava, the Arudha Pada = lord's position + same distance again.
+// Exception 1: if the result lands on the bhava itself, take the 10th from the bhava.
+// Exception 2: if the result lands on the 7th from the bhava, take the 4th from the bhava.
+(function(){
+  const PADA_META=[
+    {code:"A1",abbr:"AL",name:"Arudha Lagna",
+     theme:"Public image · worldly reputation · social projection · material circumstances",
+     body:"The most important Arudha. While Lagna shows the soul's inner truth, A1 (AL) is the outer maya — how others perceive, describe, and transact with you. It governs visible status, social reputation, and the material circumstances that follow you. The gap between Lagna and AL reveals how authentic your public persona is. Planets in AL or aspecting it color your public identity strongly."},
+    {code:"A2",abbr:"A2",name:"Dhana Pada",
+     theme:"Perceived wealth · family reputation · quality of speech",
+     body:"Image of your accumulated resources, family honour, and public speech. A dignified lord or benefics here indicate visible prosperity and persuasive, authoritative communication. Malefics indicate a financial reputation marked by fluctuation or speech that attracts controversy. Compare with A11 for the full wealth image picture."},
+    {code:"A3",abbr:"A3",name:"Vikrama Pada",
+     theme:"Courage · initiative · sibling image · competitive reputation",
+     body:"The outer projection of your effort, courage, and competitive spirit. A strong A3 lord well-placed indicates a reputation for boldness and execution. Malefics here without benefic support can mean being known for impulsive aggression. Younger siblings' public image is also shown here."},
+    {code:"A4",abbr:"A4",name:"Matri Pada",
+     theme:"Home · property · mother's public image · vehicles · emotional security",
+     body:"Image of your domestic life, property holdings, and the mother figure. Benefics (Moon, Venus, Jupiter) here indicate a visibly happy, well-resourced home environment. The mother's social reputation and her visible circumstances are shown. Vehicles and comforts are also indicated."},
+    {code:"A5",abbr:"A5",name:"Mantra Pada",
+     theme:"Intelligence · children · past-life merit · spiritual authority",
+     body:"The image of your intellectual capacity, creative output, and children's standing. Being known for wisdom, scholarship, or spiritual leadership is shown by a strong Jupiter or dignified A5 lord. Also governs political acumen, investment reputation, and past-life merit (Purva Punya) as it manifests outwardly."},
+    {code:"A6",abbr:"A6",name:"Roga Pada",
+     theme:"Enemies · debts · disease · the public adversarial arena",
+     body:"Image of your competitive and adversarial space. Malefics here without benefic mitigation show a publicly visible field of conflict, litigation, or health challenges. Importantly, Jupiter or well-placed benefics in A6 confer 'victory over enemies' — the classical ability to publicly overcome opposition. Compare A6 with A8 for the full picture of difficulties."},
+    {code:"A7",abbr:"A7",name:"Dara Pada",
+     theme:"Spouse · business partnerships · the image of the life-partner",
+     body:"Primary Jaimini indicator of the spouse or life-partner's visible nature. The sign of A7 describes the type of person attracted; the lord's condition reveals the quality of the partnership. Compare with Upapada Lagna (A12/UL) for a complete marriage analysis — A7 shows the outer image of the relationship, UL shows the dharmic depth of the bond."},
+    {code:"A8",abbr:"A8",name:"Mrityu Pada",
+     theme:"Transformation · sudden reversals · longevity · occult and research",
+     body:"Image of how you encounter and navigate transformation, crisis, and the hidden. Malefics here are often associated with a publicly dramatic or turbulent life; benefics can indicate a healing, research, or investigative reputation. Used in Jaimini longevity calculations alongside the 8th lord. Can also mark the timing of major life transitions."},
+    {code:"A9",abbr:"A9",name:"Pitri Pada",
+     theme:"Fortune · dharma · father / guru image · higher knowledge",
+     body:"Image of your fortune, dharmic standing, and the father or teacher figure. Benefics (Jupiter, Venus) well-placed as A9 lord = publicly recognized fortune, spiritual authority, and grace. The A9 lord indicates the channel through which luck arrives — scholarship, travel, lineage, or devotion. Father's public reputation is also read here."},
+    {code:"A10",abbr:"A10",name:"Rajya Pada",
+     theme:"Career · authority · public recognition · karma in the world",
+     body:"The image of your profession, command, and karma. Second only to AL for chart analysis. A strong A10 lord in a kendra or trikona = visible, recognized authority and a well-defined public role. Also called 'Karma Pada' — it shows what the world assigns as your primary life contribution. Planets in A10 brand your professional identity."},
+    {code:"A11",abbr:"A11",name:"Labha Pada",
+     theme:"Gains · income · fulfilled desires · social network reputation",
+     body:"Image of your prosperity, social connections, and realized gains. Benefics or a well-placed lord here = a reputation for abundance, profitable alliances, and achieving large aspirations. Elder siblings' public image is also shown. Dashas activating A11 bring visible financial gains and the fulfillment of long-held desires."},
+    {code:"A12",abbr:"UL",name:"Upapada Lagna",
+     theme:"Marriage partner (UL) · expenditure image · liberation · foreign domains",
+     body:"Same as Upapada Lagna (UL) — the Arudha of the 12th house is Jaimini's primary marriage indicator. The sign, lord, and planets here describe the nature of the partner the native projects into relationship. The 2nd from A12/UL is critical for marriage longevity (benefics = sustained union; malefics = challenge to continuity). A12 also governs voluntary expenditure, foreign journeys, and the path toward liberation."}
+  ];
+
+  const LS_KEY="jyotish_charts_v1";
+  function getCharts(){try{return JSON.parse(localStorage.getItem(LS_KEY))||[];}catch(e){return[];}}
+
+  const selChart=document.getElementById("arChart");
+  const emptyDiv=document.getElementById("arEmpty");
+  const resultDiv=document.getElementById("arResult");
+  let _c=null,_La=null,_sav=null,_activeIdx=0;
+
+  function computeAllArudhas(c,La){
+    return PADA_META.map((_meta,i)=>{
+      const h=i+1;
+      const bhavaSign=(La+h-1)%12;
+      const lord=SIGN_LORD[bhavaSign];
+      const lp=c.planets[lord];
+      if(!lp) return null;
+      const ls=lp.sign;
+      const dist=houseFromSigns(bhavaSign,ls);
+      let pada=(ls+dist-1)%12;
+      let rule="";
+      if(pada===bhavaSign){pada=(bhavaSign+9)%12;rule="Result fell on the bhava sign itself → moved to the 10th from the bhava (BPHS Ch.32 exception)";}
+      else if(pada===(bhavaSign+6)%12){pada=(bhavaSign+3)%12;rule="Result fell on the 7th from the bhava → moved to the 4th from the bhava (BPHS Ch.32 exception)";}
+      return{h,bhavaSign,lord,lordSign:ls,dist,sign:pada,rule};
+    });
+  }
+
+  function houseTypeStr(h){
+    if([1,4,7,10].includes(h)) return "Kendra";
+    if([5,9].includes(h)) return "Trikona";
+    if([3,11].includes(h)) return "Upachaya";
+    if([6,8,12].includes(h)) return "Dusthana";
+    return "";
+  }
+
+  function padaFromLagnaNote(meta,hn){
+    if(hn===1) return `${meta.code} lands on Lagna itself — inner self and the ${meta.code} domain are strongly fused. Authentic, direct expression of this theme.`;
+    if(hn===7) return `${meta.code} is the 7th from Lagna — a polarity axis. The ${meta.code} domain sits in visible tension with the inner self; others may project onto or idealise this part of you.`;
+    if([5,9].includes(hn)) return `${meta.code} is in a Trikona (H${hn}) from Lagna — auspicious. The ${meta.code} domain flows naturally with dharmic grace and fortune.`;
+    if([4,10].includes(hn)) return `${meta.code} is in a Kendra (H${hn}) from Lagna — materially active. The ${meta.code} domain manifests tangibly and visibly in the world.`;
+    if([3,11].includes(hn)) return `${meta.code} is in an Upachaya (H${hn}) from Lagna — grows and improves over time. The ${meta.code} domain gains momentum with Saturn and Mars dashas.`;
+    if([6,8,12].includes(hn)) return `${meta.code} is in a Dusthana (H${hn}) from Lagna — the ${meta.code} domain carries inherent challenge in its outer expression. Transformation or sustained effort is required to manifest its promise.`;
+    return `${meta.code} is H${hn} from Lagna.`;
+  }
+
+  function renderResult(c,La,sav){
+    const padas=computeAllArudhas(c,La);
+
+    // ── 12-cell summary grid ──
+    let html='<div class="ar-summary-grid">';
+    PADA_META.forEach((meta,i)=>{
+      const p=padas[i];
+      const isActive=(i===_activeIdx);
+      if(!p){
+        html+=`<div class="ar-cell${isActive?" ar-active":""}" data-idx="${i}">
+          <div class="ar-cell-code">${meta.abbr}</div>
+          <div class="ar-cell-sign" style="color:var(--muted)">—</div>
+          <div class="ar-cell-hn">missing</div></div>`;
+        return;
+      }
+      const hn=houseFromSigns(La,p.sign);
+      const lord=GBYK[p.lord];
+      const psav=sav[p.sign];
+      const savCls=psav>=30?"ar-sav-hi":psav<25?"ar-sav-lo":"";
+      html+=`<div class="ar-cell${isActive?" ar-active":""}" data-idx="${i}">
+        <div class="ar-cell-code">${meta.abbr}</div>
+        <div class="ar-cell-sign" style="color:${lord.col}">${SIGNS[p.sign]}</div>
+        <div class="ar-cell-hn">H${hn}</div>
+        <div class="ar-cell-lord" style="color:${lord.col}">${lord.gl}</div>
+        <div class="ar-cell-sav ${savCls}">${psav} SAV</div>
+      </div>`;
+    });
+    html+='</div>';
+
+    // ── Detail panel for selected pada ──
+    const meta=PADA_META[_activeIdx];
+    const p=padas[_activeIdx];
+    if(p){
+      const hn=houseFromSigns(La,p.sign);
+      const htStr=houseTypeStr(hn);
+      const lord=GBYK[p.lord];
+      const lp=c.planets[p.lord];
+      const dig=lp?dignityOf(p.lord,lp.sign):null;
+      const lhn=lp?houseFromSigns(La,lp.sign):null;
+      const psav=sav[p.sign];
+      const savCls=psav>=30?"sav-hi":psav>=25?"sav-mid":"sav-lo";
+      const pInSign=Object.entries(c.planets).filter(([k,pl])=>pl.sign===p.sign).map(([k])=>k);
+      const chain=Array.from({length:p.dist},(_,j)=>SIGNS[(p.lordSign+j)%12]).join(" → ");
+      const signLord=SIGN_LORD[p.sign];
+
+      html+=`<div class="ar-detail">
+        <div class="ar-detail-hd">
+          <span class="ar-detail-code">${meta.code}</span>
+          <div class="ar-detail-name">${meta.name}<small>${BHAVAS[_activeIdx].skt} · ${BHAVAS[_activeIdx].en}</small></div>
+          <span class="ar-detail-sign" style="color:${GBYK[signLord].col}">${SIGNS[p.sign]}</span>
+        </div>
+        <div class="ar-theme">${meta.theme}</div>
+        <div class="ar-body">${meta.body}</div>
+        <div class="ar-badges">
+          <span class="ar-badge">H${hn}${htStr?" · "+htStr:""} from Lagna</span>
+          <span class="ar-badge" style="color:${lord.col}">${lord.gl} ${lord.name}${dig?" · "+dig.full.split("·")[0].trim():""}${lhn?" (H"+lhn+")":""}</span>
+          <span class="ar-badge ${savCls}">SAV ${psav}</span>
+        </div>
+        ${pInSign.length
+          ?`<div class="ar-pls">${pInSign.map(k=>`${GBYK[k].gl} <b>${GBYK[k].name}</b> <span class="tag">${MALEFIC_PLANETS.has(k)?"malefic":"benefic"}</span>`).join(" &nbsp;·&nbsp; ")} in ${SIGNS[p.sign]}</div>`
+          :`<div class="ar-pls" style="color:var(--muted)">${SIGNS[p.sign]} is vacant — judge this Pada entirely through its lord ${lord.name}${dig?" ("+dig.full.split("·")[0].trim()+")":""} in H${lhn||"?"}.</div>`
+        }
+        <div class="ar-note">${padaFromLagnaNote(meta,hn)}</div>
+        <button type="button" class="ar-calc-toggle">▸ How this was calculated</button>
+        <div class="ar-calc">
+          <div class="ar-step"><span class="ar-step-n">1</span><span>H${p.h} from Lagna (<b>${SIGNS[La]}</b>) = <b>${SIGNS[p.bhavaSign]}</b></span></div>
+          <div class="ar-step"><span class="ar-step-n">2</span><span>${SIGNS[p.bhavaSign]} lord = <b>${lord.name}</b> · placed in <b>${SIGNS[p.lordSign]}</b> = <b>${p.dist}</b> sign${p.dist===1?"":"s"} away</span></div>
+          <div class="ar-step"><span class="ar-step-n">3</span><span>Count ${p.dist} forward from ${SIGNS[p.lordSign]}: <b style="color:var(--gold2)">${chain}</b></span></div>
+          ${p.rule?`<div class="ar-step"><span class="ar-step-n" style="color:var(--debil)">!</span><span style="color:var(--debil)">${p.rule}</span></div>`:""}
+          <div class="ar-step"><span class="ar-step-n">✓</span><span>${meta.code} = <b style="color:var(--gold2)">${SIGNS[p.sign]}</b> · H${hn}</span></div>
+        </div>
+      </div>`;
+    }
+
+    resultDiv.innerHTML=html;
+  }
+
+  // Event delegation — pada cell clicks + calc toggle
+  resultDiv.addEventListener("click",e=>{
+    const cell=e.target.closest(".ar-cell[data-idx]");
+    if(cell){_activeIdx=+cell.dataset.idx;if(_c)renderResult(_c,_La,_sav);return;}
+    const tog=e.target.closest(".ar-calc-toggle");
+    if(tog){
+      const calc=tog.nextElementSibling;
+      if(calc){calc.classList.toggle("open");tog.textContent=calc.classList.contains("open")?"▾ Hide calculation":"▸ How this was calculated";}
+    }
+  });
+
+  function runQuery(){
+    const charts=getCharts();
+    if(!charts.length||!charts[0]||!charts[0].La){emptyDiv.style.display="";resultDiv.style.display="none";return;}
+    const idx=Math.min(+selChart.value||0,charts.length-1);
+    const c=charts[idx];
+    if(!c||!c.La){emptyDiv.style.display="";resultDiv.style.display="none";return;}
+    emptyDiv.style.display="none";resultDiv.style.display="block";
+    _c=c;_La=c.La.sign;
+    const avPos={La:c.La.sign};
+    for(const k of["Su","Mo","Ma","Me","Ju","Ve","Sa"])if(c.planets[k])avPos[k]=c.planets[k].sign;
+    _sav=computeSAV(avPos);
+    renderResult(_c,_La,_sav);
+  }
+
+  function refreshChartSel(){
+    const charts=getCharts();
+    selChart.innerHTML="";
+    if(!charts.length){
+      const o=document.createElement("option");o.textContent="(no charts)";selChart.appendChild(o);
+      emptyDiv.style.display="";resultDiv.style.display="none";return;
+    }
+    charts.forEach((c,i)=>{const o=document.createElement("option");o.value=i;o.textContent=c.name;selChart.appendChild(o);});
+    runQuery();
+  }
+
+  selChart.addEventListener("change",runQuery);
+  const _prev=JA.onChartsChange;
+  JA.onChartsChange=()=>{_prev&&_prev();refreshChartSel();};
   refreshChartSel();
 })();
 
