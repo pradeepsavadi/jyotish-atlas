@@ -361,6 +361,34 @@
   .ar-calc.open{display:block}
   .ar-step{display:flex;align-items:flex-start;gap:8px;margin-bottom:4px}
   .ar-step-n{flex:0 0 20px;height:20px;border-radius:6px;background:var(--panel2);border:1px solid var(--line);display:grid;place-items:center;font-size:10px;font-weight:700;color:var(--gold2);flex-shrink:0}
+  /* === Graha Arudha planet cards === */
+  .ga-grid{display:flex;flex-direction:column;gap:14px}
+  .ga-planet-card{background:var(--panel2);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .ga-planet-hd{display:flex;align-items:center;gap:12px;padding:14px 18px;background:rgba(0,0,0,.15);border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .ga-planet-glyph{font-size:22px;line-height:1;flex-shrink:0}
+  .ga-planet-name{font-size:15px;font-weight:700}
+  .ga-planet-pos{font-size:12px;color:var(--muted);margin-left:auto;text-align:right}
+  .ga-planet-body{padding:12px 18px 4px;font-size:12.5px;line-height:1.65;color:#dfe4f6}
+  .ga-archetype{padding:0 18px 10px;font-size:11.5px;color:var(--gold2);font-style:italic}
+  .ga-arudhas-wrap{padding:4px 18px 16px;display:flex;flex-direction:column;gap:10px}
+  .ga-arudha-row{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 14px}
+  .ga-arudha-hd{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+  .ga-arudha-from{font-size:11.5px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:2px 9px;font-weight:600}
+  .ga-arudha-arr{color:var(--gold2);font-size:12px}
+  .ga-arudha-result{font-size:13.5px;font-weight:800;color:var(--gold2)}
+  .ga-arudha-hn{font-size:11.5px;color:var(--muted)}
+  .ga-arudha-note{font-size:12.5px;line-height:1.6;color:#dfe4f6;margin-bottom:8px}
+  /* === Cluster analysis === */
+  .ga-cluster{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:8px}
+  .ga-cluster h4{margin:0 0 12px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gold)}
+  .ga-cluster-rows{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+  .ga-cluster-row{display:flex;align-items:center;gap:10px}
+  .ga-cluster-lbl{font-size:12.5px;font-weight:700;min-width:110px}
+  .ga-cluster-bar{flex:1;height:7px;background:var(--panel);border-radius:4px;overflow:hidden}
+  .ga-cluster-fill{height:100%;border-radius:4px;background:var(--gold2);opacity:.7}
+  .ga-cluster-tags{display:flex;flex-wrap:wrap;gap:4px}
+  .ga-cluster-tag{font-size:10.5px;padding:2px 7px;border-radius:999px;font-weight:600;background:var(--panel);border:1px solid var(--line)}
+  .ga-cluster-interp{font-size:13px;line-height:1.65;color:#dfe4f6;padding:11px 14px;background:var(--panel);border-radius:8px;border-left:3px solid var(--gold2)}
   /* === life outlook === */
   .ol-controls{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px}
   .ol-houses{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:6px}
@@ -1098,7 +1126,7 @@ html.light .brand{color:var(--ink)!important}
     <a href="#synth">Synthesizer</a>
     <a href="#charts">My Charts</a>
     <a href="#bbavam">Bhavat Bhavam</a>
-    <a href="#arudhas">Arudha Padas</a>
+    <a href="#arudhas">Graha Arudhas</a>
     <a href="#outlook">Life Outlook</a>
     <a href="#lifepredictor">Life Predictor</a>
     <a href="#compare">Compare</a>
@@ -1336,9 +1364,9 @@ html.light .brand{color:var(--ink)!important}
   </section>
 
   <section id="arudhas" class="section-reveal">
-    <div class="eyebrow">Jaimini · Bhava Padas</div>
-    <h2>Graha Arudhas · A1–A12</h2>
-    <p class="sub">In Jaimini Jyotish, every house has an <i>Arudha Pada</i> — the "image" or outer projection of that house's themes in the material world. Lagna shows the soul's inner truth; the Arudha Padas show how that truth is perceived and manifests externally. All 12 are calculated using the same BPHS rule: count from the bhava to its lord, then count that same distance forward from the lord. Click any cell to see the full interpretation and step-by-step calculation.</p>
+    <div class="eyebrow">Jaimini · Planetary Reflections</div>
+    <h2>Graha Arudhas</h2>
+    <p class="sub">Each planet has a <i>Graha Arudha</i> — the material, external reflection of that planet's archetype. Since most planets rule two signs, they each cast two Arudhas. The rule (BPHS Ch.32): count how many signs the planet's owned sign is from the planet itself, then count that same number forward from the planet. Where this reflection lands is where that planetary energy — solar authority, lunar emotion, Martian drive — manifests as a visible, tangible force in your world. The final cluster analysis shows which houses receive the most reflections, revealing the dominant material arenas of your life.</p>
     <div class="panel" style="padding:22px">
       <div class="ar-controls">
         <div class="bb-sel-grp">
@@ -1346,7 +1374,7 @@ html.light .brand{color:var(--ink)!important}
           <select id="arChart" class="bb-sel"></select>
         </div>
       </div>
-      <div id="arEmpty" style="text-align:center;color:var(--muted);padding:30px 0;font-size:13.5px">Add a chart in <b>My Charts</b> above to see all 12 Arudha Padas.</div>
+      <div id="arEmpty" style="text-align:center;color:var(--muted);padding:30px 0;font-size:13.5px">Add a chart in <b>My Charts</b> above to compute Graha Arudhas.</div>
       <div id="arResult" style="display:none"></div>
     </div>
   </section>
@@ -4824,49 +4852,51 @@ function renderSpecialLagnas(c,La,sav){
   refreshChartSel();
 })();
 
-/* ===== GRAHA ARUDHAS — A1 through A12 ===== */
-// BPHS Ch.32: for each bhava, the Arudha Pada = lord's position + same distance again.
-// Exception 1: if the result lands on the bhava itself, take the 10th from the bhava.
-// Exception 2: if the result lands on the 7th from the bhava, take the 4th from the bhava.
+/* ===== GRAHA ARUDHAS — planetary reflections ===== */
+// BPHS Ch.32: for each sign a planet rules, the Graha Arudha = count from ruled sign to
+// planet, then count same distance forward from the planet.
+// Exception 1: result on the ruled sign itself → 10th from it.
+// Exception 2: result on 7th from ruled sign → 4th from it.
 (function(){
-  const PADA_META=[
-    {code:"A1",abbr:"AL",name:"Arudha Lagna",
-     theme:"Public image · worldly reputation · social projection · material circumstances",
-     body:"The most important Arudha. While Lagna shows the soul's inner truth, A1 (AL) is the outer maya — how others perceive, describe, and transact with you. It governs visible status, social reputation, and the material circumstances that follow you. The gap between Lagna and AL reveals how authentic your public persona is. Planets in AL or aspecting it color your public identity strongly."},
-    {code:"A2",abbr:"A2",name:"Dhana Pada",
-     theme:"Perceived wealth · family reputation · quality of speech",
-     body:"Image of your accumulated resources, family honour, and public speech. A dignified lord or benefics here indicate visible prosperity and persuasive, authoritative communication. Malefics indicate a financial reputation marked by fluctuation or speech that attracts controversy. Compare with A11 for the full wealth image picture."},
-    {code:"A3",abbr:"A3",name:"Vikrama Pada",
-     theme:"Courage · initiative · sibling image · competitive reputation",
-     body:"The outer projection of your effort, courage, and competitive spirit. A strong A3 lord well-placed indicates a reputation for boldness and execution. Malefics here without benefic support can mean being known for impulsive aggression. Younger siblings' public image is also shown here."},
-    {code:"A4",abbr:"A4",name:"Matri Pada",
-     theme:"Home · property · mother's public image · vehicles · emotional security",
-     body:"Image of your domestic life, property holdings, and the mother figure. Benefics (Moon, Venus, Jupiter) here indicate a visibly happy, well-resourced home environment. The mother's social reputation and her visible circumstances are shown. Vehicles and comforts are also indicated."},
-    {code:"A5",abbr:"A5",name:"Mantra Pada",
-     theme:"Intelligence · children · past-life merit · spiritual authority",
-     body:"The image of your intellectual capacity, creative output, and children's standing. Being known for wisdom, scholarship, or spiritual leadership is shown by a strong Jupiter or dignified A5 lord. Also governs political acumen, investment reputation, and past-life merit (Purva Punya) as it manifests outwardly."},
-    {code:"A6",abbr:"A6",name:"Roga Pada",
-     theme:"Enemies · debts · disease · the public adversarial arena",
-     body:"Image of your competitive and adversarial space. Malefics here without benefic mitigation show a publicly visible field of conflict, litigation, or health challenges. Importantly, Jupiter or well-placed benefics in A6 confer 'victory over enemies' — the classical ability to publicly overcome opposition. Compare A6 with A8 for the full picture of difficulties."},
-    {code:"A7",abbr:"A7",name:"Dara Pada",
-     theme:"Spouse · business partnerships · the image of the life-partner",
-     body:"Primary Jaimini indicator of the spouse or life-partner's visible nature. The sign of A7 describes the type of person attracted; the lord's condition reveals the quality of the partnership. Compare with Upapada Lagna (A12/UL) for a complete marriage analysis — A7 shows the outer image of the relationship, UL shows the dharmic depth of the bond."},
-    {code:"A8",abbr:"A8",name:"Mrityu Pada",
-     theme:"Transformation · sudden reversals · longevity · occult and research",
-     body:"Image of how you encounter and navigate transformation, crisis, and the hidden. Malefics here are often associated with a publicly dramatic or turbulent life; benefics can indicate a healing, research, or investigative reputation. Used in Jaimini longevity calculations alongside the 8th lord. Can also mark the timing of major life transitions."},
-    {code:"A9",abbr:"A9",name:"Pitri Pada",
-     theme:"Fortune · dharma · father / guru image · higher knowledge",
-     body:"Image of your fortune, dharmic standing, and the father or teacher figure. Benefics (Jupiter, Venus) well-placed as A9 lord = publicly recognized fortune, spiritual authority, and grace. The A9 lord indicates the channel through which luck arrives — scholarship, travel, lineage, or devotion. Father's public reputation is also read here."},
-    {code:"A10",abbr:"A10",name:"Rajya Pada",
-     theme:"Career · authority · public recognition · karma in the world",
-     body:"The image of your profession, command, and karma. Second only to AL for chart analysis. A strong A10 lord in a kendra or trikona = visible, recognized authority and a well-defined public role. Also called 'Karma Pada' — it shows what the world assigns as your primary life contribution. Planets in A10 brand your professional identity."},
-    {code:"A11",abbr:"A11",name:"Labha Pada",
-     theme:"Gains · income · fulfilled desires · social network reputation",
-     body:"Image of your prosperity, social connections, and realized gains. Benefics or a well-placed lord here = a reputation for abundance, profitable alliances, and achieving large aspirations. Elder siblings' public image is also shown. Dashas activating A11 bring visible financial gains and the fulfillment of long-held desires."},
-    {code:"A12",abbr:"UL",name:"Upapada Lagna",
-     theme:"Marriage partner (UL) · expenditure image · liberation · foreign domains",
-     body:"Same as Upapada Lagna (UL) — the Arudha of the 12th house is Jaimini's primary marriage indicator. The sign, lord, and planets here describe the nature of the partner the native projects into relationship. The 2nd from A12/UL is critical for marriage longevity (benefics = sustained union; malefics = challenge to continuity). A12 also governs voluntary expenditure, foreign journeys, and the path toward liberation."}
-  ];
+  // Sign ownership: which signs each planet rules (0-indexed sign numbers)
+  const PLANET_RULES={Su:[4],Mo:[3],Ma:[0,7],Me:[2,5],Ju:[8,11],Ve:[1,6],Sa:[9,10]};
+  const PLANET_ORDER=['Su','Mo','Ma','Me','Ju','Ve','Sa'];
+
+  // Archetype bodies per planet
+  const GA_META={
+    Su:{theme:"Solar authority · individuality · paternal and governmental archetype",
+        body:"The Sun's Graha Arudha reveals where solar energy — leadership, ego, willpower, and paternal authority — projects into your material world as visible, external forces. Authority figures, senior leaders, government institutions, and father-type individuals directly impact the house(s) where this Arudha falls."},
+    Mo:{theme:"Emotional mind · public popularity · nurturing · the maternal archetype",
+        body:"The Moon's Graha Arudha shows where lunar energy — emotional intelligence, public reputation, mass appeal, and the mother archetype — becomes tangible in your environment. Women, the masses, and emotional dynamics are the active forces in the domain where this Arudha lands."},
+    Ma:{theme:"Ambition · competitive drive · conflict · initiative · sibling archetype",
+        body:"Mars's two Graha Arudhas reveal the domains where Martian energy — ambition, competition, conflict, and raw initiative — materialises as external forces. Your competitive drive and willingness to fight create visible, tangible outcomes in the houses where these Arudhas fall."},
+    Me:{theme:"Intellect · commerce · communication · analytical skill · business networks",
+        body:"Mercury's two Graha Arudhas show the domains where Mercurial energy — analytical intelligence, trade, communication, and documentation — projects externally. In the houses where they land, intellectual output, verbal precision, business acumen, and commerce are your most publicly visible instruments."},
+    Ju:{theme:"Wisdom · divine grace · dharmic expansion · teachers and benevolent guides",
+        body:"Jupiter's two Graha Arudhas reveal where Jupiterian energy — wisdom, fortune, spiritual guidance, and the teacher/advisor archetype — materialises externally. In the houses where they fall, you are both drawn to mentors and perceived as a counsellor yourself; grace and good fortune flow through these domains."},
+    Ve:{theme:"Beauty · creative refinement · relationships · the beloved archetype",
+        body:"Venus's two Graha Arudhas show where Venusian energy — aesthetic creativity, diplomacy, relationships, and refined pleasure — projects into your material world. As Atmakaraka or a prominent planet, Venus's Arudhas are especially significant: they reveal the primary arenas where its soul-level purpose expresses itself as beauty, design, and human connection."},
+    Sa:{theme:"Discipline · karma · structure · delays · service and longevity",
+        body:"Saturn's two Graha Arudhas reveal the domains where Saturnine energy — responsibility, karmic lessons, patient effort, and the servant/elder archetype — manifests as external circumstances. In the houses where they fall, sustained discipline and structural responsibility define how others most concretely experience you."}
+  };
+
+  // House-specific interpretive note for a Graha Arudha
+  function gaHouseNote(pk,hn){
+    const pw={Su:"Solar authority and paternal archetypes",Mo:"Emotional depth and public popularity",Ma:"Martian ambition and competitive drive",Me:"Mercurial intellect and commerce",Ju:"Jupiterian wisdom and grace",Ve:"Venusian beauty and relationship skill",Sa:"Saturnine discipline and karma"}[pk]||"planetary energy";
+    const hd={1:"project directly onto your self-image and physical form — inseparable from your personal identity",2:"materialise through wealth, family reputation, and speech — others encounter this energy in financial and family dealings",3:"manifest through courage, self-effort, communication, and sibling dynamics — visible through competitive initiatives and bold action",4:"colour domestic life, property, and the mother's standing — home circumstances and emotional security are shaped by this archetype",5:"flow into intelligence, creativity, children, and past-life merit — your intellectual and speculative reputation carry this energy outward",6:"enter the adversarial arena of enemies, health, debts, and service — this archetype creates visible friction or determined victory in competitive contexts",7:"project into partnerships, marriage, and significant one-on-one relationships — key partners and contracts carry this energy directly into your life",8:"operate through sudden events, transformation, hidden knowledge, and longevity — the archetype manifests in crisis, depth, and the occult",9:"elevate through fortune, dharma, and the father/teacher figure — good luck, higher learning, and philosophical circles carry this energy",10:"define your professional authority, public recognition, and career karma — this is the most visible expression: the world sees this planetary energy as your primary professional identity",11:"drive gains, income, fulfilled desires, and social networks — financial flows and large-group dynamics are where the archetype consistently delivers results",12:"operate through loss, retreat, foreign domains, and liberation — this energy manifests through voluntary expenditure, sabbatical, or transcendence"}[hn]||"shape this domain of life";
+    return `${pw} ${hd}.`;
+  }
+
+  // Compute one Graha Arudha from a single ruled sign
+  function computeGA(c,bhavaSign,pk){
+    const lp=c.planets[pk]; if(!lp) return null;
+    const dist=houseFromSigns(bhavaSign,lp.sign);
+    let pada=(lp.sign+dist-1)%12, rule="";
+    if(pada===bhavaSign){pada=(bhavaSign+9)%12;rule="Result fell on the ruled sign → 10th from it (BPHS Ch.32 exception)";}
+    else if(pada===(bhavaSign+6)%12){pada=(bhavaSign+3)%12;rule="Result on the 7th from ruled sign → 4th from it (BPHS Ch.32 exception)";}
+    const chain=Array.from({length:dist},(_,j)=>SIGNS[(lp.sign+j)%12]).join(" → ");
+    return{bhavaSign,planetSign:lp.sign,dist,sign:pada,rule,chain};
+  }
 
   const LS_KEY="jyotish_charts_v1";
   function getCharts(){try{return JSON.parse(localStorage.getItem(LS_KEY))||[];}catch(e){return[];}}
@@ -4874,124 +4904,105 @@ function renderSpecialLagnas(c,La,sav){
   const selChart=document.getElementById("arChart");
   const emptyDiv=document.getElementById("arEmpty");
   const resultDiv=document.getElementById("arResult");
-  let _c=null,_La=null,_sav=null,_activeIdx=0;
-
-  function computeAllArudhas(c,La){
-    return PADA_META.map((_meta,i)=>{
-      const h=i+1;
-      const bhavaSign=(La+h-1)%12;
-      const lord=SIGN_LORD[bhavaSign];
-      const lp=c.planets[lord];
-      if(!lp) return null;
-      const ls=lp.sign;
-      const dist=houseFromSigns(bhavaSign,ls);
-      let pada=(ls+dist-1)%12;
-      let rule="";
-      if(pada===bhavaSign){pada=(bhavaSign+9)%12;rule="Result fell on the bhava sign itself → moved to the 10th from the bhava (BPHS Ch.32 exception)";}
-      else if(pada===(bhavaSign+6)%12){pada=(bhavaSign+3)%12;rule="Result fell on the 7th from the bhava → moved to the 4th from the bhava (BPHS Ch.32 exception)";}
-      return{h,bhavaSign,lord,lordSign:ls,dist,sign:pada,rule};
-    });
-  }
-
-  function houseTypeStr(h){
-    if([1,4,7,10].includes(h)) return "Kendra";
-    if([5,9].includes(h)) return "Trikona";
-    if([3,11].includes(h)) return "Upachaya";
-    if([6,8,12].includes(h)) return "Dusthana";
-    return "";
-  }
-
-  function padaFromLagnaNote(meta,hn){
-    if(hn===1) return `${meta.code} lands on Lagna itself — inner self and the ${meta.code} domain are strongly fused. Authentic, direct expression of this theme.`;
-    if(hn===7) return `${meta.code} is the 7th from Lagna — a polarity axis. The ${meta.code} domain sits in visible tension with the inner self; others may project onto or idealise this part of you.`;
-    if([5,9].includes(hn)) return `${meta.code} is in a Trikona (H${hn}) from Lagna — auspicious. The ${meta.code} domain flows naturally with dharmic grace and fortune.`;
-    if([4,10].includes(hn)) return `${meta.code} is in a Kendra (H${hn}) from Lagna — materially active. The ${meta.code} domain manifests tangibly and visibly in the world.`;
-    if([3,11].includes(hn)) return `${meta.code} is in an Upachaya (H${hn}) from Lagna — grows and improves over time. The ${meta.code} domain gains momentum with Saturn and Mars dashas.`;
-    if([6,8,12].includes(hn)) return `${meta.code} is in a Dusthana (H${hn}) from Lagna — the ${meta.code} domain carries inherent challenge in its outer expression. Transformation or sustained effort is required to manifest its promise.`;
-    return `${meta.code} is H${hn} from Lagna.`;
-  }
+  let _c=null,_La=null,_sav=null;
 
   function renderResult(c,La,sav){
-    const padas=computeAllArudhas(c,La);
+    let html='<div class="ga-grid">';
 
-    // ── 12-cell summary grid ──
-    let html='<div class="ar-summary-grid">';
-    PADA_META.forEach((meta,i)=>{
-      const p=padas[i];
-      const isActive=(i===_activeIdx);
-      if(!p){
-        html+=`<div class="ar-cell${isActive?" ar-active":""}" data-idx="${i}">
-          <div class="ar-cell-code">${meta.abbr}</div>
-          <div class="ar-cell-sign" style="color:var(--muted)">—</div>
-          <div class="ar-cell-hn">missing</div></div>`;
-        return;
-      }
-      const hn=houseFromSigns(La,p.sign);
-      const lord=GBYK[p.lord];
-      const psav=sav[p.sign];
-      const savCls=psav>=30?"ar-sav-hi":psav<25?"ar-sav-lo":"";
-      html+=`<div class="ar-cell${isActive?" ar-active":""}" data-idx="${i}">
-        <div class="ar-cell-code">${meta.abbr}</div>
-        <div class="ar-cell-sign" style="color:${lord.col}">${SIGNS[p.sign]}</div>
-        <div class="ar-cell-hn">H${hn}</div>
-        <div class="ar-cell-lord" style="color:${lord.col}">${lord.gl}</div>
-        <div class="ar-cell-sav ${savCls}">${psav} SAV</div>
+    // Cluster tally: sign → [{pk, label}]
+    const clusterMap={};
+
+    PLANET_ORDER.forEach(pk=>{
+      const gp=GBYK[pk], lp=c.planets[pk];
+      if(!lp) return;
+      const meta=GA_META[pk];
+      const ruled=PLANET_RULES[pk];
+      const planetH=houseFromSigns(La,lp.sign);
+      const dig=dignityOf(pk,lp.sign);
+
+      html+=`<div class="ga-planet-card">
+        <div class="ga-planet-hd">
+          <span class="ga-planet-glyph" style="color:${gp.col}">${gp.gl}</span>
+          <span class="ga-planet-name" style="color:${gp.col}">${gp.name}</span>
+          <span class="ga-planet-pos">in ${SIGNS[lp.sign]} · H${planetH} · ${dig.full.split("·")[0].trim()}</span>
+        </div>
+        <div class="ga-archetype">${meta.theme}</div>
+        <div class="ga-planet-body">${meta.body}</div>
+        <div class="ga-arudhas-wrap">`;
+
+      ruled.forEach((bhavaSign,ri)=>{
+        const ga=computeGA(c,bhavaSign,pk);
+        if(!ga){html+=`<div class="ga-arudha-row"><span style="color:var(--muted)">Cannot compute — planet data missing</span></div>`;return;}
+        const bhavaH=houseFromSigns(La,bhavaSign);
+        const aruH=houseFromSigns(La,ga.sign);
+        const signLord=SIGN_LORD[ga.sign];
+        const savVal=sav[ga.sign];
+        const savCls=savVal>=30?"ar-sav-hi":savVal<25?"ar-sav-lo":"";
+
+        // Register in cluster
+        if(!clusterMap[ga.sign]) clusterMap[ga.sign]=[];
+        clusterMap[ga.sign].push({pk,label:`${gp.gl} ${gp.name} (${ri===0?"P₁":"P₂"})`});
+
+        const pInSign=Object.entries(c.planets).filter(([k,p])=>p.sign===ga.sign).map(([k])=>k);
+
+        html+=`<div class="ga-arudha-row">
+          <div class="ga-arudha-hd">
+            <span class="ga-arudha-from">From H${bhavaH} · ${SIGNS[bhavaSign]}</span>
+            <span class="ga-arudha-arr">→</span>
+            <span class="ga-arudha-result" style="color:${GBYK[signLord].col}">${SIGNS[ga.sign]}</span>
+            <span class="ga-arudha-hn">H${aruH}</span>
+            <span class="ar-badge ${savCls}" style="font-size:11px;padding:2px 8px;margin-left:auto">SAV ${savVal}</span>
+          </div>
+          <div class="ga-arudha-note">${gaHouseNote(pk,aruH)}</div>
+          ${pInSign.length?`<div style="font-size:12px;color:var(--muted);margin-bottom:8px">${pInSign.map(k=>`${GBYK[k].gl} ${GBYK[k].name}`).join(", ")} in ${SIGNS[ga.sign]}</div>`:""}
+          <button type="button" class="ar-calc-toggle">▸ How this was calculated</button>
+          <div class="ar-calc">
+            <div class="ar-step"><span class="ar-step-n">1</span><span>${gp.name} rules <b>${SIGNS[bhavaSign]}</b> (H${bhavaH} from Lagna)</span></div>
+            <div class="ar-step"><span class="ar-step-n">2</span><span>${gp.name} is in <b>${SIGNS[ga.planetSign]}</b> — <b>${ga.dist}</b> sign${ga.dist===1?"":"s"} from ${SIGNS[bhavaSign]}</span></div>
+            <div class="ar-step"><span class="ar-step-n">3</span><span>Count ${ga.dist} forward from ${SIGNS[ga.planetSign]}: <b style="color:var(--gold2)">${ga.chain}</b></span></div>
+            ${ga.rule?`<div class="ar-step"><span class="ar-step-n" style="color:var(--debil)">!</span><span style="color:var(--debil)">${ga.rule}</span></div>`:""}
+            <div class="ar-step"><span class="ar-step-n">✓</span><span>Graha Arudha of ${gp.name} from ${SIGNS[bhavaSign]} = <b style="color:var(--gold2)">${SIGNS[ga.sign]}</b> · H${aruH}</span></div>
+          </div>
+        </div>`;
+      });
+
+      html+='</div></div>';
+    });
+    html+='</div>';
+
+    // ── Cluster analysis ──
+    const sorted=Object.entries(clusterMap).sort((a,b)=>b[1].length-a[1].length);
+    const maxCount=sorted.length?sorted[0][1].length:1;
+    html+=`<div class="ga-cluster" style="margin-top:14px">
+      <h4>Cluster analysis — where planetary reflections concentrate</h4>
+      <div class="ga-cluster-rows">`;
+    sorted.forEach(([sign,planets])=>{
+      const si=+sign;
+      const hn=houseFromSigns(La,si);
+      const hl=SIGN_LORD[si];
+      const pct=Math.round(planets.length/maxCount*100);
+      html+=`<div class="ga-cluster-row">
+        <span class="ga-cluster-lbl" style="color:${GBYK[hl].col}">${SIGNS[si]} · H${hn}</span>
+        <div class="ga-cluster-bar"><div class="ga-cluster-fill" style="width:${pct}%;background:${GBYK[hl].col};opacity:.6"></div></div>
+        <div class="ga-cluster-tags">${planets.map(p=>`<span class="ga-cluster-tag" style="color:${GBYK[p.pk].col}">${p.label}</span>`).join("")}</div>
       </div>`;
     });
     html+='</div>';
 
-    // ── Detail panel for selected pada ──
-    const meta=PADA_META[_activeIdx];
-    const p=padas[_activeIdx];
-    if(p){
-      const hn=houseFromSigns(La,p.sign);
-      const htStr=houseTypeStr(hn);
-      const lord=GBYK[p.lord];
-      const lp=c.planets[p.lord];
-      const dig=lp?dignityOf(p.lord,lp.sign):null;
-      const lhn=lp?houseFromSigns(La,lp.sign):null;
-      const psav=sav[p.sign];
-      const savCls=psav>=30?"sav-hi":psav>=25?"sav-mid":"sav-lo";
-      const pInSign=Object.entries(c.planets).filter(([k,pl])=>pl.sign===p.sign).map(([k])=>k);
-      const chain=Array.from({length:p.dist},(_,j)=>SIGNS[(p.lordSign+j)%12]).join(" → ");
-      const signLord=SIGN_LORD[p.sign];
-
-      html+=`<div class="ar-detail">
-        <div class="ar-detail-hd">
-          <span class="ar-detail-code">${meta.code}</span>
-          <div class="ar-detail-name">${meta.name}<small>${BHAVAS[_activeIdx].skt} · ${BHAVAS[_activeIdx].en}</small></div>
-          <span class="ar-detail-sign" style="color:${GBYK[signLord].col}">${SIGNS[p.sign]}</span>
-        </div>
-        <div class="ar-theme">${meta.theme}</div>
-        <div class="ar-body">${meta.body}</div>
-        <div class="ar-badges">
-          <span class="ar-badge">H${hn}${htStr?" · "+htStr:""} from Lagna</span>
-          <span class="ar-badge" style="color:${lord.col}">${lord.gl} ${lord.name}${dig?" · "+dig.full.split("·")[0].trim():""}${lhn?" (H"+lhn+")":""}</span>
-          <span class="ar-badge ${savCls}">SAV ${psav}</span>
-        </div>
-        ${pInSign.length
-          ?`<div class="ar-pls">${pInSign.map(k=>`${GBYK[k].gl} <b>${GBYK[k].name}</b> <span class="tag">${MALEFIC_PLANETS.has(k)?"malefic":"benefic"}</span>`).join(" &nbsp;·&nbsp; ")} in ${SIGNS[p.sign]}</div>`
-          :`<div class="ar-pls" style="color:var(--muted)">${SIGNS[p.sign]} is vacant — judge this Pada entirely through its lord ${lord.name}${dig?" ("+dig.full.split("·")[0].trim()+")":""} in H${lhn||"?"}.</div>`
-        }
-        <div class="ar-note">${padaFromLagnaNote(meta,hn)}</div>
-        <button type="button" class="ar-calc-toggle">▸ How this was calculated</button>
-        <div class="ar-calc">
-          <div class="ar-step"><span class="ar-step-n">1</span><span>H${p.h} from Lagna (<b>${SIGNS[La]}</b>) = <b>${SIGNS[p.bhavaSign]}</b></span></div>
-          <div class="ar-step"><span class="ar-step-n">2</span><span>${SIGNS[p.bhavaSign]} lord = <b>${lord.name}</b> · placed in <b>${SIGNS[p.lordSign]}</b> = <b>${p.dist}</b> sign${p.dist===1?"":"s"} away</span></div>
-          <div class="ar-step"><span class="ar-step-n">3</span><span>Count ${p.dist} forward from ${SIGNS[p.lordSign]}: <b style="color:var(--gold2)">${chain}</b></span></div>
-          ${p.rule?`<div class="ar-step"><span class="ar-step-n" style="color:var(--debil)">!</span><span style="color:var(--debil)">${p.rule}</span></div>`:""}
-          <div class="ar-step"><span class="ar-step-n">✓</span><span>${meta.code} = <b style="color:var(--gold2)">${SIGNS[p.sign]}</b> · H${hn}</span></div>
-        </div>
-      </div>`;
-    }
+    // Cluster interpretation
+    const top=sorted.filter(([,p])=>p.length===maxCount);
+    const topStr=top.map(([s,p])=>`<b>${SIGNS[+s]}</b> (H${houseFromSigns(La,+s)}) — ${p.map(x=>x.label).join(", ")}`).join("; ");
+    const topHouses=top.map(([s])=>houseFromSigns(La,+s));
+    const houseDescr={1:"self-expression and personal identity",2:"financial reputation and family dealings",3:"courage and competitive communication",4:"home, property, and domestic life",5:"intellect, children, and past-life merit",6:"conflict, service, and health",7:"partnerships and marriage",8:"transformation and hidden knowledge",9:"fortune, dharma, and higher learning",10:"career, authority, and public recognition",11:"gains, income, and social networks",12:"loss, liberation, and foreign domains"};
+    const topH_desc=topHouses.map(h=>`H${h} (${houseDescr[h]||""})`).join(" and ");
+    html+=`<div class="ga-cluster-interp">Your planetary reflections concentrate most heavily in ${topStr}. This reveals that regardless of what happens in your inner life, the material world consistently pulls you into visible activity around <b>${topH_desc}</b>. These are the arenas where your external environment is structurally designed to force engagement — where planetary archetypes arrive as real people, real situations, and real consequences.</div>`;
+    html+='</div>';
 
     resultDiv.innerHTML=html;
   }
 
-  // Event delegation — pada cell clicks + calc toggle
+  // Event delegation for calc toggles
   resultDiv.addEventListener("click",e=>{
-    const cell=e.target.closest(".ar-cell[data-idx]");
-    if(cell){_activeIdx=+cell.dataset.idx;if(_c)renderResult(_c,_La,_sav);return;}
     const tog=e.target.closest(".ar-calc-toggle");
     if(tog){
       const calc=tog.nextElementSibling;
