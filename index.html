@@ -329,6 +329,19 @@
   .sl-ival span{color:var(--muted)}
   .sl-ival b{color:var(--gold2)}
   @media(max-width:600px){.sl-grid{grid-template-columns:1fr}}
+  .sl-persona{font-size:12.5px;line-height:1.6;background:var(--panel);border-radius:10px;padding:11px 14px;margin-bottom:10px;border:1px solid var(--line);color:#dfe4f6}
+  .sl-persona b{color:var(--fg);font-size:13px;display:block;margin-bottom:5px}
+  .sl-planets-block{font-size:12.5px;background:var(--panel);border-radius:10px;padding:11px 14px;margin-bottom:10px;border:1px solid var(--line)}
+  .sl-planets-block b{color:var(--fg);font-size:13px;display:block;margin-bottom:6px}
+  .sl-planet-row{display:flex;gap:8px;margin-bottom:7px;line-height:1.5;color:#dfe4f6}
+  .sl-planet-row:last-child{margin-bottom:0}
+  .sl-planet-lbl{font-weight:700;white-space:nowrap;font-size:12.5px;flex-shrink:0}
+  .sl-sav-block{font-size:12.5px;background:var(--panel);border-radius:10px;padding:11px 14px;margin-bottom:10px;border:1px solid var(--line);color:#dfe4f6}
+  .sl-sav-block b{color:var(--fg);font-size:13px}
+  .sl-takeaways{font-size:12.5px;background:var(--panel);border-radius:10px;padding:11px 14px;margin-bottom:10px;border:1px solid var(--line)}
+  .sl-takeaways b{color:var(--fg);font-size:13px;display:block;margin-bottom:5px}
+  .sl-takeaways ul{margin:0;padding-left:16px;color:#dfe4f6}
+  .sl-takeaways li{margin-bottom:4px;line-height:1.55}
   /* === Graha Arudhas (A1–A12) === */
   .ar-controls{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px;align-items:flex-end}
   .ar-summary-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:20px}
@@ -4343,6 +4356,62 @@ function computeUL(c,La){
   return{sign:ul,lord,lordSign:ls,dist,rule,h12sign};
 }
 
+// ── AL Sign public-persona data (for each of 12 signs) ──
+const AL_SIGN_DATA=[
+  {persona:"dynamic, pioneering, and action-driven",traits:"bold initiative, courage, and competitive energy",archetype:"warrior, entrepreneur, or trailblazer",impression:"The world perceives you as someone who acts first — a self-starter whose energy is unmistakably assertive. People associate your name with initiative and the courage to begin what others only contemplate."},
+  {persona:"stable, prosperous, and materially grounded",traits:"reliability, aesthetic refinement, and quiet authority",archetype:"connoisseur, builder, or trusted steward",impression:"Others perceive you as someone who accumulates resources and possesses refined taste. Your public image is steady and dependable — people associate you with tangible wealth, quality, and enduring value."},
+  {persona:"sharp, communicative, and intellectually versatile",traits:"quick wit, analytical intelligence, and networking skill",archetype:"consultant, writer, strategist, or connector",impression:"The world sees you as highly intelligent and articulate — someone who can discuss anything with fluency. Your public brand is built on ideas, communication, and the ability to synthesise complexity into clarity."},
+  {persona:"nurturing, emotionally resonant, and publicly popular",traits:"care, emotional depth, and protective instincts",archetype:"nurturer, public caretaker, or community builder",impression:"Others experience you as warm and relatably human. Your public image carries a maternal, protective quality that draws loyalty — people feel cared for in your presence and naturally speak well of you."},
+  {persona:"regal, commanding, and magnetically visible",traits:"confidence, creative authority, and natural leadership",archetype:"leader, performer, sovereign, or creative director",impression:"The world perceives you as naturally authoritative. You carry a solar, kingly presence that commands attention and respect in public settings — people notice when you enter a room."},
+  {persona:"meticulous, analytical, and professionally precise",traits:"discipline, service orientation, and intellectual accuracy",archetype:"expert, analyst, craftsperson, or critical thinker",impression:"Others see you as a capable and detail-oriented professional. Your public reputation rests on competence, reliability, and a discerning eye for systems and quality — you are the person others call when precision matters."},
+  {persona:"diplomatic, balanced, and aesthetically sophisticated",traits:"charm, fairness, relationship skill, and cultural refinement",archetype:"diplomat, advisor, mediator, or creative professional",impression:"The world perceives you as charming, fair, and cultivated. Your public image is built on harmonious relationships and aesthetic intelligence — others seek you out as someone who brings balance to difficult situations."},
+  {persona:"intense, penetrating, and transformative",traits:"depth, strategic power, occult intelligence, and fearlessness",archetype:"investigator, strategist, transformer, or power broker",impression:"Others sense hidden depth and strategic intelligence in you. Your public image carries an intense, magnetic quality — people feel there is always more beneath the surface, which makes you both intriguing and formidable."},
+  {persona:"philosophical, expansive, and visionary",traits:"optimism, higher wisdom, teaching ability, and adventurous spirit",archetype:"teacher, philosopher, adventurer, or thought leader",impression:"The world sees you as someone with a big-picture vision and philosophical authority. Your public brand is associated with knowledge, dharma, and an inspiring worldview that makes others feel larger for knowing you."},
+  {persona:"disciplined, authoritative, and achievement-oriented",traits:"ambition, structural thinking, hard work, and earned prestige",archetype:"executive, institution-builder, or public authority figure",impression:"Others perceive you as serious, capable, and built for positions of authority. Your public image is associated with professional mastery and earned status — you are the person people expect to be in charge."},
+  {persona:"visionary, unconventional, and socially conscious",traits:"innovation, humanitarian ideals, group intelligence, and independence",archetype:"innovator, networker, social reformer, or futurist",impression:"The world perceives you as someone ahead of their time — independent-thinking and progressive. Your public brand is associated with collective movements, technology, or social causes that others have yet to catch up with."},
+  {persona:"imaginative, spiritual, and compassionately fluid",traits:"intuition, empathy, artistic depth, and mystical awareness",archetype:"mystic, artist, healer, or compassionate visionary",impression:"Others experience you as ethereal, sensitive, and deeply imaginative. Your public image carries a spiritual or artistic quality — you are difficult to categorise but deeply resonant, and people sense something beyond the ordinary in you."}
+];
+
+// ── Planet in AL interpretations ──
+const PLANET_IN_AL={
+  Su:"The Sun sitting directly in your AL bestows solar authority and a commanding public presence. Society perceives you as confident, dignified, and naturally suited for positions of leadership and governmental recognition. Your professional image shines brightly — though others may also perceive a degree of pride, self-certainty, or a commanding expect of status.",
+  Mo:"The Moon in your AL creates a highly relatable and emotionally accessible public image. Society connects with your warmth and popularity — you attract genuine public affection. Your visible fortunes wax and wane with cycles, and your reputation is closely tied to public mood and emotional resonance. You are the public's favourite when the Moon is well-placed.",
+  Ma:"Mars in your AL gives you a dynamic, action-oriented public image. Society perceives you as brave, technically skilled, and energetically driven. Your professional sphere often involves initiative, technical excellence, or direct competitive leadership — the public sees you as someone who gets things done and does not shrink from conflict.",
+  Me:"Mercury in your AL builds an intellectual and communicative public brand. Society perceives you as sharp, versatile, and analytically gifted. Your reputation is built on ideas, articulate expression, and the ability to navigate complex information with ease — people seek you out as an advisor, strategist, or communicator of skill.",
+  Ju:"Jupiter in your AL is one of the most auspicious influences possible. Society perceives you as wise, principled, generous, and inherently trustworthy. Your public image radiates dharmic authority and good judgment — opportunities and goodwill arrive without excessive effort, and people extend grace and respect to you by default.",
+  Ve:"Venus sitting directly in your AL creates a highly charismatic, attractive, and polished public presence. Society perceives you as charming, sophisticated, and naturally graceful. You are well-liked in professional circles, and your public image benefits from an inherent aesthetic appeal that draws cooperation, artistic recognition, and warm regard from those in power.",
+  Sa:"Saturn in your AL adds gravitas, discipline, and long-term durability to your public image. Society perceives you as serious, capable, and someone who earns everything through sustained effort. Reputation builds slowly but becomes immovable over time. Early life may bring public friction or underestimation; later life commands deep, enduring respect.",
+  Ra:"Rahu in your AL gives your public persona an unconventional, ambitious, and boundary-crossing quality. Society perceives you as foreign, trend-setting, or operating outside normal categories — often misunderstood or even controversial early, but deeply magnetic and influential in the long run. Fame, when it arrives, can be sudden and large.",
+  Ke:"Ketu in your AL creates a spiritualising or de-materialising influence on your public image. Society finds you difficult to categorise. Ketu here often indicates withdrawal from conventional status-seeking and gives your public profile a mysterious, otherworldly quality — fame arrives unexpectedly or in unconventional, non-material domains."
+};
+
+// ── Planet aspecting AL interpretations ──
+const PLANET_ASPECT_AL={
+  Su:d=>`${GBYK.Su.gl} Sun (H${d}) aspects your AL — solar authority, governmental recognition, and paternal dignity reinforce your public image from the background.`,
+  Mo:d=>`${GBYK.Mo.gl} Moon (H${d}) aspects your AL — emotional resonance, public popularity, and social networking amplify your external profile.`,
+  Ma:d=>`${GBYK.Ma.gl} Mars (H${d}) aspects your AL — competitive drive, technical courage, and bold leadership add an active, forceful dimension to your public image.`,
+  Me:d=>`${GBYK.Me.gl} Mercury (H${d}) aspects your AL — intellectual sharpness, communication skill, and analytical precision reinforce your public reputation for intelligence.`,
+  Ju:d=>`${GBYK.Ju.gl} Jupiter (H${d}) aspects your AL — wisdom, dharmic authority, and expansive generosity significantly elevate your public standing. Jupiter's aspect is among the most auspicious modifications an Arudha can receive.`,
+  Ve:d=>`${GBYK.Ve.gl} Venus (H${d}) aspects your AL — charm, aesthetic refinement, and relational grace amplify your public appeal and make cooperation with influential people come naturally.`,
+  Sa:d=>`${GBYK.Sa.gl} Saturn (H${d}) aspects your AL — discipline, longevity, and earned authority cast a long, serious shadow over your public image. Reputation is hard-won but lasting; the world demands proof before granting recognition.`,
+  Ra:d=>`${GBYK.Ra.gl} Rahu (H${d}) aspects your AL — unconventional ambition, foreign connections, and boundary-crossing themes colour your public profile, amplifying it in unusual or unexpected directions.`,
+  Ke:d=>`${GBYK.Ke.gl} Ketu (H${d}) aspects your AL — a spiritualising or de-materialising influence. This can detach you from conventional status-seeking and give your public profile a mysterious or transcendent quality.`
+};
+
+// ── Standard BPHS Graha Drishti: which planets aspect a given sign ──
+function planetsAspecting(c,targetSign){
+  const result=[];
+  for(const pk of Object.keys(GBYK)){
+    const lp=c.planets[pk]; if(!lp||lp.sign===targetSign) continue;
+    const d=(targetSign-lp.sign+12)%12;
+    if(d===6){result.push({pk,fromH:houseFromSigns(c.La.sign,lp.sign)});continue;}
+    if(pk==='Ma'&&(d===3||d===7)){result.push({pk,fromH:houseFromSigns(c.La.sign,lp.sign)});continue;}
+    if(pk==='Ju'&&(d===4||d===8)){result.push({pk,fromH:houseFromSigns(c.La.sign,lp.sign)});continue;}
+    if(pk==='Sa'&&(d===2||d===9)){result.push({pk,fromH:houseFromSigns(c.La.sign,lp.sign)});continue;}
+  }
+  return result;
+}
+
 function renderSpecialLagnas(c,La,sav){
   const al=computeAL(c,La), il=computeIL(c,La), ul=computeUL(c,La);
   const el=document.getElementById("specialLagnas");
@@ -4358,45 +4427,68 @@ function renderSpecialLagnas(c,La,sav){
     const alLHn=alLP?houseFromSigns(La,alLP.sign):null;
     const alSav=sav[al.sign];
     const pInAl=Object.entries(c.planets).filter(([k,p])=>p.sign===al.sign).map(([k])=>k);
-
-    let gapText="",gapCls="";
-    if(alH===1){gapText="AL falls on the Lagna itself — inner self and public image are unusually aligned. What others see is close to who you actually are.";gapCls="tri";}
-    else if(alH===7){gapText="AL is the 7th from Lagna — a strong polarity. Private self and public image are near-opposites; others often misjudge or idealise you.";gapCls="opp";}
-    else if([5,9].includes(alH)){gapText=`AL is in a Trikona (H${alH}) from Lagna — harmonious. Public image naturally reflects inner purpose; the outer projection is authentic.`;gapCls="tri";}
-    else if([4,10].includes(alH)){gapText=`AL is in H${alH} (Kendra) from Lagna — tangible material expression. Public image is built actively through action in the world.`;}
-    else if([6,8,12].includes(alH)){gapText=`AL is in H${alH} (Dusthana) from Lagna. Public image carries difficulty — perception by others may involve struggle, controversy, or misrepresentation.`;gapCls="opp";}
-    else{gapText=`AL is H${alH} from Lagna — distinct but not in sharp tension with the inner self.`;}
-
+    const aspecting=planetsAspecting(c,al.sign);
+    const sd=AL_SIGN_DATA[al.sign];
+    const chain=Array.from({length:al.dist},(_,i)=>SIGNS[(al.lordSign+i)%12]).join(" → ");
     const savCls=alSav>=30?"sav-hi":alSav>=25?"sav-mid":"sav-lo";
     const lordLine=alDig?`${GBYK[alLord].gl} ${GBYK[alLord].name} · ${alDig.full} (H${alLHn})`:`${GBYK[alLord].gl} ${GBYK[alLord].name}`;
-    const chain=Array.from({length:al.dist},(_,i)=>SIGNS[(al.lordSign+i)%12]).join(" → ");
+
+    let gapText="",gapCls="";
+    if(alH===1){gapText=`Your AL falls on the Lagna itself (H1) — a rare alignment. Your inner self and public image are unusually fused; what others see is very close to who you actually are. The authentic self and the projected self operate as one.`;gapCls="tri";}
+    else if(alH===7){gapText=`Your AL is exactly the 7th from Lagna — the sharpest polarity. Your private inner nature and public image are near-opposites; others routinely misjudge, project onto, or idealise you in ways that bear little resemblance to your actual inner life.`;gapCls="opp";}
+    else if([5,9].includes(alH)){gapText=`Your AL is in H${alH} (Trikona) from Lagna — a harmonious alignment. Your public image naturally reflects your inner dharma and purpose. The projection others see is largely authentic, and society rewards you for being yourself.`;gapCls="tri";}
+    else if(alH===10){gapText=`Your AL is in H10 (Kendra) from Lagna — your entire public identity is fused with professional life, achievements, and social duty. Society primarily judges, categorises, and remembers you through the lens of what you accomplish and contribute publicly.`;}
+    else if(alH===4){gapText=`Your AL is in H4 (Kendra) from Lagna — public image is shaped by domestic standing, property, and emotional stability. Society perceives you through the lens of rootedness, family, and the comfort and care you provide.`;}
+    else if([6,8,12].includes(alH)){gapText=`Your AL is in H${alH} (Dusthana) from Lagna. Your public image carries an element of difficulty — perception by others may involve struggle, controversy, misrepresentation, or an unusual quality that society finds hard to categorise cleanly.`;gapCls="opp";}
+    else{gapText=`Your AL is in H${alH} from Lagna — distinct from the inner self but not in sharp tension with it. There is a gap between how you experience yourself and how the world perceives you, which gives you room to curate your public brand intentionally.`;}
+
+    let savText="";
+    if(alSav>=34) savText=`<b>SAV ${alSav} — Exceptional material support.</b> Significantly above the average of 28. Your AL sign holds strong ashtakavarga strength — material rewards, status, and social access flow to you with relative ease in proportion to your public efforts.`;
+    else if(alSav>=30) savText=`<b>SAV ${alSav} — Strong material support.</b> Above the average of 28. Tangible rewards (wealth, recognition, status) flow reasonably smoothly from your public reputation. You do not have to fight unusually hard to convert your image into material outcomes.`;
+    else if(alSav>=25) savText=`<b>SAV ${alSav} — Moderate material support.</b> Near the average of 28. Your public reputation and talent can be considerable, but consistent effort is required to convert your visible image into tangible outcomes. Dasha timing matters here.`;
+    else if(alSav>=20) savText=`<b>SAV ${alSav} — Below-average material support.</b> This creates a persistent friction between how others see you and what you actually receive materially. You may find yourself over-delivering publicly while facing delays in financial or status reward — disciplined strategy is essential.`;
+    else savText=`<b>SAV ${alSav} — Challenging material support.</b> Significantly below the average of 28. While your public image and talent may be genuine, the environment around your AL offers limited material reinforcement. Sustained effort and remedial measures for the AL lord are especially important.`;
+
+    const houseThemes={1:"personal identity and physical presence",2:"family reputation, wealth, and speech",3:"courage, communication, and self-initiated ventures",4:"domestic standing, property, and emotional security",5:"intellect, creativity, and speculative ventures",6:"competitive arenas, service, and overcoming obstacles",7:"partnerships, contracts, and public-facing relationships",8:"transformation, research, and hidden knowledge",9:"dharma, higher learning, and fortune",10:"career, public authority, and professional achievements",11:"gains, networks, and fulfilled ambitions",12:"retreat, foreign connections, and inner liberation"};
 
     return`<div class="sl-eyebrow">Arudha Lagna <span>AL · H${alH}</span></div>
       <div class="sl-sign">${SIGNS[al.sign]}</div>
       <div class="sl-house">${BHAVAS[alH-1].skt} · ${BHAVAS[alH-1].en}</div>
-      <div class="sl-what">
-        <b>What Arudha Lagna reveals</b>
-        <ul>
-          <li>Your <b>public image</b> — how others see, describe, and remember you</li>
-          <li><b>Social reputation</b>, visible status, and worldly standing</li>
-          <li>The <b>material circumstances</b> and lifestyle that follow you</li>
-          <li>Fame, authority, and your tangible presence in the world</li>
-        </ul>
-        <span class="note">Lagna = your soul's inner truth · AL = the outer reflection. The world transacts with your AL, not your Lagna.</span>
+      <div class="sl-persona">
+        <b>Your Public Persona — ${sd.persona}</b>
+        ${sd.impression}
+        <span class="note" style="margin-top:6px;display:block">Archetype: ${sd.archetype} · Core traits: ${sd.traits}</span>
       </div>
       <div class="sl-gap ${gapCls}">${gapText}</div>
       <div class="sl-meta">
         <span class="sl-badge">${lordLine}</span>
         <span class="sl-badge ${savCls}">SAV ${alSav}</span>
       </div>
-      <div class="sl-pls">${pInAl.length?pInAl.map(k=>`${GBYK[k].gl} ${GBYK[k].name} in AL`).join(" · "):"No planets in AL — lord's condition is the primary indicator"}</div>
+      ${pInAl.length?`<div class="sl-planets-block">
+        <b>Planets in your AL (${SIGNS[al.sign]})</b>
+        ${pInAl.map(k=>{const gp=GBYK[k];return`<div class="sl-planet-row"><span class="sl-planet-lbl" style="color:${gp.col}">${gp.gl} ${gp.name}</span><span>${PLANET_IN_AL[k]||''}</span></div>`;}).join('')}
+      </div>`:`<div class="sl-pls">No planets sit in AL — the AL lord (${GBYK[alLord].name}) carries all interpretive weight. Its dignity, house placement, and dasha activations are the primary levers for your public image.</div>`}
+      ${aspecting.length?`<div class="sl-planets-block">
+        <b>Planets aspecting your AL</b>
+        ${aspecting.map(({pk,fromH})=>{const gp=GBYK[pk];const lp=c.planets[pk];const dig=lp?dignityOf(pk,lp.sign):null;return`<div class="sl-planet-row"><span class="sl-planet-lbl" style="color:${gp.col}">${gp.gl} ${gp.name}</span><span>${PLANET_ASPECT_AL[pk]?PLANET_ASPECT_AL[pk](fromH):''} ${dig?`<em style="color:var(--muted)">(${dig.full})</em>`:''}</span></div>`;}).join('')}
+      </div>`:''}
+      <div class="sl-sav-block">${savText}</div>
+      <div class="sl-takeaways">
+        <b>How to work with your Arudha Lagna</b>
+        <ul>
+          <li><b>Your public brand is ${SIGNS[al.sign]}</b> — consciously embody its traits (${sd.traits}) in your professional and social conduct. The world is most receptive to you when you lead with this energy.</li>
+          <li><b>AL in H${alH} means ${houseThemes[alH]||'this domain'} define your social scoreboard</b> — prioritise excellence and reputation-building specifically in this domain; society evaluates and rewards you primarily here.</li>
+          <li><b>${alDig&&alDig.score>=1.5?`Your AL lord ${GBYK[alLord].name} is well-dignified — its natural domains (H${alLHn}) are reliable engines for your public standing.`:`Your AL lord ${GBYK[alLord].name} (H${alLHn}) is the master key — strengthen it through its natural domains and time its dasha for major public initiatives.`}</b></li>
+          <li><b>Guard against Maya</b> — AL is the illusory reflection, not your soul's truth (Lagna). Invest in your public image intentionally, but do not let external perception determine your inner choices.</li>
+        </ul>
+      </div>
       <span class="sl-toggle" onclick="this.nextElementSibling.classList.toggle('open');this.textContent=this.nextElementSibling.classList.contains('open')?'▾ Hide calculation':'▸ How this was calculated'">▸ How this was calculated</span>
       <div class="sl-calc">
         <div class="sl-step"><span class="sl-step-n">1</span><span>Lagna = <b>${SIGNS[La]}</b> · lord = <b>${GBYK[al.lord].name}</b></span></div>
-        <div class="sl-step"><span class="sl-step-n">2</span><span>${GBYK[al.lord].name} is in <b>${SIGNS[al.lordSign]}</b> = <b>H${al.dist}</b> from Lagna</span></div>
+        <div class="sl-step"><span class="sl-step-n">2</span><span>${GBYK[al.lord].name} is in <b>${SIGNS[al.lordSign]}</b> = <b>H${al.dist}</b> from Lagna (inclusive count)</span></div>
         <div class="sl-step"><span class="sl-step-n">3</span><span>Count ${al.dist} forward from ${SIGNS[al.lordSign]}: <b style="color:var(--gold2)">${chain}</b></span></div>
         ${al.rule?`<div class="sl-step"><span class="sl-step-n" style="color:var(--debil)">!</span><span style="color:var(--debil)">${al.rule}</span></div>`:""}
-        <div class="sl-step"><span class="sl-step-n">✓</span><span>Arudha Lagna = <b style="color:var(--gold2)">${SIGNS[al.sign]}</b></span></div>
+        <div class="sl-step"><span class="sl-step-n">✓</span><span>Arudha Lagna = <b style="color:var(--gold2)">${SIGNS[al.sign]}</b> · H${alH} from Lagna</span></div>
       </div>`;
   }
 
