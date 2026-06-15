@@ -298,7 +298,7 @@
   @media(max-width:600px){.bb-cards{grid-template-columns:1fr}}
   /* === special lagnas === */
   .sl-section h4{margin:0 0 14px}
-  .sl-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .sl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
   .sl-card{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
   .sl-eyebrow{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:7px}
   .sl-eyebrow span{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:1px 9px;font-size:10px;color:var(--gold2)}
@@ -1224,10 +1224,11 @@ html.light .brand{color:var(--ink)!important}
       <div id="yogaPanel" style="display:none;margin-top:14px"></div>
       <div id="dashaPanel" style="display:none;margin-top:14px"></div>
       <div class="sl-section panel" id="specialLagnas" style="display:none;margin-top:14px">
-        <h4>Special Lagnas · Image &amp; Wealth</h4>
+        <h4>Special Lagnas · Image · Wealth · Marriage</h4>
         <div class="sl-grid">
           <div class="sl-card" id="alCard"></div>
           <div class="sl-card" id="ilCard"></div>
+          <div class="sl-card" id="ulCard"></div>
         </div>
       </div>
       <div class="chart-story" id="chartStory" style="display:none">
@@ -4252,10 +4253,23 @@ function computeIL(c,La){
   return{sign:(mo.sign+rem-1)%12,d1_9,d1v,d9La,d9_9,d9v,sum,rem,moonSign:mo.sign};
 }
 
+// Upapada Lagna (UL) = Arudha Pada of the 12th house. Jaimini/BPHS: primary indicator of
+// marriage, spouse and long-term partnerships. Same Arudha rules, anchored on the 12th bhava.
+function computeUL(c,La){
+  const h12sign=(La+11)%12;
+  const lord=SIGN_LORD[h12sign], lp=c.planets[lord];
+  if(!lp) return null;
+  const ls=lp.sign, dist=houseFromSigns(h12sign,ls);
+  let ul=(ls+dist-1)%12, rule="";
+  if(ul===h12sign){ul=(h12sign+9)%12;rule="Result fell on the 12th house itself → moved 10 signs forward";}
+  else if(ul===(h12sign+6)%12){ul=(h12sign+3)%12;rule="Result fell on the 7th from the 12th → moved to the 4th from it";}
+  return{sign:ul,lord,lordSign:ls,dist,rule,h12sign};
+}
+
 function renderSpecialLagnas(c,La,sav){
-  const al=computeAL(c,La), il=computeIL(c,La);
+  const al=computeAL(c,La), il=computeIL(c,La), ul=computeUL(c,La);
   const el=document.getElementById("specialLagnas");
-  if(!al&&!il){el.style.display="none";return;}
+  if(!al&&!il&&!ul){el.style.display="none";return;}
   el.style.display="block";
 
   // ── Arudha Lagna ──
@@ -4366,8 +4380,71 @@ function renderSpecialLagnas(c,La,sav){
       </div>`;
   }
 
+  // ── Upapada Lagna ──
+  function mkUL(){
+    if(!ul) return `<p class="note">Could not compute — 12th lord missing.</p>`;
+    const ulH=houseFromSigns(La,ul.sign);
+    const ulLord=SIGN_LORD[ul.sign], ulLP=c.planets[ulLord];
+    const ulDig=ulLP?dignityOf(ulLord,ulLP.sign):null;
+    const ulLHn=ulLP?houseFromSigns(La,ulLP.sign):null;
+    const ulSav=sav[ul.sign];
+    const pInUl=Object.entries(c.planets).filter(([k,p])=>p.sign===ul.sign).map(([k])=>k);
+
+    // 2nd from UL — classical key to the sustenance/longevity of marriage
+    const sec2sign=(ul.sign+1)%12;
+    const pIn2=Object.entries(c.planets).filter(([k,p])=>p.sign===sec2sign).map(([k])=>k);
+    const ben2=pIn2.filter(k=>!MALEFIC_PLANETS.has(k));
+    const mal2=pIn2.filter(k=>MALEFIC_PLANETS.has(k));
+    let marNote="",marCls="";
+    if(!pIn2.length){marNote=`2nd from UL (${SIGNS[sec2sign]}) is empty — judge marital sustenance from its lord ${GBYK[SIGN_LORD[sec2sign]].name}. No direct planetary pressure on longevity.`;}
+    else if(mal2.length&&!ben2.length){marNote=`Malefic${mal2.length>1?"s":""} ${mal2.map(k=>GBYK[k].name).join(", ")} in the 2nd from UL — classical caution on the marriage's continuity; strain, distance, or delay possible. Strength of the UL lord and benefic aspects can soften this.`;marCls="opp";}
+    else if(ben2.length&&!mal2.length){marNote=`Benefic${ben2.length>1?"s":""} ${ben2.map(k=>GBYK[k].name).join(", ")} in the 2nd from UL — a classical signature of a stable, sustained marriage and a supportive partner.`;marCls="tri";}
+    else{marNote=`Mixed planets ${pIn2.map(k=>GBYK[k].name).join(", ")} in the 2nd from UL — marital sustenance is supported and tested both; outcome depends on which side is more dignified.`;}
+
+    let spouseNote="";
+    if(ulDig){
+      if(ulDig.score>=1.5) spouseNote=`${GBYK[ulLord].name} (UL lord) strong — a dignified, fortunate partner and an elevated relationship.`;
+      else if(ulDig.score<=-1) spouseNote=`${GBYK[ulLord].name} (UL lord) weak — the partnership asks for conscious effort; choose timing and partner with care.`;
+      else spouseNote=`${GBYK[ulLord].name} (UL lord) moderate — a workable, ordinary partnership shaped more by the wider chart.`;
+    }
+
+    const savCls=ulSav>=30?"sav-hi":ulSav>=25?"sav-mid":"sav-lo";
+    const lordLine=ulDig?`${GBYK[ulLord].gl} ${GBYK[ulLord].name} · ${ulDig.full} (H${ulLHn})`:`${GBYK[ulLord].gl} ${GBYK[ulLord].name}`;
+    const chain=Array.from({length:ul.dist},(_,i)=>SIGNS[(ul.lordSign+i)%12]).join(" → ");
+
+    return`<div class="sl-eyebrow">Upapada Lagna <span>UL · H${ulH}</span></div>
+      <div class="sl-sign">${SIGNS[ul.sign]}</div>
+      <div class="sl-house">${BHAVAS[ulH-1].skt} · ${BHAVAS[ulH-1].en}</div>
+      <div class="sl-what">
+        <b>What Upapada Lagna reveals</b>
+        <ul>
+          <li><b>Marriage &amp; the spouse</b> — nature, character, and quality of the life-partner</li>
+          <li>The <b>health and continuity</b> of the marriage (read the 2nd from UL)</li>
+          <li><b>Dharma through partnership</b> — values and commitments brought via union</li>
+          <li>Its lord and sign colour <b>how the spouse appears and behaves</b></li>
+        </ul>
+        <span class="note">UL = the Arudha (image) of the 12th house — the "garment" of partnership. The 2nd from UL governs whether the marriage lasts.</span>
+      </div>
+      <div class="sl-gap ${marCls}">${marNote}</div>
+      ${spouseNote?`<div class="sl-gap">${spouseNote}</div>`:""}
+      <div class="sl-meta">
+        <span class="sl-badge">${lordLine}</span>
+        <span class="sl-badge ${savCls}">SAV ${ulSav}</span>
+      </div>
+      <div class="sl-pls">${pInUl.length?pInUl.map(k=>`${GBYK[k].gl} ${GBYK[k].name} in UL`).join(" · "):"No planets in UL — lord's condition is the primary indicator"}</div>
+      <span class="sl-toggle" onclick="this.nextElementSibling.classList.toggle('open');this.textContent=this.nextElementSibling.classList.contains('open')?'▾ Hide calculation':'▸ How this was calculated'">▸ How this was calculated</span>
+      <div class="sl-calc">
+        <div class="sl-step"><span class="sl-step-n">1</span><span>12th house from ${SIGNS[La]} = <b>${SIGNS[ul.h12sign]}</b> · lord = <b>${GBYK[ul.lord].name}</b></span></div>
+        <div class="sl-step"><span class="sl-step-n">2</span><span>${GBYK[ul.lord].name} is in <b>${SIGNS[ul.lordSign]}</b> = <b>${ul.dist}</b> signs from the 12th house</span></div>
+        <div class="sl-step"><span class="sl-step-n">3</span><span>Count ${ul.dist} forward from ${SIGNS[ul.lordSign]}: <b style="color:var(--gold2)">${chain}</b></span></div>
+        ${ul.rule?`<div class="sl-step"><span class="sl-step-n" style="color:var(--debil)">!</span><span style="color:var(--debil)">${ul.rule}</span></div>`:""}
+        <div class="sl-step"><span class="sl-step-n">✓</span><span>Upapada Lagna = <b style="color:var(--gold2)">${SIGNS[ul.sign]}</b></span></div>
+      </div>`;
+  }
+
   document.getElementById("alCard").innerHTML=mkAL();
   document.getElementById("ilCard").innerHTML=mkIL();
+  document.getElementById("ulCard").innerHTML=mkUL();
 }
 
 /* ===== BHAVAT BHAVAM EXPLORER ===== */
