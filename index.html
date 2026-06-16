@@ -122,7 +122,11 @@
   .av-table .av-t{font-size:10px;color:var(--muted);font-style:italic}
   .av-table td{vertical-align:top}
   .av-table .ck-sig{font-size:11px;margin-top:2px}
-  @media(max-width:760px){.av-table{min-width:600px}}
+  .av-digrow{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+  .av-dlabel{font-size:9px;color:var(--muted);font-weight:600}
+  .av-chip{font-weight:700;font-size:12.5px}
+  .av-vgot{font-size:9px;color:var(--gold2);border:1px solid var(--gold);border-radius:4px;padding:0 4px;font-weight:600}
+  .av-table{min-width:720px}
   section{padding:var(--section-y) 0 16px;border-bottom:1px solid rgba(42,51,96,.5)}
   section.section-reveal{opacity:0;transform:translateY(10px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
   section.section-reveal.visible{opacity:1;transform:none}
@@ -1360,7 +1364,7 @@ html.light .brand{color:var(--ink)!important}
       </div>
       <div class="avastha-section panel" id="avasthaPanel" style="display:none;margin-top:14px">
         <h4 style="margin:0 0 4px">Planetary Avasthas · states of a planet</h4>
-        <p class="note" style="margin:0 0 12px">A planet can be well-placed yet unable to deliver. <b>Bālādi</b> reads its life-stage by degree (peaks at <i>Yuvā</i>), <b>Jāgradādi</b> its wakefulness by dignity, and <b>Dīptādi</b> its condition. <b>Net vitality</b> = how much of itself it can actually express.</p>
+        <p class="note" style="margin:0 0 12px">A planet can be well-placed yet unable to deliver. <b>Bālādi</b> reads its life-stage by degree (peaks at <i>Yuvā</i>), <b>Jāgradādi</b> its wakefulness, <b>Dīptādi</b> its condition. <b>Effective strength</b> leads with <b>dignity across D-1, D-9 &amp; D-10</b> plus <b>vargottama</b> — the primary strength — and only <i>modulates</i> by avastha, so an exalted, own-sign or vargottama planet stays strong even at a weak degree. The notes flag where promise (D-1) and delivery (D-9 / D-10) diverge.</p>
         <div class="varga-wrap" id="avBody"></div>
       </div>
       <div class="bav-section panel" style="margin-top:14px">
@@ -2620,16 +2624,40 @@ const NAT_MAL=new Set(["Su","Ma","Sa","Ra","Ke"]);
 function renderAvasthas(c,La){
   const wrap=document.getElementById("avasthaPanel"); if(!wrap) return;
   const PL=["Su","Mo","Ma","Me","Ju","Ve","Sa"];
-  let t=`<table class="ck-table av-table"><thead><tr><th>Planet</th><th>Bālādi <span class="vh-name">(by degree)</span></th><th>Jāgradādi <span class="vh-name">(by dignity)</span></th><th>Dīptādi <span class="vh-name">(by condition)</span></th><th>Net vitality</th></tr></thead><tbody>`;
+  // dignity score (−2..2) → strength fraction (0..1)
+  const dF=s=>({"2":1,"1.5":0.85,"1":0.65,"0":0.5,"-1":0.3,"-2":0.15}[String(s)]??0.5);
+  const chip=(s,d)=>`<span class="av-chip" style="color:${d.col}" title="${SIGNS[s]} · ${d.full}">${SIGN3[s]}</span>`;
+  let t=`<table class="ck-table av-table"><thead><tr><th>Planet</th>`+
+    `<th>Dignity · D-1 / D-9 / D-10</th><th>Bālādi <span class="vh-name">(degree)</span></th>`+
+    `<th>Jāgradādi <span class="vh-name">(wakefulness)</span></th><th>Dīptādi <span class="vh-name">(condition)</span></th>`+
+    `<th>Effective strength</th></tr></thead><tbody>`;
   for(const k of PL){
     const p=c.planets[k]; if(!p) continue;
-    const g=GBYK[k], dig=dignityOf(k,p.sign), combust=isCombustDE(k,c);
-    const bal=baladiAvastha(p.sign,p.deg), jag=jagradadiAvastha(dig.score), dee=deeptadiAvastha(dig,combust);
-    const vit=bal.pot*jag.pot, pct=Math.round(vit*100), tier=vit>=0.66?"hi":vit>=0.33?"mid":"lo";
-    t+=`<tr><td class="ck-pl">${g.gl} ${g.name}</td>`+
-       `<td><b>${bal.n}</b> <span class="av-t">${bal.t}</span><div class="ck-sig">${bal.note}</div></td>`+
-       `<td><b>${jag.n}</b> <span class="av-t">${jag.t}</span><div class="ck-sig">${jag.note}</div></td>`+
-       `<td><b>${dee.n}</b><div class="ck-sig">${dee.note}</div></td>`+
+    const g=GBYK[k], combust=isCombustDE(k,c);
+    const d9s=navamsaSign(p.sign,p.deg), d10s=vargaSign(p.sign,p.deg,10);
+    const d1=dignityOf(k,p.sign), d9=dignityOf(k,d9s), d10=dignityOf(k,d10s);
+    const vargottama=d9s===p.sign;
+    const bal=baladiAvastha(p.sign,p.deg), jag=jagradadiAvastha(d1.score), dee=deeptadiAvastha(d1,combust);
+    // Strength leads with dignity across D-1·D-9·D-10 (+vargottama); avastha only modulates.
+    const base=0.45*dF(d1.score)+0.33*dF(d9.score)+0.22*dF(d10.score);
+    const avMod=0.72+0.28*bal.pot, combF=combust?0.8:1;
+    const eff=Math.max(0,Math.min(1,base+(vargottama?0.10:0)))*avMod*combF;
+    const pct=Math.round(eff*100), tier=eff>=0.66?"hi":eff>=0.4?"mid":"lo";
+    const N=[];
+    if(vargottama) N.push("★ Vargottama — same sign in D-1 & D-9; strength strongly reinforced.");
+    if(d1.score>=1.5&&d9.score<=-1) N.push("Strong in Rāśi but weak in Navāṁśa — the promise exceeds the delivery; results can feel hollow or fade.");
+    if(d1.score<=-1&&d9.score>=1.5) N.push("Weak in Rāśi but strong in Navāṁśa — Navāṁśa redeems it; results improve with maturity and effort.");
+    if(d10.score>=1.5) N.push("Strong in Daśāṁśa — expresses powerfully through career and public action.");
+    else if(d10.score<=-2) N.push("Debilitated in Daśāṁśa — career expression of this planet needs conscious effort.");
+    if(d1.score>=1.5&&(bal.n==="Bāla"||bal.n==="Mṛta")) N.push(`Dignified yet ${bal.n} by degree — the strength is real but expresses late or needs a dasha/transit to ignite.`);
+    if(combust) N.push("Combust — scorched by the Sun; outward results are suppressed even when otherwise strong.");
+    const noteHtml=N.length?`<div class="ck-sig" style="margin-top:4px">${N.join(" ")}</div>`:"";
+    const digCell=`<div class="av-digrow"><span class="av-dlabel">D1</span>${chip(p.sign,d1)} <span class="av-dlabel">D9</span>${chip(d9s,d9)} <span class="av-dlabel">D10</span>${chip(d10s,d10)}${vargottama?` <span class="av-vgot">★ vargottama</span>`:""}</div><div class="ck-sig">${d1.full.split("·")[0].trim()} in Rāśi</div>`;
+    t+=`<tr><td class="ck-pl">${g.gl} ${g.name}${noteHtml}</td>`+
+       `<td>${digCell}</td>`+
+       `<td title="${bal.note}"><b>${bal.n}</b> <span class="av-t">${bal.t}</span></td>`+
+       `<td title="${jag.note}"><b>${jag.n}</b> <span class="av-t">${jag.t}</span></td>`+
+       `<td title="${dee.note}"><b>${dee.n}</b></td>`+
        `<td><div class="vim-wrap"><b>${pct}%</b><div class="vim-bar"><i class="vim-${tier}" style="width:${pct}%"></i></div></div></td></tr>`;
   }
   wrap.querySelector("#avBody").innerHTML=t+`</tbody></table>`;
