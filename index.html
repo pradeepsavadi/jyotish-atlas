@@ -130,6 +130,13 @@
   .av-chip{font-weight:700;font-size:12.5px}
   .av-vgot{font-size:9px;color:var(--gold2);border:1px solid var(--gold);border-radius:4px;padding:0 4px;font-weight:600}
   .av-table{min-width:720px}
+  /* Prompt Builder recipe chips */
+  .pb-recipe{display:flex;flex-direction:column;gap:8px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .pb-recipe-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .pb-rlabel{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:600;min-width:64px}
+  .pb-chip{font-size:11.5px;padding:2px 9px;border-radius:20px;border:1px solid var(--line);background:var(--panel)}
+  .pb-chip.pb-v{border-color:var(--gold);color:var(--gold2)}
+  .pb-chip.pb-s{border-color:#6a8cff;color:#9db4ff}
   section{padding:var(--section-y) 0 16px;border-bottom:1px solid rgba(42,51,96,.5)}
   section.section-reveal{opacity:0;transform:translateY(10px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
   section.section-reveal.visible{opacity:1;transform:none}
@@ -1208,6 +1215,7 @@ html.light .brand{color:var(--ink)!important}
     <a href="#synth">Synthesizer</a>
     <div class="nav-group">Your chart</div>
     <a href="#charts">My Charts</a>
+    <a href="#promptbuilder">Prompt Builder</a>
     <a href="#bbavam">Bhavat Bhavam</a>
     <a href="#arudhas">Graha Arudhas</a>
     <div class="nav-group">Predict &amp; time</div>
@@ -1423,6 +1431,34 @@ html.light .brand{color:var(--ink)!important}
           <div class="story-content"><div class="story-label patterns">Relative patterns · house relationships</div><div class="story-text" id="storyP5"></div></div>
         </div>
       </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="promptbuilder" class="section-reveal">
+    <div class="eyebrow">The refined reading engine</div>
+    <h2>Prompt Builder</h2>
+    <p class="sub">Pick a question. The builder assembles the <b>complete classical analytical stack</b> for it — the right houses, kārakas, divisional charts (D-1 → D-60), special lagnas, Jaimini kāraka, ashtakavarga, planetary avasthas and daśā timing — into one deeply layered prompt for Claude or Gemini.</p>
+    <div class="panel" style="padding:22px">
+      <div class="bb-selectors">
+        <div class="bb-sel-grp"><label>Chart</label><select id="pbChart" class="bb-sel"></select></div>
+        <div class="bb-sel-grp"><label>Question / life area</label><select id="pbTopic" class="bb-sel"></select></div>
+      </div>
+      <div id="pbEmpty" style="text-align:center;color:var(--muted);padding:30px 0;font-size:13.5px">Add a chart in <b>My Charts</b> above to use the builder.</div>
+      <div id="pbResult" style="display:none">
+        <div class="pb-recipe" id="pbRecipe"></div>
+        <div class="ol-ai-wrap" style="margin-top:16px">
+          <div class="ol-ai-hdr">
+            <b>✦ Your deep-reading prompt</b>
+            <span>The full classical analysis packet — paste into Claude or Gemini for a layered reading.</span>
+          </div>
+          <textarea class="ol-prompt-ta" id="pbPromptText" readonly style="height:320px"></textarea>
+          <div class="ol-ai-btns">
+            <button class="ol-ai-btn ol-ai-btn-cl" onclick="JA.pbCopyOpen('https://claude.ai')">Copy &amp; open Claude.ai →</button>
+            <button class="ol-ai-btn ol-ai-btn-gm" onclick="JA.pbCopyOpen('https://gemini.google.com')">Copy &amp; open Gemini →</button>
+            <span class="ol-ai-note">Prompt is copied to clipboard — just paste ⌘V</span>
+          </div>
         </div>
       </div>
     </div>
@@ -2005,6 +2041,7 @@ function vargaSign(s,d,N){
     case 10: return m((VARGA_ODD(s)?s:s+8)+Math.floor(d/3));            // Dasamsa
     case 12: return m(s+Math.floor(d/2.5));                             // Dwadasamsa
     case 16: return m([0,4,8][s%3]+Math.floor(d/(30/16)));             // Shodasamsa
+    case 20: return m([0,8,4][s%3]+Math.floor(d/1.5));                 // Vimsamsa (movable→Ar, fixed→Sg, dual→Le)
     case 24: return m((VARGA_ODD(s)?4:3)+Math.floor(d/1.25));          // Chaturvimsamsa
     case 27: return m([0,3,6,9][s%4]+Math.floor(d/(30/27)));           // Bhamsa
     case 30: return trimsamsaSign(s,d);                                 // Trimsamsa
@@ -2078,6 +2115,28 @@ function deeptadiAvastha(dig,combust){
   if(dig.score===0)   return {n:"Śānta",  note:"calm — neutral sign; moderate, peaceful results"};
   if(dig.score===-1)  return {n:"Dīna",   note:"distressed — enemy's sign; strained, reluctant results"};
   return                  {n:"Khala",  note:"wretched — debilitated; poor or misdirected results"};
+}
+// Composite planetary strength: dignity across D-1·D-9·D-10 (+vargottama), modulated by avastha.
+const DIGNITY_FRAC=s=>({"2":1,"1.5":0.85,"1":0.65,"0":0.5,"-1":0.3,"-2":0.15}[String(s)]??0.5);
+function planetAvasthaStrength(k,c){
+  const p=c.planets[k]; if(!p) return null;
+  const combust=isCombustDE(k,c);
+  const d9s=navamsaSign(p.sign,p.deg), d10s=vargaSign(p.sign,p.deg,10);
+  const d1=dignityOf(k,p.sign), d9=dignityOf(k,d9s), d10=dignityOf(k,d10s);
+  const vargottama=d9s===p.sign;
+  const bal=baladiAvastha(p.sign,p.deg), jag=jagradadiAvastha(d1.score), dee=deeptadiAvastha(d1,combust);
+  const base=0.45*DIGNITY_FRAC(d1.score)+0.33*DIGNITY_FRAC(d9.score)+0.22*DIGNITY_FRAC(d10.score);
+  const eff=Math.max(0,Math.min(1,base+(vargottama?0.10:0)))*(0.72+0.28*bal.pot)*(combust?0.8:1);
+  return {d1,d9,d10,d9s,d10s,vargottama,bal,jag,dee,combust,pct:Math.round(eff*100)};
+}
+// Arudha Pada of any bhava (general form of AL/UL).
+function bhavaArudha(c,La,h){
+  const hs=(La+h-1)%12, lord=SIGN_LORD[hs], lp=c.planets[lord];
+  if(!lp) return null;
+  const ls=lp.sign, dist=houseFromSigns(hs,ls);
+  let a=(ls+dist-1)%12;
+  if(a===hs) a=(hs+9)%12; else if(a===(hs+6)%12) a=(hs+3)%12;
+  return a;
 }
 const HOUSE_KARAKA={1:"Su",2:"Ju",3:"Ma",4:"Mo",5:"Ju",6:"Ma",7:"Ve",8:"Sa",9:"Ju",10:"Su",11:"Ju",12:"Sa"};
 const ORD=n=>n+(n===1?"st":n===2?"nd":n===3?"rd":"th");
@@ -2636,16 +2695,9 @@ function renderAvasthas(c,La){
     `<th>Effective strength</th></tr></thead><tbody>`;
   for(const k of PL){
     const p=c.planets[k]; if(!p) continue;
-    const g=GBYK[k], combust=isCombustDE(k,c);
-    const d9s=navamsaSign(p.sign,p.deg), d10s=vargaSign(p.sign,p.deg,10);
-    const d1=dignityOf(k,p.sign), d9=dignityOf(k,d9s), d10=dignityOf(k,d10s);
-    const vargottama=d9s===p.sign;
-    const bal=baladiAvastha(p.sign,p.deg), jag=jagradadiAvastha(d1.score), dee=deeptadiAvastha(d1,combust);
-    // Strength leads with dignity across D-1·D-9·D-10 (+vargottama); avastha only modulates.
-    const base=0.45*dF(d1.score)+0.33*dF(d9.score)+0.22*dF(d10.score);
-    const avMod=0.72+0.28*bal.pot, combF=combust?0.8:1;
-    const eff=Math.max(0,Math.min(1,base+(vargottama?0.10:0)))*avMod*combF;
-    const pct=Math.round(eff*100), tier=eff>=0.66?"hi":eff>=0.4?"mid":"lo";
+    const g=GBYK[k];
+    const {d1,d9,d10,d9s,d10s,vargottama,bal,jag,dee,combust,pct}=planetAvasthaStrength(k,c);
+    const tier=pct>=66?"hi":pct>=40?"mid":"lo";
     const N=[];
     if(vargottama) N.push("★ Vargottama — same sign in D-1 & D-9; strength strongly reinforced.");
     if(d1.score>=1.5&&d9.score<=-1) N.push("Strong in Rāśi but weak in Navāṁśa — the promise exceeds the delivery; results can feel hollow or fade.");
@@ -7019,6 +7071,170 @@ function toggleTheme(){
   };
   updatePill();
   fillCmpSelects();
+})();
+
+/* ===================== PROMPT BUILDER ===================== */
+(function(){
+  const selChart=document.getElementById("pbChart"), selTopic=document.getElementById("pbTopic");
+  const empty=document.getElementById("pbEmpty"), result=document.getElementById("pbResult");
+  const ta=document.getElementById("pbPromptText"), recipeEl=document.getElementById("pbRecipe");
+  if(!selChart||!selTopic||!ta) return;
+
+  const PB_TOPICS=[
+    {key:"career", label:"Career & profession", houses:[10,6,7,2,11], karakas:["Su","Sa","Me"],
+      vargas:[{N:10,why:"profession, status, karma — primary"},{N:1,why:"the foundation"},{N:9,why:"sustained capacity"}],
+      special:["AmK","A10"],
+      focus:"Judge profession from the 10th (karma, status), 6th (service/employment), 7th (business, dealings) and income from the 2nd & 11th. Daśāṁśa (D-10) is the primary divisional. The Amātyakāraka and the Arudha of the 10th refine the public career image."},
+    {key:"marriage", label:"Marriage & spouse", houses:[7,2,8,12], karakas:["Ve","Ju"],
+      vargas:[{N:9,why:"spouse and the marriage itself — primary"},{N:1,why:"the foundation"}],
+      special:["UL","DK"],
+      focus:"Judge marriage from the 7th (spouse), 2nd (family/kuṭumba), 8th (māngalya — longevity of marriage) and 12th (bed comforts). Navāṁśa (D-9) is primary. The Upapada Lagna and the 2nd from it govern the marriage's nature and endurance; the Dārakāraka is the Jaimini spouse-significator. Venus is the kāraka (Jupiter for a woman's chart)."},
+    {key:"children", label:"Children & progeny", houses:[5,9,11], karakas:["Ju"],
+      vargas:[{N:7,why:"children, progeny — primary"},{N:9,why:"dharma of progeny"},{N:1,why:"the foundation"}],
+      special:["PK"],
+      focus:"Judge progeny from the 5th (children, pūrva-puṇya), the 9th (the child's own fortune; also dharma) and the 11th (fulfilment). Saptāṁśa (D-7) is primary. Jupiter is the kāraka; the Putrakāraka is the Jaimini significator."},
+    {key:"wealth", label:"Wealth & finance", houses:[2,11,5,9,1], karakas:["Ju","Ve","Me"],
+      vargas:[{N:2,why:"wealth & accumulation — primary"},{N:1,why:"earning capacity"},{N:9,why:"sustained fortune"}],
+      special:["IL"],
+      focus:"Judge wealth from the 2nd (accumulated wealth), 11th (gains), 5th & 9th (Lakṣmī-sthānas / fortune) and 1st (self-effort). Horā (D-2) is primary. The Indu Lagna is the seat of wealth; check Dhana Yogas (lords of 2/5/9/11 in mutual relationship). Jupiter and Venus are kārakas."},
+    {key:"education", label:"Education & learning", houses:[4,5,9,2], karakas:["Me","Ju"],
+      vargas:[{N:24,why:"learning & academic success — primary"},{N:1,why:"the mind"}],
+      special:[],
+      focus:"Judge education from the 4th (formal schooling), 5th (intelligence, pūrva-puṇya), 9th (higher learning) and 2nd (retentive speech). Chaturviṁśāṁśa (D-24 / Siddhāṁśa) is primary. Mercury (intellect) and Jupiter (wisdom) are kārakas."},
+    {key:"property", label:"Property, home & mother", houses:[4,2], karakas:["Mo","Ma"],
+      vargas:[{N:4,why:"fixed assets, property, happiness — primary"},{N:1,why:"the foundation"}],
+      special:[],
+      focus:"Judge property, conveyances, mother and domestic happiness from the 4th. Chaturthāṁśa (D-4) is primary. Mars signifies land/immovable property; the Moon signifies the mother and emotional contentment."},
+    {key:"health", label:"Health & longevity", houses:[1,6,8,12], karakas:["Su","Sa"],
+      vargas:[{N:1,why:"the body — primary"},{N:30,why:"diseases, weaknesses, evils"},{N:3,why:"vitality & longevity"}],
+      special:[],
+      focus:"Judge health from the 1st (body, vitality), 6th (disease, debts), 8th (chronic ailments, āyus / longevity) and 12th (hospitalisation, losses). Triṁśāṁśa (D-30) shows specific afflictions; Drekkāṇa (D-3) relates to vitality and longevity. Weigh each significator's avasthā — a planet asleep (Suṣupti) or Mṛta by degree under-delivers even if dignified."},
+    {key:"siblings", label:"Siblings & courage", houses:[3,11], karakas:["Ma"],
+      vargas:[{N:3,why:"co-borns, courage, communication — primary"},{N:1,why:"the foundation"}],
+      special:[],
+      focus:"Judge younger siblings and courage from the 3rd, and elder siblings from the 11th. Drekkāṇa (D-3) is primary. Mars is the kāraka of siblings and valour."},
+    {key:"spiritual", label:"Spirituality & mokṣa", houses:[12,9,5,8], karakas:["Ke","Ju","Sa"],
+      vargas:[{N:20,why:"upāsanā, spiritual practice — primary"},{N:9,why:"dharma"},{N:1,why:"the foundation"}],
+      special:["AK"],
+      focus:"Judge spiritual life from the 12th (mokṣa, liberation), 9th (dharma, guru, fortune), 5th (mantra, devotion, pūrva-puṇya) and 8th (occult, kuṇḍalinī). Viṁśāṁśa (D-20) shows the nature of upāsanā. The Ātmakāraka and the planets in the 12th from the Kārakāṁśa reveal the soul's direction; Ketu signifies mokṣa, Jupiter the guru, Saturn renunciation."},
+    {key:"father", label:"Father & fortune (dharma)", houses:[9,10], karakas:["Su","Ju"],
+      vargas:[{N:12,why:"parents & lineage — primary"},{N:9,why:"dharma & fortune"}],
+      special:[],
+      focus:"Judge the father, fortune, dharma and guru from the 9th, and the father's status from the 10th. Dvādaśāṁśa (D-12) is primary for parents. The Sun is the kāraka of the father; Jupiter of dharma and fortune."}
+  ];
+  selTopic.innerHTML=PB_TOPICS.map(t=>`<option value="${t.key}">${t.label}</option>`).join("");
+
+  const ORDn=n=>n+(n===1?"st":n===2?"nd":n===3?"rd":"th");
+  const digShort=d=>d.full.split("·")[0].trim();
+  const fmtY=ts=>{const d=new Date(ts);return `${d.toLocaleString("en",{month:"short"})} ${d.getFullYear()}`;};
+  const pbPos=c=>{const pos={La:c.La.sign};for(const k of["Su","Mo","Ma","Me","Ju","Ve","Sa"])if(c.planets[k])pos[k]=c.planets[k].sign;return pos;};
+  function avLine(k,c){const A=planetAvasthaStrength(k,c);if(!A)return"";return `avasthā ${A.bal.n}/${A.jag.n}/${A.dee.n}, effective ${A.pct}%${A.vargottama?", VARGOTTAMA":""}`;}
+
+  function houseBlock(c,La,h,sav){
+    const hs=(La+h-1)%12, lord=SIGN_LORD[hs], lp=c.planets[lord];
+    const lH=lp?houseFromSigns(La,lp.sign):null, lDig=lp?dignityOf(lord,lp.sign):null;
+    const occ=Object.entries(c.planets).filter(([k,p])=>p&&p.sign===hs).map(([k,p])=>`${GBYK[k].name}${p.retro?"(R)":""} [${digShort(dignityOf(k,p.sign))}]`);
+    const asp=planetsAspecting(c,hs).map(a=>`${GBYK[a.pk].name}(from H${a.fromH})`);
+    let s=`H${h} ${BHAVAS[h-1].en} — ${SIGNS[hs]} · SAV ${sav[hs]}\n`;
+    s+=`   Lord ${GBYK[lord].name}: ${lp?`H${lH} ${SIGNS[lp.sign]} ${Math.floor(lp.deg)}° · ${digShort(lDig)} · ${avLine(lord,c)}`:"not in chart"}\n`;
+    s+=`   Occupants: ${occ.length?occ.join(", "):"empty"}\n`;
+    s+=`   Aspected by: ${asp.length?asp.join(", "):"none"}`;
+    return s;
+  }
+  function vargaHouse(c,La,N,h){
+    const vLa=vargaSign(c.La.sign,c.La.deg||0,N), vhs=(vLa+h-1)%12, lord=SIGN_LORD[vhs], lp=c.planets[lord];
+    const lvs=lp?vargaSign(lp.sign,lp.deg,N):null;
+    const inH=Object.entries(c.planets).filter(([k,p])=>p&&vargaSign(p.sign,p.deg,N)===vhs).map(([k])=>GBYK[k].name);
+    let s=`   D-${N} Lagna ${SIGNS[vLa]}; ${ORDn(h)} house ${SIGNS[vhs]} · lord ${GBYK[lord].name}${lvs!=null?` in ${SIGNS[lvs]} (${digShort(dignityOf(lord,lvs))})`:""}\n`;
+    s+=`   Planets in that D-${N} house: ${inH.length?inH.join(", "):"none"}`;
+    return s;
+  }
+  function specialBlock(c,La,specials){
+    const ck=charaKarakas(c), out=[];
+    for(const sp of specials){
+      if(sp==="UL"){const ul=computeUL(c,La);if(ul){const sec=(ul.sign+1)%12;const inSec=Object.entries(c.planets).filter(([k,p])=>p&&p.sign===sec).map(([k])=>GBYK[k].name);out.push(`Upapada Lagna: ${SIGNS[ul.sign]} (H${houseFromSigns(La,ul.sign)}) · lord ${GBYK[SIGN_LORD[ul.sign]].name}. 2nd from UL = ${SIGNS[sec]} · occupants ${inSec.length?inSec.join(", "):"empty"} (governs the marriage's endurance).`);}}
+      else if(sp==="IL"){const il=computeIL(c,La);if(il)out.push(`Indu Lagna (seat of wealth): ${SIGNS[il.sign]} (H${houseFromSigns(La,il.sign)}) · lord ${GBYK[SIGN_LORD[il.sign]].name}.`);}
+      else if(sp==="A10"){const a=bhavaArudha(c,La,10);if(a!=null)out.push(`Arudha of the 10th (public career image): ${SIGNS[a]} (H${houseFromSigns(La,a)}).`);}
+      else{const kk=ck.find(o=>o.ab===sp);if(kk){const ex=sp==="AK"?` Kārakāṁśa (AK in navāṁśa) = ${SIGNS[navamsaSign(kk.sign,kk.deg)]}.`:"";out.push(`${kk.name} (${sp}) = ${GBYK[kk.k].name} in ${SIGNS[kk.sign]} (H${houseFromSigns(La,kk.sign)}).${ex}`);}}
+    }
+    return out.join("\n");
+  }
+
+  function buildPBPrompt(c,La,t){
+    const sav=computeSAV(pbPos(c));
+    const ll=SIGN_LORD[La], llP=c.planets[ll];
+    const mo=c.planets.Mo, moNak=mo?nakInfo(mo.sign*30+mo.deg):null, lagNak=nakInfo(La*30+(c.La.deg||0));
+    let dashaNow="not available (no birth date on this chart)", upcoming="";
+    if(c.dashas&&c.dashas.mahas){
+      const now=Date.now(), cur=c.dashas.mahas.find(m=>m.start<=now&&m.end>=now);
+      if(cur){const ant=(cur.antars||[]).find(a=>a.start<=now&&a.end>=now);dashaNow=`${GBYK[cur.lord].name} mahādaśā${ant?` / ${GBYK[ant.lord].name} antardaśā`:""} (until ${fmtY(cur.end)})`;}
+      upcoming=c.dashas.mahas.filter(m=>m.start>now).slice(0,4).map(m=>`${GBYK[m.lord].name} (${fmtY(m.start)}–${fmtY(m.end)})`).join(", ");
+    }
+    const L=[];
+    L.push(`You are a master Vedic astrologer (Parāśarī + Jaimini). Give a deep, classical, evidence-based reading STRICTLY on the question below, using only the prepared chart data. Reason in the BPHS sequence and always separate PROMISE (D-1) from DELIVERY (the divisional chart + each significator's avasthā / effective strength). Do not invent placements.`);
+    L.push(`\n===========================================\nQUESTION: ${t.label.toUpperCase()}\n===========================================`);
+    L.push(`METHOD: ${t.focus}`);
+    L.push(`Weigh — houses ${t.houses.map(h=>"H"+h).join(", ")} · kārakas ${t.karakas.map(k=>GBYK[k].name).join(", ")} · divisional ${t.vargas.map(v=>"D-"+v.N).join(", ")}${t.special.length?` · special ${t.special.join(", ")}`:""}.`);
+    L.push(`\n----- NATIVE ESSENTIALS -----`);
+    L.push(`Lagna: ${SIGNS[La]} (${lagNak.n}) · lord ${GBYK[ll].name}${llP?` in H${houseFromSigns(La,llP.sign)} ${SIGNS[llP.sign]}, ${digShort(dignityOf(ll,llP.sign))}`:""}`);
+    L.push(`Moon: ${mo?`${SIGNS[mo.sign]} · ${moNak.n} pada ${moNak.pada} (nakṣatra lord ${GBYK[moNak.l].name})`:"—"}`);
+    L.push(`Current daśā: ${dashaNow}`);
+    L.push(`\n----- PRIMARY HOUSES (D-1 Rāśi) -----`);
+    t.houses.forEach(h=>L.push(houseBlock(c,La,h,sav)));
+    L.push(`\n----- DIVISIONAL CONFIRMATION -----`);
+    const primH=t.houses[0];
+    t.vargas.forEach(v=>{if(v.N===1)return;L.push(`D-${v.N} (${v.why}):\n${vargaHouse(c,La,v.N,primH)}`);});
+    L.push(`\n----- KĀRAKA CONDITION -----`);
+    t.karakas.forEach(k=>{const p=c.planets[k];if(!p){L.push(`   ${GBYK[k].name}: not in chart`);return;}L.push(`   ${GBYK[k].name}: H${houseFromSigns(La,p.sign)} ${SIGNS[p.sign]} ${Math.floor(p.deg)}° · ${digShort(dignityOf(k,p.sign))} · ${avLine(k,c)}`);});
+    if(t.special.length){L.push(`\n----- SPECIAL / JAIMINI -----`);L.push(specialBlock(c,La,t.special));}
+    L.push(`\n----- TIMING (VIMŚOTTARI DAŚĀ) -----`);
+    L.push(`Current: ${dashaNow}`);
+    if(upcoming)L.push(`Upcoming mahādaśās: ${upcoming}`);
+    const actLords=[...new Set(t.houses.map(h=>SIGN_LORD[(La+h-1)%12]).concat(t.karakas))];
+    L.push(`Activating planets to watch (lords of the topic houses + kārakas): ${actLords.map(k=>GBYK[k].name).join(", ")}. A daśā/antardaśā of any of these times the result.`);
+    L.push(`\n----- THE ASK -----`);
+    L.push(`1) Verdict on "${t.label}" — strongly supported, mixed, or challenged — citing the specific placements above.`);
+    L.push(`2) Separate PROMISE (D-1) from DELIVERY (the divisional + avasthā/effective strength). Explicitly flag any planet strong in Rāśi but weak in Navāṁśa, or asleep/Mṛta by degree.`);
+    L.push(`3) Most likely TIMING windows, from the daśās listed.`);
+    L.push(`4) A CONFIDENCE level (high when D-1 and the divisional agree) and the 2–3 strongest yogas/factors driving the result.`);
+    return L.join("\n");
+  }
+
+  function recipeSummary(t){
+    const chip=(x,cls)=>`<span class="pb-chip ${cls||""}">${x}</span>`;
+    return `<div class="pb-recipe-row"><span class="pb-rlabel">Houses</span>${t.houses.map(h=>chip("H"+h+" "+BHAVAS[h-1].en,"pb-h")).join("")}</div>`+
+      `<div class="pb-recipe-row"><span class="pb-rlabel">Kārakas</span>${t.karakas.map(k=>chip(GBYK[k].gl+" "+GBYK[k].name,"pb-k")).join("")}</div>`+
+      `<div class="pb-recipe-row"><span class="pb-rlabel">Charts</span>${t.vargas.map(v=>chip("D-"+v.N,"pb-v")).join("")}${t.special.map(s=>chip(s,"pb-s")).join("")}</div>`;
+  }
+
+  const getCharts=()=>(JA.getCharts&&JA.getCharts())||[];
+  function run(){
+    const charts=getCharts(), c=charts[+selChart.value]||charts[0];
+    if(!c){empty.style.display="block";result.style.display="none";return;}
+    empty.style.display="none";result.style.display="block";
+    const t=PB_TOPICS.find(x=>x.key===selTopic.value)||PB_TOPICS[0];
+    try{recipeEl.innerHTML=recipeSummary(t);ta.value=buildPBPrompt(c,c.La.sign,t);}
+    catch(e){console.error("pb build:",e);ta.value="Error building prompt: "+e.message;}
+  }
+  function refreshCharts(){
+    const charts=getCharts();
+    if(!charts.length){empty.style.display="block";result.style.display="none";selChart.innerHTML="";return;}
+    const prev=selChart.value;
+    selChart.innerHTML=charts.map((c,i)=>`<option value="${i}">${c.name||("Chart "+(i+1))}</option>`).join("");
+    if(prev!==""&&+prev<charts.length)selChart.value=prev;
+    run();
+  }
+  selChart.addEventListener("change",run);
+  selTopic.addEventListener("change",run);
+  const _prevOCC=JA.onChartsChange;JA.onChartsChange=()=>{_prevOCC&&_prevOCC();refreshCharts();};
+
+  JA.pbCopyOpen=function(url){
+    const txt=ta.value, go=()=>{JA.toast&&JA.toast("Prompt copied to clipboard","ok");window.open(url,"_blank");};
+    if(navigator.clipboard){navigator.clipboard.writeText(txt).then(go).catch(go);}
+    else{const x=document.createElement("textarea");x.value=txt;x.style.cssText="position:fixed;opacity:0";document.body.appendChild(x);x.select();try{document.execCommand("copy");}catch(e){}document.body.removeChild(x);go();}
+  };
+
+  refreshCharts();
 })();
 </script>
 </body>
