@@ -4603,7 +4603,7 @@ function computeAL(c,La){
 
 function computeIL(c,La){
   const d1_9=SIGN_LORD[(La+8)%12], d1v=INDU_VAL[d1_9]||0;
-  const d9La=navamsaSign(c.La.sign,c.La.deg);
+  const d9La=navamsaSign(c.La.sign,c.La.deg||0);
   const d9_9=SIGN_LORD[(d9La+8)%12], d9v=INDU_VAL[d9_9]||0;
   const sum=d1v+d9v, rem=sum%12||12;
   const mo=c.planets.Mo; if(!mo) return null;
@@ -4751,7 +4751,7 @@ function renderSpecialLagnas(c,La,sav){
     const alDig=alLP?dignityOf(alLord,alLP.sign):null;
     const alLHn=alLP?houseFromSigns(La,alLP.sign):null;
     const alSav=sav[al.sign];
-    const pInAl=Object.entries(c.planets).filter(([k,p])=>p.sign===al.sign).map(([k])=>k);
+    const pInAl=Object.entries(c.planets).filter(([k,p])=>p&&p.sign===al.sign).map(([k])=>k);
     const aspecting=planetsAspecting(c,al.sign);
     const sd=AL_SIGN_DATA[al.sign];
     const chain=Array.from({length:al.dist},(_,i)=>SIGNS[(al.lordSign+i)%12]).join(" → ");
@@ -4825,7 +4825,7 @@ function renderSpecialLagnas(c,La,sav){
     const ilDig=ilLP?dignityOf(ilLord,ilLP.sign):null;
     const ilLHn=ilLP?houseFromSigns(La,ilLP.sign):null;
     const ilSav=sav[il.sign];
-    const pInIl=Object.entries(c.planets).filter(([k,p])=>p.sign===il.sign).map(([k])=>k);
+    const pInIl=Object.entries(c.planets).filter(([k,p])=>p&&p.sign===il.sign).map(([k])=>k);
     const ilAspecting=planetsAspecting(c,il.sign);
     const isd=IL_SIGN_DATA[il.sign];
     const chain=Array.from({length:il.rem},(_,i)=>SIGNS[(il.moonSign+i)%12]).join(" → ");
@@ -4902,7 +4902,7 @@ function renderSpecialLagnas(c,La,sav){
     const ulDig=ulLP?dignityOf(ulLord,ulLP.sign):null;
     const ulLHn=ulLP?houseFromSigns(La,ulLP.sign):null;
     const ulSav=sav[ul.sign];
-    const pInUl=Object.entries(c.planets).filter(([k,p])=>p.sign===ul.sign).map(([k])=>k);
+    const pInUl=Object.entries(c.planets).filter(([k,p])=>p&&p.sign===ul.sign).map(([k])=>k);
     const ulAspecting=planetsAspecting(c,ul.sign);
     const usd=UL_SIGN_DATA[ul.sign];
     const chain=Array.from({length:ul.dist},(_,i)=>SIGNS[(ul.lordSign+i)%12]).join(" → ");
@@ -4911,7 +4911,7 @@ function renderSpecialLagnas(c,La,sav){
 
     // 2nd from UL — classical key to marriage sustenance/longevity
     const sec2sign=(ul.sign+1)%12;
-    const pIn2=Object.entries(c.planets).filter(([k,p])=>p.sign===sec2sign).map(([k])=>k);
+    const pIn2=Object.entries(c.planets).filter(([k,p])=>p&&p.sign===sec2sign).map(([k])=>k);
     const ben2=pIn2.filter(k=>!MALEFIC_PLANETS.has(k));
     const mal2=pIn2.filter(k=>MALEFIC_PLANETS.has(k));
     let marNote="",marCls="";
@@ -5066,7 +5066,7 @@ function renderSpecialLagnas(c,La,sav){
     const lordHn=lordSign!==undefined?houseFromSigns(La,lordSign):null;
     const lordHt=lordHn?houseType(lordHn):null;
     const lordFromBhava=lordSign!==undefined?houseFromSigns(hSign,lordSign):null;
-    const planetsInH=Object.entries(c.planets).filter(([k,p])=>p.sign===hSign);
+    const planetsInH=Object.entries(c.planets).filter(([k,p])=>p&&p.sign===hSign);
     const sunP=c.planets.Su;
     let isCombust=false;
     if(lordP&&sunP&&lord!=="Su"&&lord!=="Mo"){
@@ -5261,7 +5261,7 @@ function renderSpecialLagnas(c,La,sav){
     const d1LS=d1LP?d1LP.sign:undefined;
     const d1LD=d1LS!==undefined?dignityOf(d1Lord,d1LS):null;
     const d1LHn=d1LS!==undefined?houseFromSigns(La,d1LS):null;
-    const d1Pls=Object.entries(c.planets).filter(([k,p])=>p.sign===resultSign).map(([k])=>k);
+    const d1Pls=Object.entries(c.planets).filter(([k,p])=>p&&p.sign===resultSign).map(([k])=>k);
     const sav=savForHouse(c,La,resultH);
 
     const fn=topic.vk?VARGA_FN[topic.vk]:null;
@@ -5510,7 +5510,7 @@ function renderSpecialLagnas(c,La,sav){
         if(!clusterMap[ga.sign]) clusterMap[ga.sign]=[];
         clusterMap[ga.sign].push({pk,label:`${gp.gl} ${gp.name} (${ri===0?"P₁":"P₂"})`});
 
-        const pInSign=Object.entries(c.planets).filter(([k,p])=>p.sign===ga.sign).map(([k])=>k);
+        const pInSign=Object.entries(c.planets).filter(([k,p])=>p&&p.sign===ga.sign).map(([k])=>k);
 
         html+=`<div class="ga-arudha-row">
           <div class="ga-arudha-hd">
@@ -5874,7 +5874,7 @@ function computeVimDashas(mo,birthDateStr){
     const personLordP=c.planets[personLord];
     const personLordDig=personLordP?dignityOf(personLord,personLordP.sign):null;
     const personLordH=personLordP?houseFromSigns(La,personLordP.sign):null;
-    const inPersonH=Object.entries(c.planets).filter(([k,p])=>p.sign===personSign)
+    const inPersonH=Object.entries(c.planets).filter(([k,p])=>p&&p.sign===personSign)
       .map(([k,p])=>`${GBYK[k].name} [${dignityOf(k,p.sign).full.split("·")[0].trim()}${p.retro?" R":""}]`).join(", ")||"none";
     // Result house
     const hSign=(La+resultH-1)%12;
@@ -5884,7 +5884,7 @@ function computeVimDashas(mo,birthDateStr){
     const hLordH=hLordP?houseFromSigns(La,hLordP.sign):null;
     const hLordFromBhava=hLordP?houseFromSigns(hSign,hLordP.sign):null;
     const hLordHt=hLordH?houseType(hLordH):null;
-    const inResultH=Object.entries(c.planets).filter(([k,p])=>p.sign===hSign)
+    const inResultH=Object.entries(c.planets).filter(([k,p])=>p&&p.sign===hSign)
       .map(([k,p])=>`${GBYK[k].name} [${dignityOf(k,p.sign).full.split("·")[0].trim()}${p.retro?" R":""}]`).join(", ")||"none";
     const resultSav=sav[hSign];
     // Combustion of hLord
@@ -6103,7 +6103,7 @@ Reference exact planets, house numbers, degrees, nakshatras, and classical princ
       const lH=lp?houseFromSigns(La,lp.sign):null,lDig=lp?dignityOf(lord,lp.sign):null;
       const lFromBhava=lp?houseFromSigns(hs,lp.sign):null;
       const lHt=lH?houseType(lH):null;
-      const inH=Object.entries(c.planets).filter(([k,p])=>houseFromSigns(La,p.sign)===h)
+      const inH=Object.entries(c.planets).filter(([k,p])=>p&&houseFromSigns(La,p.sign)===h)
         .map(([k,p])=>`${GBYK[k].name}${p.retro?" [R]":""} [${dignityOf(k,p.sign).full.split("·")[0].trim()}]`);
       let combNote="";
       const sunP=c.planets.Su;
