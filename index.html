@@ -7170,6 +7170,30 @@ function toggleTheme(){
   const ORDn=n=>n+(n===1?"st":n===2?"nd":n===3?"rd":"th");
   const digShort=d=>d.full.split("·")[0].trim();
   const fmtY=ts=>{const d=new Date(ts);return `${d.toLocaleString("en",{month:"short"})} ${d.getFullYear()}`;};
+  const fmtD=ts=>{const d=new Date(ts);return `${String(d.getDate()).padStart(2,"0")} ${d.toLocaleString("en",{month:"short"})} ${d.getFullYear()}`;};
+  function dashaSection(c){
+    const now=Date.now();
+    if(c.dashas&&c.dashas.mahas&&c.dashas.mahas.length){
+      const M=c.dashas.mahas, out=["VIMŚOTTARI DAŚĀ — full Mahādaśā periods (already computed by the app; USE THESE EXACT DATES, do not recompute):"];
+      M.forEach(m=>{const cur=m.start<=now&&(m.end==null||m.end>=now);
+        out.push(`  ${cur?"►":" "} ${GBYK[m.lord].name.padEnd(8)} ${m.start?fmtD(m.start):"?"} – ${m.end?fmtD(m.end):"ongoing"}  (${VIMY[m.lord]} yrs)${cur?"  ← CURRENT MAHĀDAŚĀ":""}`);});
+      const cur=M.find(m=>m.start<=now&&(m.end==null||m.end>=now));
+      if(cur&&cur.antars&&cur.antars.length){
+        out.push(`  Antardaśās (bhukti) within the current ${GBYK[cur.lord].name} mahādaśā:`);
+        cur.antars.forEach(a=>{const ca=a.start<=now&&(a.end==null||a.end>=now);
+          out.push(`       ${ca?"►":" "} ${GBYK[cur.lord].name}/${GBYK[a.lord].name.padEnd(8)} ${a.start?fmtD(a.start):"?"} – ${a.end?fmtD(a.end):"ongoing"}${ca?"  ← CURRENT ANTARDAŚĀ":""}`);});
+      }
+      return out.join("\n");
+    }
+    const mo=c.planets.Mo;
+    if(mo){
+      const lon=mo.sign*30+mo.deg, span=360/27, idx=Math.floor(lon/span), degIn=lon%span;
+      const i0=idx%9, lord0=DASHA_SEQ_K[i0], bal=(span-degIn)/span*VIMY[lord0];
+      const seq=[];for(let i=0;i<9;i++){const l=DASHA_SEQ_K[(i0+i)%9];seq.push(`${GBYK[l].name} (${i===0?bal.toFixed(2)+" of "+VIMY[l]+" yrs left at birth":VIMY[l]+" yrs"})`);}
+      return `VIMŚOTTARI DAŚĀ — sequence & durations from the Moon's nakṣatra (this chart has no birth date, so calendar dates are not available; ask the native's date of birth to anchor exact periods).\n  Daśā running at birth: ${GBYK[lord0].name} with ${bal.toFixed(2)} years remaining.\n  Order from birth: ${seq.join(" → ")}`;
+    }
+    return "VIMŚOTTARI DAŚĀ: not available (no dasha data and no Moon in chart).";
+  }
   const pbPos=c=>{const pos={La:c.La.sign};for(const k of["Su","Mo","Ma","Me","Ju","Ve","Sa"])if(c.planets[k])pos[k]=c.planets[k].sign;return pos;};
   function avLine(k,c){const A=planetAvasthaStrength(k,c);if(!A)return"";return `avasthā ${A.bal.n}/${A.jag.n}/${A.dee.n}, effective ${A.pct}%${A.vargottama?", VARGOTTAMA":""}`;}
 
@@ -7259,9 +7283,10 @@ function toggleTheme(){
     L.push(`\nKāraka condition:`);
     t.karakas.forEach(k=>{const p=c.planets[k];if(!p){L.push(`   ${GBYK[k].name}: not in chart`);return;}L.push(`   ${GBYK[k].name}: H${houseFromSigns(La,p.sign)} ${SIGNS[p.sign]} ${Math.floor(p.deg)}° · ${digShort(dignityOf(k,p.sign))} · ${avLine(k,c)}`);});
     if(t.special.length){L.push(`\nSpecial / Jaimini:`);L.push(specialBlock(c,La,t.special));}
-    L.push(`\nTiming — current: ${dashaNow}.${upcoming?` Upcoming mahādaśās: ${upcoming}.`:""}`);
+    L.push(`\n----- TIMING (VIMŚOTTARI DAŚĀ) -----`);
+    L.push(dashaSection(c));
     const actLords=[...new Set(t.houses.map(h=>SIGN_LORD[(La+h-1)%12]).concat(t.karakas))];
-    L.push(`Activating planets (lords of topic houses + kārakas): ${actLords.map(k=>GBYK[k].name).join(", ")} — a daśā/antardaśā of any of these times the result.`);
+    L.push(`Activating planets (lords of topic houses + kārakas): ${actLords.map(k=>GBYK[k].name).join(", ")} — find their mahādaśā/antardaśā in the table above to time the result.`);
     L.push(`\n===== THE ASK =====`);
     L.push(question?`Answer the native's exact question — "${question}" — using the data above:`:`Deliver the reading on "${t.label}":`);
     L.push(`1) A clear verdict — strongly supported, mixed, or challenged — citing the specific placements.`);
