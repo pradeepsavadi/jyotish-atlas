@@ -35,6 +35,7 @@ Compatible with JHora and Parashara's Light `.txt` export format.
 ## Technical notes
 
 - **Single file** — everything is self-contained in `index.html`; just open it
+- **Built-in regression guard** — open `index.html#selftest` to run 13 sanity checks (Navamsa + core data invariants). It stays inert during normal use.
 - **Navamsa (D-9)** computed from each planet's degree using the classical `NAV_START = [Aries, Capricorn, Libra, Cancer]` rule; validated against four real natal charts (0 errors)
 - **BAV tables** validated sign-by-sign against four natal charts (23/23 rows exact). Two commonly-printed table errors (Moon and Venus) were corrected via a four-chart constraint solver
 - **Nakshatra** computed as `floor(lon / 13°20')` with pada as `floor(remainder / 3°20') + 1`; validated 11/11 against chart files

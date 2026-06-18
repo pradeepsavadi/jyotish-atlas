@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="description" content="Jyotish Atlas — an interactive primer to Parashara's grammar. Learn the 9 Grahas, 12 Rashis, and 12 Bhavas, synthesize placements, and paste real natal charts."/>
-<meta name="theme-color" content="#0b0e1a"/>
+<meta name="theme-color" content="#181310"/>
 <meta property="og:title" content="Jyotish Atlas"/>
 <meta property="og:description" content="Parashara's grammar, made interactive — grahas, rashis, bhavas, synthesizer, and chart analysis."/>
 <meta property="og:type" content="website"/>
@@ -14,10 +14,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <title>Jyotish Atlas — a living primer to Parashara's grammar</title>
 <style>
+  /* == TOKENS == */
   :root{
-    --bg:#0b0e1a; --bg2:#0f1430; --panel:#151a35; --panel2:#1c2347; --line:#2a3360;
-    --ink:#eef1fb; --muted:#9aa4c8; --gold:#e7b94e; --gold2:#f4d27a; --accent:#7aa2ff;
-    --exalt:#4fd07f; --debil:#ef6a5a; --own:#e7b94e; --friend:#7fc4ff; --enemy:#ff9a8a; --neutral:#b9c0dd;
+    --bg:#181310; --bg2:#1f1813; --panel:#241b16; --panel2:#2c211b;
+    --line:#3a2e26; --ink:#f3ead9; --muted:#b8a78f;
+    --gold:#e9bf6a; --gold2:#f5d894; --terracotta:#d6815a;
+    --accent:#d6815a;
+    --exalt:#6fbf86; --debil:#e2705a;
+    --own:#e9bf6a; --friend:#7fb0c4; --enemy:#e2705a; --neutral:#b8a78f;
     --r:14px;
     --ease:cubic-bezier(.2,.8,.2,1);
     --dur:150ms;
@@ -28,8 +32,46 @@
     --font-display:"Fraunces", ui-serif, Georgia, "Times New Roman", serif;
     --font-sans:"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
+  /* == TYPOGRAPHY == */
+  .eyebrow{font-family:var(--font-sans);font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted)}
+  .display{font-family:var(--font-display);font-weight:600;line-height:1.02;letter-spacing:-.01em}
+  .display .em{font-style:italic;color:var(--gold)}
+  .devanagari{font-family:var(--font-sans),"Noto Sans Devanagari","Nirmala UI","Mangal",sans-serif;color:var(--gold)}
+  .rule-gold{height:2px;border:0;width:64px;background:linear-gradient(90deg,var(--gold),var(--terracotta));margin:12px 0}
+  .dropcap::first-letter{font-family:var(--font-display);font-weight:600;font-style:italic;color:var(--gold);
+    float:left;font-size:3.4em;line-height:.72;padding:.05em .12em 0 0}
+  .watchfor{border-left:2px solid var(--terracotta);padding:6px 0 6px 14px;margin-top:14px}
+  .watchfor .label{font-family:var(--font-sans);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--terracotta);margin-bottom:4px}
+  /* == EMBLEMS == */
+  .emblem{display:inline-block;vertical-align:middle}
+  .emblem .ring-base{stroke:var(--line)}
+  .emblem .ring-gold{stroke:var(--gold);opacity:.5}
+  .emblem .ink{fill:var(--ink)} .emblem .gold{fill:var(--gold)} .emblem .terra{fill:var(--terracotta)}
+  .emblem .stroke-gold{stroke:var(--gold);fill:none}
+  .emblem .aura{opacity:0;transform-origin:50% 50%;transition:opacity var(--dur) var(--ease)}
+  .emblem.focus .aura{opacity:.36;animation:embpulse 3.4s ease-in-out infinite}
+  @keyframes embpulse{0%,100%{opacity:.28;transform:scale(1)}50%{opacity:.5;transform:scale(1.05)}}
+  @media (prefers-reduced-motion:reduce){.emblem.focus .aura{animation:none;opacity:.4}}
+  /* == COMPONENTS == */
+  /* Settled class names: ec-btn-primary, ec-btn-ghost, ec-chip, ec-verdict, ec-zone-card (existing .chip already in file). */
+  .ec-btn-primary{font-family:var(--font-sans);font-weight:600;font-size:13px;color:#2a1a0c;
+    background:linear-gradient(135deg,var(--gold),var(--terracotta));border:0;border-radius:9px;
+    padding:11px 20px;cursor:pointer}
+  .ec-btn-ghost{font-family:var(--font-sans);font-size:13px;color:var(--gold);background:none;
+    border:1px solid var(--line);border-radius:9px;padding:11px 20px;cursor:pointer}
+  .ec-chip{font-family:var(--font-sans);font-size:11px;padding:5px 11px;border-radius:20px;border:1px solid var(--line);color:var(--muted);background:var(--panel)}
+  .ec-chip.good{color:var(--exalt);border-color:color-mix(in srgb,var(--exalt) 40%,transparent);background:color-mix(in srgb,var(--exalt) 12%,transparent)}
+  .ec-chip.bad{color:var(--debil);border-color:color-mix(in srgb,var(--debil) 40%,transparent);background:color-mix(in srgb,var(--debil) 12%,transparent)}
+  .ec-chip.gold{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 40%,transparent);background:color-mix(in srgb,var(--gold) 12%,transparent)}
+  .ec-verdict{border:1px solid var(--line);background:var(--panel);border-radius:9px;padding:9px 13px;min-width:96px}
+  .ec-verdict .k{font-family:var(--font-sans);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .ec-verdict .v{font-family:var(--font-display);font-size:14px;font-weight:600;margin-top:2px}
+  .ec-zone-card{border:1px solid var(--line);border-radius:11px;padding:16px;background:var(--panel);transition:transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease),border-color var(--dur) var(--ease)}
+  .ec-zone-card h4{font-family:var(--font-display);font-size:19px;font-weight:600;color:var(--gold);margin:0}
+  .ec-zone-card p{font-family:var(--font-sans);font-size:11.5px;line-height:1.6;color:var(--muted);margin:6px 0 0}
+  .ec-zone-card:hover{transform:translateY(-1px);box-shadow:var(--shadow-2);border-color:color-mix(in srgb,var(--gold) 36%,var(--line))}
   *{box-sizing:border-box}
-  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  :focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
   a:focus:not(:focus-visible),button:focus:not(:focus-visible){outline:none}
   .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
   .skip-link:focus-visible{position:fixed;left:16px;top:16px;width:auto;height:auto;overflow:visible;z-index:100;
@@ -46,18 +88,35 @@
   header.top .brand small{display:block;font-size:var(--text-xs);color:var(--muted);font-weight:400}
   .nav-toggle{display:none;margin-left:auto;background:var(--panel2);border:1px solid var(--line);color:var(--ink);
     border-radius:8px;padding:6px 12px;font-size:var(--text-sm);font-weight:600;cursor:pointer}
-  nav.site-nav{display:flex;flex-wrap:wrap;gap:2px;flex:1}
-  nav.site-nav a{position:relative;font-size:var(--text-sm);color:var(--muted);padding:6px 10px;border-radius:8px;transition:color var(--dur) var(--ease),background var(--dur) var(--ease)}
-  nav.site-nav a::after{content:"";position:absolute;left:10px;right:10px;bottom:3px;height:1.5px;background:var(--gold);
+  nav.site-nav{display:flex;flex-wrap:wrap;gap:6px;flex:1;align-items:flex-start}
+  .nav-zone{position:relative;min-width:150px}
+  .nav-zone>summary{list-style:none;cursor:pointer;user-select:none;position:relative;
+    font-family:var(--font-sans);font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);
+    padding:7px 10px 9px;border-radius:8px;transition:color var(--dur) var(--ease),background var(--dur) var(--ease)}
+  .nav-zone>summary::-webkit-details-marker{display:none}
+  .nav-zone>summary::after{content:"";position:absolute;left:10px;right:10px;bottom:4px;height:1.5px;background:var(--gold);
     transform:scaleX(0);transform-origin:left;transition:transform var(--dur) var(--ease);border-radius:2px}
-  nav.site-nav a:hover{color:var(--ink)}
-  nav.site-nav a:hover::after,nav.site-nav a.nav-active::after{transform:scaleX(1)}
-  nav.site-nav a.nav-active{color:var(--ink)}
-  .nav-group{display:none}
+  .nav-zone:hover>summary,.nav-zone>summary:focus-visible{color:var(--ink);background:var(--panel2)}
+  .nav-zone[open]>summary,.nav-zone.is-active>summary{color:var(--ink)}
+  .nav-zone[open]>summary::after,.nav-zone.is-active>summary::after{transform:scaleX(1)}
+  .nav-zone-menu{display:none;flex-direction:column;gap:2px;background:var(--panel);border:1px solid var(--line);
+    border-radius:10px;box-shadow:var(--shadow-2);padding:8px;min-width:190px;position:absolute;left:0;top:100%;z-index:45}
+  .nav-zone[open] .nav-zone-menu{display:flex}
+  .nav-zone-menu a{position:relative;font-size:var(--text-sm);color:var(--muted);padding:7px 10px;border-radius:8px;
+    transition:color var(--dur) var(--ease),background var(--dur) var(--ease)}
+  .nav-zone-menu a::after{content:"";position:absolute;left:10px;right:10px;bottom:4px;height:1.5px;background:var(--gold);
+    transform:scaleX(0);transform-origin:left;transition:transform var(--dur) var(--ease);border-radius:2px}
+  .nav-zone-menu a:hover{color:var(--ink);background:var(--panel2)}
+  .nav-zone-menu a:hover::after,.nav-zone-menu a.nav-active::after{transform:scaleX(1)}
+  .nav-zone-menu a.nav-active{color:var(--ink)}
   @media(max-width:640px){
     .nav-toggle{display:block}
     nav.site-nav{display:none;width:100%;flex-direction:column;padding:8px 0 4px;border-top:1px solid var(--line);margin-top:4px}
     nav.site-nav.open{display:flex}
+    .nav-zone{width:100%;min-width:0;padding:0 2px 8px;border-bottom:1px solid var(--line)}
+    .nav-zone:last-child{border-bottom:none;padding-bottom:2px}
+    .nav-zone-menu{position:static;min-width:0;box-shadow:none;background:none;border:none;padding:2px 0 0 10px}
+    .nav-zone-menu a{padding:7px 10px}
     header.top .brand{margin-right:0;flex:1}
   }
   .theme-toggle{margin-left:auto;background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:5px 11px;cursor:pointer;font-size:15px;line-height:1;flex-shrink:0}
@@ -73,13 +132,15 @@
     header.top .brand{margin:0 0 18px;padding:0 10px}
     .nav-toggle{display:none !important}
     nav.site-nav{flex:1 1 auto;flex-direction:column;flex-wrap:nowrap;gap:1px;width:100%}
-    nav.site-nav a{font-size:14px;padding:8px 12px;border-radius:9px;color:var(--muted)}
-    nav.site-nav a::after{display:none}
-    nav.site-nav a:hover{background:var(--panel2);color:var(--ink)}
-    nav.site-nav a.nav-active{background:var(--panel2);color:var(--ink);box-shadow:inset 2px 0 0 var(--gold)}
-    .nav-group{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
-      color:var(--muted);opacity:.55;padding:15px 12px 5px;font-weight:600}
-    .nav-group:first-child{padding-top:2px}
+    .nav-zone{width:100%;min-width:0}
+    .nav-zone>summary{padding:8px 12px 10px}
+    .nav-zone>summary::after{display:block}
+    .nav-zone.is-active>summary{background:var(--panel2)}
+    .nav-zone-menu{position:static;min-width:0;box-shadow:none;background:none;border:none;padding:2px 0 10px}
+    .nav-zone-menu a{font-size:14px;padding:8px 12px;border-radius:9px;color:var(--muted)}
+    .nav-zone-menu a::after{display:none}
+    .nav-zone-menu a:hover{background:var(--panel2);color:var(--ink)}
+    .nav-zone-menu a.nav-active{background:var(--panel2);color:var(--ink);box-shadow:inset 2px 0 0 var(--gold)}
     .header-actions{margin:16px 0 0;width:100%;justify-content:flex-start;flex-wrap:wrap;gap:8px;
       border-top:1px solid var(--line);padding-top:14px}
     .header-actions .theme-toggle{margin-left:auto}
@@ -89,11 +150,11 @@
   /* Divisional charts (Vargas) table */
   .varga-wrap{overflow-x:auto}
   .varga-table{width:100%;border-collapse:collapse;font-size:12px}
-  .varga-table th,.varga-table td{padding:6px 5px;text-align:center;border-bottom:1px solid var(--line)}
-  .varga-table thead th{color:var(--ink);font-weight:600;vertical-align:bottom}
+  .varga-table th,.varga-table td{padding:7px 6px;text-align:center;border-bottom:1px solid var(--line)}
+  .varga-table thead th{color:var(--muted);font-weight:700;vertical-align:bottom;background:var(--panel2)}
   .varga-table .vh-tag{font-size:11px;font-weight:600}
   .varga-table .vh-name{font-size:9px;color:var(--muted);font-weight:400}
-  .varga-table .vp-label{text-align:left;white-space:nowrap;font-weight:600;padding-left:6px}
+  .varga-table .vp-label{text-align:left;white-space:nowrap;font-weight:700;padding-left:6px;color:var(--ink)}
   .varga-table .vcell{color:var(--dc,var(--ink));font-variant-numeric:tabular-nums;position:relative;font-weight:600}
   .varga-table .vgot{outline:1px solid var(--gold);outline-offset:-3px;border-radius:5px}
   .vg-dot{color:var(--gold2);font-size:7px;position:absolute;top:1px;right:2px}
@@ -101,20 +162,22 @@
   .vim-bar{width:48px;height:4px;border-radius:3px;background:var(--panel2);overflow:hidden}
   .vim-bar i{display:block;height:100%}
   .vim-hi{background:var(--exalt)}.vim-mid{background:var(--gold)}.vim-lo{background:var(--debil)}
+  .varga-table tbody tr:nth-child(odd){background:color-mix(in srgb,var(--panel2) 58%,transparent)}
   .varga-table tbody tr:hover{background:var(--panel2)}
   @media(max-width:760px){.varga-table{min-width:680px}}
   /* Jaimini panel */
   .jm-sub{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--gold2);font-weight:600;margin-bottom:8px}
   .ck-table{width:100%;border-collapse:collapse;font-size:12.5px}
-  .ck-table th,.ck-table td{padding:7px 8px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
-  .ck-table thead th{color:var(--muted);font-weight:600;font-size:11px}
+  .ck-table th,.ck-table td{padding:8px 9px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  .ck-table thead th{color:var(--muted);font-weight:700;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;background:var(--panel2)}
   .ck-ab{font-weight:700;color:var(--gold2);white-space:nowrap}
   .ck-ab .ck-name{font-size:9.5px;font-weight:400;color:var(--muted);letter-spacing:.02em}
-  .ck-pl{white-space:nowrap;font-weight:600}
+  .ck-pl{white-space:nowrap;font-weight:700;color:var(--ink)}
   .ck-sig{color:var(--muted);line-height:1.45}
   .arg-yes{color:var(--exalt);font-weight:600;white-space:nowrap}
   .arg-no{color:var(--muted);white-space:nowrap}
-  .km-head{font-size:13px;margin-bottom:8px}
+  .km-head{font-size:13px;margin-bottom:8px;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:10px 12px}
+  .ck-table tbody tr:nth-child(odd){background:color-mix(in srgb,var(--panel2) 58%,transparent)}
   .km-list{margin:0;padding-left:18px;font-size:12.5px;line-height:1.6}
   .km-list li{margin-bottom:3px}
   @media(max-width:760px){.ck-table{min-width:520px}}
@@ -131,17 +194,21 @@
   .av-vgot{font-size:9px;color:var(--gold2);border:1px solid var(--gold);border-radius:4px;padding:0 4px;font-weight:600}
   .av-table{min-width:720px}
   /* Prompt Builder recipe chips */
-  .pb-recipe{display:flex;flex-direction:column;gap:8px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .pb-recipe{display:flex;flex-direction:column;gap:8px;background:linear-gradient(180deg,color-mix(in srgb,var(--gold) 10%,var(--panel2)),var(--panel2));border:1px solid color-mix(in srgb,var(--gold) 22%,var(--line));border-radius:12px;padding:14px 16px}
   .pb-recipe-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-  .pb-rlabel{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:600;min-width:64px}
-  .pb-chip{font-size:11.5px;padding:2px 9px;border-radius:20px;border:1px solid var(--line);background:var(--panel)}
+  .pb-rlabel{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--gold2);font-weight:700;min-width:64px}
+  .pb-chip{font-size:11.5px;padding:2px 9px;border-radius:20px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
   .pb-chip.pb-v{border-color:var(--gold);color:var(--gold2)}
-  .pb-chip.pb-s{border-color:#6a8cff;color:#9db4ff}
+  .pb-chip.pb-s{border-color:color-mix(in srgb,var(--friend) 44%,var(--line));color:var(--friend)}
   .pb-question-wrap{margin-bottom:14px}
-  .pb-question-wrap label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+  .pb-question-wrap label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:6px;font-weight:700}
   .pb-question{width:100%;box-sizing:border-box;background:var(--panel2);border:1px solid var(--line);border-radius:9px;color:var(--ink);padding:10px 12px;font-size:13.5px;font-family:inherit;line-height:1.5;resize:vertical;outline:none}
-  .pb-question:focus{border-color:var(--gold)}
+  .pb-question-wrap .note{font-size:11px;font-weight:500;text-transform:none;letter-spacing:0}
+  .pb-question:focus,.pb-question:focus-visible{border-color:var(--gold)}
   .pb-detected{font-size:10px;color:var(--gold2);font-weight:400;text-transform:none;letter-spacing:0}
+  #promptbuilder .panel.ec-zone-card,#outlook .panel.ec-zone-card,#lifepredictor .panel.ec-zone-card{
+    background:linear-gradient(180deg,var(--panel),color-mix(in srgb,var(--panel2) 58%,var(--panel)));
+  }
   section{padding:var(--section-y) 0 16px;border-bottom:1px solid rgba(42,51,96,.5)}
   section.section-reveal{opacity:0;transform:translateY(10px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
   section.section-reveal.visible{opacity:1;transform:none}
@@ -149,6 +216,16 @@
     letter-spacing:-.015em;color:var(--ink);max-width:900px;text-wrap:balance}
   h1.hero .accent{color:var(--gold2);font-style:italic;font-weight:500}
   .lede{font-size:clamp(17px,2.1vw,20px);color:var(--muted);max-width:720px;line-height:1.6}
+  .hero-warm{display:flex;gap:40px;align-items:center;flex-wrap:wrap;padding:48px 0 40px;
+    background:radial-gradient(110% 80% at 80% -10%, color-mix(in srgb,var(--gold) 12%,transparent), transparent 55%)}
+  .hero-copy{flex:1;min-width:280px}
+  .hero-h{font-size:clamp(38px,6vw,56px);margin:10px 0 0}
+  .hero-lede{font-family:var(--font-sans);font-size:17px;line-height:1.55;color:var(--muted);max-width:42ch;margin:18px 0 26px}
+  .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+  .hero-emblem{flex:0 0 auto}
+  .hero-zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:0 0 12px}
+  .hero-zone-link{text-decoration:none;display:block}
+  .hero-zone-link .ec-zone-card{height:100%}
   .eyebrow{display:inline-flex;align-items:center;gap:9px;color:var(--gold);font-size:var(--text-xs);letter-spacing:2.5px;text-transform:uppercase;font-weight:700}
   .eyebrow::before{content:"";width:22px;height:1.5px;background:var(--gold);opacity:.8;border-radius:2px}
   h2{font-family:var(--font-display);font-size:clamp(26px,3.4vw,36px);line-height:1.1;letter-spacing:-.012em;font-weight:600;margin:10px 0 6px}
@@ -173,6 +250,8 @@
   .tok:hover{transform:translateY(-2px);border-color:var(--gold)}
   .tok.active{background:var(--panel2);border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
   .tok .gl{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:13px;color:#0b0e1a}
+  .tok .emblem{width:24px;height:24px;flex-shrink:0}
+  .tok.active .emblem{filter:drop-shadow(0 0 6px color-mix(in srgb,var(--gold2) 30%,transparent))}
   .detail{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:16px;padding:20px;min-height:120px}
   .detail h3{font-family:var(--font-display);font-weight:600;margin:0 0 2px;font-size:24px;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
   .detail .skt{color:var(--muted);font-weight:400;font-size:14px}
@@ -203,6 +282,22 @@
   .hero-verdict .badge{flex:0 0 auto;width:62px;height:62px;border-radius:16px;display:grid;place-items:center;font-size:30px;color:#0b0e1a;font-weight:800}
   .hero-verdict .ht{font-size:19px;font-weight:800;margin-bottom:2px}
   .hero-verdict .hx{font-size:13.5px;color:#dfe4f6;max-width:820px}
+  .synth-placement{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;margin:6px 0 12px;border-bottom:1px solid var(--line);padding-bottom:12px}
+  .synth-lead{display:flex;align-items:center;gap:12px}
+  .synth-emblem{display:inline-flex;align-items:center;justify-content:center;width:76px;height:76px;flex-shrink:0}
+  .synth-emblem .emblem{width:74px;height:74px}
+  .synth-placement .title{font-size:clamp(30px,4.2vw,44px)}
+  .synth-placement .meta{font-family:Menlo,Consolas,monospace;font-size:12px;color:var(--muted);text-align:right;line-height:1.6;white-space:pre-line}
+  .synth-verdicts{display:grid;grid-template-columns:repeat(4,minmax(110px,1fr));gap:10px;margin-bottom:14px}
+  .synth-reading p{margin:0 0 12px;color:#dfe4f6;line-height:1.74}
+  .synth-reading p:last-of-type{margin-bottom:0}
+  @media(max-width:900px){
+    .synth-placement{flex-direction:column;align-items:flex-start}
+    .synth-emblem{width:68px;height:68px}
+    .synth-emblem .emblem{width:66px;height:66px}
+    .synth-placement .meta{text-align:left}
+    .synth-verdicts{grid-template-columns:repeat(2,minmax(120px,1fr))}
+  }
 
   /* ---- balanced result grid (fills the row, no dead space) ---- */
   .result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:start}
@@ -231,25 +326,30 @@
 
   /* ---- my charts ---- */
   .chartbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
-  .ctab{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 15px;cursor:pointer;font-size:13px;display:flex;gap:8px;align-items:center;
+  .ctab{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:8px 15px;cursor:pointer;font-size:13px;display:flex;gap:8px;align-items:center;
     transition:background var(--dur) var(--ease),border-color var(--dur) var(--ease),color var(--dur) var(--ease),box-shadow var(--dur) var(--ease),transform var(--dur) var(--ease)}
-  .ctab.active{background:var(--gold);color:#0b0e1a;border-color:var(--gold);font-weight:600}
+  .ctab.active{background:linear-gradient(135deg,var(--gold),var(--terracotta));color:#2a1a0c;border-color:transparent;font-weight:700}
   .ctab .x{opacity:.5;font-weight:700}.ctab .x:hover{opacity:1}
-  .ctab.add{border-style:dashed;color:var(--gold2)}
+  .ctab.add{border-style:dashed;color:var(--gold2);background:var(--panel)}
   .charttable{width:100%;border-collapse:collapse;font-size:13px}
   .charttable th{text-align:left;color:var(--muted);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;padding:7px 8px;border-bottom:1px solid var(--line)}
-  .charttable td{padding:9px 8px;border-bottom:1px solid rgba(42,51,96,.45)}
+  .charttable td{padding:9px 8px;border-bottom:1px solid var(--line)}
   .charttable tr.clk{cursor:pointer}
   .charttable tr.clk:hover td{background:var(--panel2)}
   .dchip{display:inline-block;font-size:10.5px;font-weight:700;color:#0b0e1a;padding:2px 9px;border-radius:999px}
   .gname{display:inline-flex;align-items:center;gap:7px;font-weight:600}
   .gdot{width:18px;height:18px;border-radius:50%;display:inline-grid;place-items:center;font-size:11px;color:#0b0e1a;font-weight:800}
+  .row-emblem{display:inline-flex;align-items:center;gap:6px}
+  .row-emblem .emblem{width:18px;height:18px;flex-shrink:0}
 
   /* ---- modal ---- */
-  .modal{position:fixed;inset:0;background:rgba(4,6,12,.76);display:none;align-items:center;justify-content:center;z-index:60;padding:18px}
+  .modal{position:fixed;inset:0;background:rgba(24,19,16,.76);display:none;align-items:center;justify-content:center;z-index:60;padding:18px}
   .modal.show{display:flex}
-  .modal .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;max-width:660px;width:100%;padding:24px}
+  .modal .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;max-width:660px;width:100%;padding:24px;box-shadow:var(--shadow-2)}
+  #addModalTitle.display{font-size:clamp(26px,4vw,34px);line-height:1.08;margin:0 0 6px}
   .modal h3{margin:0 0 4px}
+  .upload-trigger{border:none;border-radius:10px;padding:10px 14px;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--terracotta));color:#2a1a0c;box-shadow:var(--shadow-1);transition:transform var(--dur) var(--ease),filter var(--dur) var(--ease)}
+  .upload-trigger:hover{transform:translateY(-1px);filter:brightness(1.04)}
   .modal textarea{width:100%;height:210px;background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px;font-family:Menlo,Consolas,monospace;font-size:12px;resize:vertical}
   .modal input[type=text]{width:100%;background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px}
   .row-actions{display:flex;gap:10px;align-items:center;margin-top:14px}
@@ -258,15 +358,26 @@
   button.ghost{background:none;color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:10px 16px;cursor:pointer}
 
   /* ---- quiz ---- */
-  .quiz{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:16px;padding:22px}
-  .qq{font-size:18px;font-weight:600;margin-bottom:14px}
+  .quiz{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--panel),color-mix(in srgb,var(--panel2) 52%,var(--panel)));border:1px solid var(--line);border-radius:16px;padding:22px}
+  .quiz::before{content:"";position:absolute;left:18px;right:18px;top:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--terracotta));opacity:.55}
+  .quiz-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .quiz-step{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .quiz-score{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;border:1px solid var(--line);background:var(--panel2);color:var(--ink)}
+  .quiz-score b{color:var(--gold2)}
+  .qq{font-size:clamp(19px,2.8vw,24px);font-weight:600;line-height:1.35;font-family:var(--font-display);margin:0 0 14px}
   .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   @media(max-width:600px){.opts{grid-template-columns:1fr}}
-  .opt{cursor:pointer;border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:11px 14px;font-size:var(--text-base);width:100%}
-  .opt:hover{border-color:var(--gold)}
-  .opt.right{background:rgba(79,208,127,.18);border-color:var(--exalt)}
-  .opt.wrong{background:rgba(239,106,90,.18);border-color:var(--debil)}
-  .qmeta{display:flex;justify-content:space-between;align-items:center;margin-top:14px;color:var(--muted);font-size:13px}
+  .opt{cursor:pointer;border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:11px 14px;font-size:var(--text-base);width:100%;text-align:left;line-height:1.45;font-weight:600;transition:border-color var(--dur) var(--ease),transform var(--dur) var(--ease),background var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
+  .opt:hover{border-color:var(--gold);transform:translateY(-1px)}
+  .opt.right{background:color-mix(in srgb,var(--exalt) 18%,var(--panel2));border-color:color-mix(in srgb,var(--exalt) 54%,var(--line));box-shadow:0 0 0 1px color-mix(in srgb,var(--exalt) 35%,transparent) inset}
+  .opt.wrong{background:color-mix(in srgb,var(--debil) 16%,var(--panel2));border-color:color-mix(in srgb,var(--debil) 54%,var(--line));box-shadow:0 0 0 1px color-mix(in srgb,var(--debil) 34%,transparent) inset}
+  .opt:disabled{cursor:default;opacity:1}
+  .qmeta{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px;color:var(--muted);font-size:13px}
+  .quiz-status{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .quiz-status.is-right{color:var(--exalt)}
+  .quiz-status.is-wrong{color:var(--debil)}
+  .quiz-next{padding:8px 15px;font-size:12px;border-radius:9px}
+  .quiz-why{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:13px;line-height:1.58}
   .nakband{background:linear-gradient(120deg,#1a1f48,#141938);border:1px solid var(--line);border-radius:14px;padding:12px 18px;margin-bottom:16px;font-size:13.5px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;cursor:pointer;transition:.12s}
   .nakband:hover{border-color:var(--gold)}
   .nakband .nstar{color:var(--gold2);font-size:20px}
@@ -282,22 +393,23 @@
   .bav-table thead th.hh{color:var(--gold2);font-size:12px}
   .bav-table td{padding:6px 4px;text-align:center;font-size:14px;font-weight:700;border:1px solid var(--line);min-width:38px}
   .bav-table td.plabel{font-size:12px;font-weight:700;text-align:right;padding:4px 8px;
-    white-space:nowrap;background:var(--panel);color:var(--fg);min-width:80px}
+    white-space:nowrap;background:var(--panel);color:var(--ink);min-width:80px}
+  .bav-table td.plabel .row-emblem{justify-content:flex-end}
   .bav-table tr.sav-row td{font-weight:800;font-size:15px;border-top:2px solid var(--gold)}
   .bav-table tr.sav-row td.plabel{color:var(--gold2)}
-  .bav-table td.hi5{background:#1d3a20;color:var(--exalt)}
-  .bav-table td.hi4{background:#1e3220;color:#9ee0b0}
-  .bav-table td.lo2{background:#2d1a1a;color:var(--debil)}
-  .bav-table td.lo1{background:#2a1818;color:#de8070}
-  .bav-table td.sav-hi{background:#1d3a20;color:var(--exalt)}
-  .bav-table td.sav-mid{background:var(--panel2);color:var(--fg)}
-  .bav-table td.sav-lo{background:#2d1a1a;color:var(--debil)}
+  .bav-table td.hi5{background:rgba(62,125,87,.24);color:var(--exalt)}
+  .bav-table td.hi4{background:rgba(62,125,87,.16);color:var(--exalt)}
+  .bav-table td.lo2{background:rgba(187,59,40,.15);color:var(--debil)}
+  .bav-table td.lo1{background:rgba(187,59,40,.24);color:var(--debil)}
+  .bav-table td.sav-hi{background:rgba(62,125,87,.24);color:var(--exalt)}
+  .bav-table td.sav-mid{background:var(--panel2);color:var(--ink)}
+  .bav-table td.sav-lo{background:rgba(187,59,40,.18);color:var(--debil)}
   .bav-table td.natal{outline:2px solid var(--gold);outline-offset:-2px;position:relative}
   .bav-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:6px}
   .bav-legend span{display:flex;align-items:center;gap:5px}
   .bav-legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
   .bav-insight{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;
-    margin-top:12px;font-size:13px;color:#dfe4f6}
+    margin-top:12px;font-size:13px;color:var(--ink)}
   .bav-insight b{color:var(--gold2)}
   .bav-insight-total{font-size:13px;color:var(--muted);margin-bottom:12px}
   .bav-insight-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -308,13 +420,13 @@
   .bav-insight-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
   .bav-insight-item:last-child{margin-bottom:0}
   .bav-score-badge{flex:0 0 auto;min-width:44px;padding:3px 6px;border-radius:8px;font-size:13px;font-weight:800;text-align:center;line-height:1.4}
-  .bav-score-badge.hi{background:#1d3a20;color:var(--exalt)}
-  .bav-score-badge.lo{background:#2d1a1a;color:var(--debil)}
+  .bav-score-badge.hi{background:rgba(62,125,87,.2);color:var(--exalt)}
+  .bav-score-badge.lo{background:rgba(187,59,40,.2);color:var(--debil)}
   .bav-insight-body{flex:1}
   .bav-insight-hlabel{font-weight:700;font-size:12.5px;margin-bottom:2px}
   .bav-insight-hdesc{font-size:12px;color:var(--muted);line-height:1.45}
   /* Chart Story */
-  .chart-story{margin-top:14px;background:linear-gradient(160deg,#0f1530,#0b0e1a);border:1px solid var(--line);border-radius:16px;padding:20px 22px}
+  .chart-story{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 22px}
   .chart-story-header{display:flex;align-items:center;gap:10px;margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:12px}
   .chart-story-header h4{margin:0;font-size:16px;font-weight:800;color:var(--gold2)}
   .chart-story-header .sub{font-size:12px;color:var(--muted)}
@@ -323,12 +435,12 @@
   .story-num{flex:0 0 auto;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;background:var(--panel2);border:1px solid var(--line);color:var(--gold2)}
   .story-content{}
   .story-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
-  .story-label.identity{color:#7aa2ff}
+  .story-label.identity{color:var(--friend)}
   .story-label.current{color:var(--exalt)}
   .story-label.friction{color:var(--debil)}
   .story-label.ruler{color:var(--gold2)}
-  .story-label.patterns{color:#a78bfa}
-  .story-text{font-size:13.5px;color:#dfe4f6;line-height:1.65}
+  .story-label.patterns{color:var(--terracotta)}
+  .story-text{font-size:13.5px;color:var(--ink);line-height:1.65}
   .story-text b{color:var(--ink)}
   .story-text i{color:var(--gold2);font-style:normal}
   footer{padding:40px 0 70px;color:var(--muted);font-size:12.5px}
@@ -337,44 +449,46 @@
   .bb-selectors{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin-bottom:22px}
   .bb-sel-grp{display:flex;flex-direction:column;gap:5px}
   .bb-sel-grp label{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
-  .bb-sel{background:var(--panel2);border:1px solid var(--line);color:var(--fg);border-radius:8px;padding:7px 11px;font-size:13.5px;min-width:190px}
-  .bb-chain{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:18px;padding:14px 20px;background:var(--panel2);border-radius:12px;border:1px solid var(--line)}
+  .bb-sel{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:7px 11px;font-size:13.5px;min-width:190px}
+  .bb-chain{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:18px;padding:14px 20px;background:var(--panel);border-radius:12px;border:1px solid var(--line)}
   .bb-chain-node{display:flex;flex-direction:column;align-items:center;gap:2px}
   .bb-chain-house{font-size:24px;font-weight:800;color:var(--gold2)}
   .bb-chain-label{font-size:11px;color:var(--muted);text-align:center;max-width:140px}
-  .bb-chain-sign{font-size:12px;color:var(--fg);font-weight:600}
+  .bb-chain-sign{font-size:12px;color:var(--ink);font-weight:600;display:inline-flex;align-items:center;gap:6px}
   .bb-chain-arrow{font-size:18px;color:var(--line);padding:0 14px;font-weight:700;white-space:nowrap;padding-bottom:14px}
   .bb-chain-result .bb-chain-house{color:var(--exalt);font-size:30px}
   .bb-chain-result .bb-chain-sign{color:var(--exalt);font-size:13px}
   .bb-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
-  .bb-vcard{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .bb-vcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
   .bb-vcard-title{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-  .bb-vcard-sign{font-size:22px;font-weight:800;color:var(--gold2);margin-bottom:8px}
+  .bb-vcard-sign{font-size:22px;font-weight:800;color:var(--gold2);margin-bottom:8px;display:inline-flex;align-items:center;gap:8px}
   .bb-vcard-kv{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:13px}
   .bb-vcard-kv b{color:var(--muted);font-weight:600;white-space:nowrap}
   .bb-sav-badge{display:inline-block;padding:2px 9px;border-radius:999px;font-weight:700;font-size:12px}
   .bb-sav-hi{background:#1d3a20;color:var(--exalt)}
   .bb-sav-mid{border:1px solid var(--line);color:var(--fg)}
   .bb-sav-lo{background:#2d1a1a;color:var(--debil)}
-  .bb-reading{background:linear-gradient(160deg,#0f1530,#0b0e1a);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:13.5px;line-height:1.75;color:#dfe4f6}
+  .bb-reading{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:13.5px;line-height:1.75;color:var(--ink)}
   .bb-section-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 8px}
   .bb-section-lbl:first-child{margin-top:0}
   .bb-conds{display:flex;flex-direction:column;gap:7px}
   .bb-cond{display:flex;gap:10px;padding:10px 12px;border-radius:8px;font-size:13px;line-height:1.5}
-  .bb-cond.pos{background:rgba(29,58,32,.5);border:1px solid rgba(76,175,80,.2)}
-  .bb-cond.neg{background:rgba(45,26,26,.5);border:1px solid rgba(211,47,47,.2)}
+  .bb-cond.pos{background:rgba(47,125,87,.16);border:1px solid rgba(47,125,87,.32)}
+  .bb-cond.neg{background:rgba(187,59,40,.14);border:1px solid rgba(187,59,40,.3)}
   .bb-cond.neu{background:var(--panel2);border:1px solid var(--line)}
   .bb-cond-icon{font-size:14px;flex-shrink:0;line-height:1.5}
   .bb-cond-title{font-weight:700;color:var(--ink);margin-bottom:2px;font-size:13px}
   .bb-cond-desc{color:var(--muted);font-size:12.5px}
   .bb-verdict-bar{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-radius:10px;margin-top:4px}
-  .bb-verdict-bar.v-strong{background:rgba(29,58,32,.5);border:1px solid rgba(76,175,80,.3)}
-  .bb-verdict-bar.v-mid{background:rgba(15,21,48,.9);border:1px solid var(--line)}
-  .bb-verdict-bar.v-weak{background:rgba(45,26,26,.5);border:1px solid rgba(211,47,47,.3)}
+  .bb-verdict-bar.v-strong{background:rgba(47,125,87,.16);border:1px solid rgba(47,125,87,.35)}
+  .bb-verdict-bar.v-mid{background:var(--panel2);border:1px solid var(--line)}
+  .bb-verdict-bar.v-weak{background:rgba(187,59,40,.14);border:1px solid rgba(187,59,40,.35)}
   .bb-verdict-badge{font-size:12px;font-weight:800;padding:3px 11px;border-radius:999px;white-space:nowrap;display:inline-block;margin-bottom:6px}
   .v-strong .bb-verdict-badge{background:var(--exalt);color:#0b1a0d}
   .v-mid .bb-verdict-badge{background:var(--gold);color:#0b0e1a}
   .v-weak .bb-verdict-badge{background:var(--debil);color:#fff8f8}
+  .bb-inline{display:inline-flex;align-items:center;gap:6px;margin-right:8px;vertical-align:middle}
+  .bb-inline .emblem{width:20px;height:20px}
   @media(max-width:600px){.bb-cards{grid-template-columns:1fr}}
   /* === special lagnas === */
   .sl-section h4{margin:0 0 14px}
@@ -444,81 +558,89 @@
   .ar-detail-name small{font-size:11.5px;font-weight:400;color:var(--muted);display:block;margin-top:1px}
   .ar-detail-sign{font-size:22px;font-weight:800;margin-left:auto}
   .ar-theme{font-size:12.5px;color:var(--gold2);margin-bottom:10px;font-style:italic}
-  .ar-body{font-size:13.5px;line-height:1.7;margin-bottom:14px;color:#dfe4f6}
+  .ar-body{font-size:13.5px;line-height:1.7;margin-bottom:14px;color:var(--ink)}
   .ar-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
   .ar-badge{font-size:12px;padding:4px 11px;border-radius:999px;font-weight:600;background:var(--panel);border:1px solid var(--line)}
   .ar-pls{font-size:13px;padding:10px 14px;background:var(--panel);border-radius:8px;border-left:3px solid var(--gold2);margin-bottom:12px;line-height:1.6}
   .ar-note{margin-top:10px;padding:11px 14px;background:var(--panel);border-radius:8px;border:1px solid var(--line);font-size:12.5px;line-height:1.6;color:var(--muted)}
   .ar-calc-toggle{font-size:12px;color:var(--gold2);cursor:pointer;margin:10px 0 0;display:inline-block;background:none;border:none;padding:0}
-  .ar-calc{display:none;padding:11px 14px;background:var(--panel);border-radius:8px;font-size:12px;line-height:1.9;border:1px solid var(--line);color:#dfe4f6;margin-top:6px}
+  .ar-calc{display:none;padding:11px 14px;background:var(--panel);border-radius:8px;font-size:12px;line-height:1.9;border:1px solid var(--line);color:var(--ink);margin-top:6px}
   .ar-calc.open{display:block}
   .ar-step{display:flex;align-items:flex-start;gap:8px;margin-bottom:4px}
   .ar-step-n{flex:0 0 20px;height:20px;border-radius:6px;background:var(--panel2);border:1px solid var(--line);display:grid;place-items:center;font-size:10px;font-weight:700;color:var(--gold2);flex-shrink:0}
   /* === Graha Arudha planet cards === */
   .ga-grid{display:flex;flex-direction:column;gap:14px}
-  .ga-planet-card{background:var(--panel2);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  .ga-planet-hd{display:flex;align-items:center;gap:12px;padding:14px 18px;background:rgba(0,0,0,.15);border-bottom:1px solid var(--line);flex-wrap:wrap}
-  .ga-planet-glyph{font-size:22px;line-height:1;flex-shrink:0}
-  .ga-planet-name{font-size:15px;font-weight:700}
-  .ga-planet-pos{font-size:12px;color:var(--muted);margin-left:auto;text-align:right}
-  .ga-planet-body{padding:12px 18px 4px;font-size:12.5px;line-height:1.65;color:#dfe4f6}
+  .ga-planet-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .ga-planet-hd{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--panel2);border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .ga-planet-glyph{line-height:1;flex-shrink:0;display:inline-flex;align-items:center}
+  .ga-planet-glyph .emblem{width:28px;height:28px}
+  .ga-planet-name{font-size:15px;font-weight:700;color:var(--gold2)}
+  .ga-planet-pos{font-size:12px;color:var(--muted);margin-left:auto;text-align:right;display:inline-flex;gap:6px;align-items:center}
+  .ga-planet-body{padding:12px 18px 4px;font-size:12.5px;line-height:1.65;color:var(--ink)}
   .ga-archetype{padding:0 18px 10px;font-size:11.5px;color:var(--gold2);font-style:italic}
   .ga-arudhas-wrap{padding:4px 18px 16px;display:flex;flex-direction:column;gap:10px}
   .ga-arudha-row{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 14px}
   .ga-arudha-hd{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
-  .ga-arudha-from{font-size:11.5px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:2px 9px;font-weight:600}
+  .ga-arudha-from{font-size:11.5px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:2px 9px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
   .ga-arudha-arr{color:var(--gold2);font-size:12px}
-  .ga-arudha-result{font-size:13.5px;font-weight:800;color:var(--gold2)}
+  .ga-arudha-result{font-size:13.5px;font-weight:800;color:var(--gold2);display:inline-flex;align-items:center;gap:6px}
   .ga-arudha-hn{font-size:11.5px;color:var(--muted)}
-  .ga-arudha-note{font-size:12.5px;line-height:1.6;color:#dfe4f6;margin-bottom:8px}
+  .ga-arudha-note{font-size:12.5px;line-height:1.6;color:var(--ink);margin-bottom:8px}
   /* === Cluster analysis === */
   .ga-cluster{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:8px}
   .ga-cluster h4{margin:0 0 12px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gold)}
   .ga-cluster-rows{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
   .ga-cluster-row{display:flex;align-items:center;gap:10px}
-  .ga-cluster-lbl{font-size:12.5px;font-weight:700;min-width:110px}
+  .ga-cluster-lbl{font-size:12.5px;font-weight:700;min-width:110px;display:inline-flex;align-items:center;gap:6px}
   .ga-cluster-bar{flex:1;height:7px;background:var(--panel);border-radius:4px;overflow:hidden}
   .ga-cluster-fill{height:100%;border-radius:4px;background:var(--gold2);opacity:.7}
   .ga-cluster-tags{display:flex;flex-wrap:wrap;gap:4px}
   .ga-cluster-tag{font-size:10.5px;padding:2px 7px;border-radius:999px;font-weight:600;background:var(--panel);border:1px solid var(--line)}
-  .ga-cluster-interp{font-size:13px;line-height:1.65;color:#dfe4f6;padding:11px 14px;background:var(--panel);border-radius:8px;border-left:3px solid var(--gold2)}
+  .ga-cluster-interp{font-size:13px;line-height:1.65;color:var(--ink);padding:11px 14px;background:var(--panel2);border-radius:8px;border-left:3px solid var(--gold2)}
   /* === life outlook === */
   .ol-controls{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+  .ol-controls .bb-sel,.ol-controls input.bb-sel,#promptbuilder .bb-sel{
+    min-width:190px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;color:var(--ink)
+  }
+  .ol-controls .bb-sel:focus-visible,.ol-controls input.bb-sel:focus-visible,#promptbuilder .bb-sel:focus-visible{border-color:var(--gold)}
   .ol-houses{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:6px}
   .ol-htag{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:4px 11px;font-size:12.5px;font-weight:700;color:var(--gold2)}
   .ol-htag span{font-weight:400;color:var(--muted);margin-left:4px;font-size:12px}
   .ol-vk-note{font-size:12px;color:var(--muted);margin-bottom:14px}
-  .ol-best-banner{background:linear-gradient(90deg,#1e3324,#182a1e);border:1px solid #3a7a4a;border-radius:10px;padding:11px 16px;margin-bottom:16px;font-size:13.5px;color:#c8f0d0}
+  .ol-best-banner{background:linear-gradient(135deg,color-mix(in srgb,var(--exalt) 24%,var(--panel2)),color-mix(in srgb,var(--gold) 16%,var(--panel2)));border:1px solid color-mix(in srgb,var(--exalt) 46%,var(--line));border-radius:10px;padding:11px 16px;margin-bottom:16px;font-size:13.5px;color:var(--ink)}
   .ol-years{display:flex;flex-direction:column;gap:10px}
-  .ol-year-card{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:15px 18px}
-  .ol-year-card.ol-good{border-color:#2d5e38;background:linear-gradient(135deg,#1a2e1f 0%,var(--panel2) 60%)}
-  .ol-year-card.ol-weak{border-color:#5a2a22;background:linear-gradient(135deg,#2a1918 0%,var(--panel2) 60%)}
+  .ol-year-card{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:15px 18px;transition:transform var(--dur) var(--ease),border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
+  .ol-year-card:hover{transform:translateY(-1px);box-shadow:var(--shadow-1)}
+  .ol-year-card.ol-good{border-color:color-mix(in srgb,var(--exalt) 45%,var(--line));background:linear-gradient(135deg,color-mix(in srgb,var(--exalt) 14%,var(--panel2)) 0%,var(--panel2) 60%)}
+  .ol-year-card.ol-weak{border-color:color-mix(in srgb,var(--debil) 48%,var(--line));background:linear-gradient(135deg,color-mix(in srgb,var(--debil) 14%,var(--panel2)) 0%,var(--panel2) 60%)}
   .ol-yhead{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
   .ol-yn{font-size:22px;font-weight:800;color:var(--gold2);min-width:54px}
   .ol-ybadge{font-size:11.5px;font-weight:700;padding:3px 11px;border-radius:999px;background:var(--panel);border:1px solid var(--line)}
-  .ol-year-card.ol-good .ol-ybadge{background:#1d3a20;color:var(--exalt);border-color:transparent}
-  .ol-year-card.ol-weak .ol-ybadge{background:#2d1a1a;color:var(--debil);border-color:transparent}
+  .ol-year-card.ol-good .ol-ybadge{background:color-mix(in srgb,var(--exalt) 18%,transparent);color:var(--exalt);border-color:color-mix(in srgb,var(--exalt) 32%,transparent)}
+  .ol-year-card.ol-weak .ol-ybadge{background:color-mix(in srgb,var(--debil) 16%,transparent);color:var(--debil);border-color:color-mix(in srgb,var(--debil) 30%,transparent)}
   .ol-yt{font-size:12px;color:var(--muted);margin-left:auto}
-  .ol-sati{font-size:11px;padding:2px 8px;border-radius:999px;background:#2d1a1a;color:var(--debil);font-weight:600;white-space:nowrap}
-  .ol-msg{font-size:13px;color:#dfe4f6;line-height:1.62;margin-bottom:6px}
-  .ol-msg b{color:var(--fg)}
+  .ol-sati{font-size:11px;padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--debil) 16%,transparent);color:var(--debil);font-weight:600;white-space:nowrap;border:1px solid color-mix(in srgb,var(--debil) 32%,transparent)}
+  .ol-msg{font-size:13px;color:var(--ink);line-height:1.62;margin-bottom:6px}
+  .ol-msg b{color:var(--gold2)}
   .ol-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-  .ol-pill{font-size:11.5px;padding:3px 10px;border-radius:999px;font-weight:600}
-  .ol-pill-pos{background:#1d3a20;color:var(--exalt)}
-  .ol-pill-neg{background:#2d1a1a;color:var(--debil)}
+  .ol-pill{font-size:11.5px;padding:3px 10px;border-radius:999px;font-weight:600;border:1px solid var(--line)}
+  .ol-pill-pos{background:color-mix(in srgb,var(--exalt) 18%,transparent);color:var(--exalt);border-color:color-mix(in srgb,var(--exalt) 32%,transparent)}
+  .ol-pill-neg{background:color-mix(in srgb,var(--debil) 15%,transparent);color:var(--debil);border-color:color-mix(in srgb,var(--debil) 30%,transparent)}
   .ol-pill-neu{background:var(--panel);color:var(--muted);border:1px solid var(--line)}
-  .ol-foot{margin-top:16px;padding:13px 16px;font-size:13px;color:var(--muted);background:var(--panel);border-radius:10px;border:1px solid var(--line)}
+  .ol-foot{margin-top:16px;padding:13px 16px;font-size:13px;color:var(--muted);background:var(--panel);border-radius:10px;border:1px solid var(--line);line-height:1.6}
   @media(max-width:600px){.ol-controls{flex-direction:column}.ol-yt{margin-left:0}}
-  .ol-ai-wrap{margin-top:22px;padding:18px 20px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+  .ol-ai-wrap{margin-top:22px;padding:18px 20px;background:linear-gradient(180deg,var(--panel2),color-mix(in srgb,var(--panel) 70%,var(--bg2)));border:1px solid color-mix(in srgb,var(--gold) 20%,var(--line));border-radius:14px}
   .ol-ai-hdr{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
-  .ol-ai-hdr b{font-size:14px}
+  .ol-ai-hdr b{font-size:17px;color:var(--gold2);font-family:var(--font-display);font-weight:600}
   .ol-ai-hdr span{font-size:12px;color:var(--muted)}
-  .ol-prompt-ta{width:100%;box-sizing:border-box;height:190px;background:#0d1117;color:#c9d1d9;border:1px solid var(--line);border-radius:9px;padding:11px 13px;font-size:11.5px;font-family:monospace;line-height:1.55;resize:vertical;outline:none}
+  .ol-prompt-ta{width:100%;box-sizing:border-box;height:190px;background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:11px 13px;font-size:11.5px;font-family:Menlo,Consolas,monospace;line-height:1.55;resize:vertical;outline:none}
+  .ol-prompt-ta:focus-visible{border-color:var(--gold)}
   .ol-ai-btns{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;align-items:center}
-  .ol-ai-btn{padding:9px 22px;border-radius:10px;border:none;cursor:pointer;font-size:13px;font-weight:700;letter-spacing:.02em;transition:.15s opacity,.15s transform}
-  .ol-ai-btn:hover{opacity:.88;transform:translateY(-1px)}
-  .ol-ai-btn-cl{background:linear-gradient(135deg,#d97b4f,#b84028);color:#fff}
-  .ol-ai-btn-gm{background:linear-gradient(135deg,#4a90e2,#1a7f50);color:#fff}
+  .ol-ai-btn{padding:9px 22px;border-radius:10px;border:1px solid transparent;cursor:pointer;font-size:13px;font-weight:700;letter-spacing:.02em;transition:transform var(--dur) var(--ease),filter var(--dur) var(--ease),border-color var(--dur) var(--ease),background var(--dur) var(--ease),color var(--dur) var(--ease)}
+  .ol-ai-btn:hover{transform:translateY(-1px);filter:brightness(1.03)}
+  .ol-ai-btn-cl{background:linear-gradient(135deg,var(--gold),var(--terracotta));color:#2a1a0c}
+  .ol-ai-btn-gm{background:var(--panel);border-color:var(--line);color:var(--gold2)}
+  .ol-ai-btn:focus-visible{border-color:var(--gold2)}
   .ol-ai-note{font-size:11.5px;color:var(--muted);margin-left:4px}
 
   /* ===== House Strip ===== */
@@ -530,6 +652,8 @@
   .hs-hn{font-size:16px;font-weight:800;color:var(--gold2);line-height:1}
   .hs-sign{font-size:10px;color:var(--muted);margin:2px 0 5px;letter-spacing:.02em}
   .hs-occ{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;min-height:20px;align-items:center}
+  .hs-emblem{display:inline-flex;align-items:center;justify-content:center}
+  .hs-emblem .emblem{width:17px;height:17px}
   .hs-empty{font-size:10px;color:var(--muted)}
 
   /* ===== Planet Strength Dashboard ===== */
@@ -540,6 +664,8 @@
   .ps-card{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;
     transition:border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease),transform var(--dur) var(--ease)}
   .ps-card:hover{border-color:var(--gold)}
+  .ps-emblem{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;flex-shrink:0}
+  .ps-emblem .emblem{width:30px;height:30px}
   .ps-top{display:flex;align-items:center;gap:9px;margin-bottom:8px}
   .ps-name{font-size:14px;font-weight:800;flex:1;line-height:1.2}
   .ps-house{font-size:11px;color:var(--muted)}
@@ -547,31 +673,31 @@
   .ps-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:7px;align-items:center}
   .ps-badge{font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;text-transform:uppercase;white-space:nowrap}
   /* Inherent strength — dignity-based */
-  .ps-badge.exalted{background:#1d3a20;color:var(--exalt)}
-  .ps-badge.mool{background:#103030;color:#4fd0c0}
-  .ps-badge.own{background:#2a2e10;color:#d4c840}
-  .ps-badge.friend{background:#131e38;color:var(--accent)}
+  .ps-badge.exalted{background:rgba(62,125,87,.2);color:var(--exalt)}
+  .ps-badge.mool{background:rgba(94,131,75,.2);color:#9bc57a}
+  .ps-badge.own{background:rgba(184,134,11,.18);color:var(--gold2)}
+  .ps-badge.friend{background:rgba(127,176,196,.2);color:var(--friend)}
   .ps-badge.neutral{background:var(--panel);border:1px solid var(--line);color:var(--muted)}
-  .ps-badge.enemy{background:#2a1e0e;color:#c09050}
-  .ps-badge.debil{background:#2d1a1a;color:var(--debil)}
+  .ps-badge.enemy{background:rgba(182,103,72,.2);color:var(--terracotta)}
+  .ps-badge.debil{background:rgba(187,59,40,.2);color:var(--debil)}
   /* Functional nature — lagna-based */
   .ps-fn{font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;white-space:nowrap}
-  .ps-fn.yogakaraka{background:linear-gradient(135deg,#c49a10,#e8c547);color:#0b0e1a}
-  .ps-fn.benefic{background:#1d3a20;color:var(--exalt)}
-  .ps-fn.mixed{background:#2a2e10;color:#d4c840}
+  .ps-fn.yogakaraka{background:linear-gradient(135deg,var(--gold),var(--terracotta));color:#2a1a0c}
+  .ps-fn.benefic{background:rgba(62,125,87,.2);color:var(--exalt)}
+  .ps-fn.mixed{background:rgba(184,134,11,.16);color:var(--gold2)}
   .ps-fn.neutral{background:var(--panel);border:1px solid var(--line);color:var(--muted)}
-  .ps-fn.malefic{background:#2d1a1a;color:var(--debil)}
-  .ps-fn.shadow{background:#1a1040;color:#a080f0;border:1px solid rgba(120,80,200,.4)}
+  .ps-fn.malefic{background:rgba(187,59,40,.2);color:var(--debil)}
+  .ps-fn.shadow{background:rgba(160,132,76,.2);color:#9b834c;border:1px solid rgba(160,132,76,.35)}
   .ps-kv{display:grid;grid-template-columns:68px 1fr;gap:3px 8px;font-size:12px;margin-bottom:6px}
   .ps-kv b{color:var(--muted);font-weight:600}
-  .ps-kv span{color:#dfe4f6}
+  .ps-kv span{color:var(--ink)}
   .ps-hlabel{font-size:10px;color:var(--muted);margin-bottom:2px;font-style:italic}
   .ps-flags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
   .ps-flag{font-size:10px;font-weight:700;padding:1px 7px;border-radius:999px}
-  .ps-flag.combust{background:#2d1a1a;color:var(--debil);border:1px solid rgba(239,106,90,.3)}
-  .ps-flag.retro{background:#131e38;color:var(--accent);border:1px solid rgba(122,162,255,.3)}
-  .ps-flag.vg{background:#1d3a20;color:var(--exalt);border:1px solid rgba(79,208,127,.3)}
-  .ps-flag.mool{background:#103030;color:#4fd0c0;border:1px solid rgba(79,208,192,.3)}
+  .ps-flag.combust{background:rgba(187,59,40,.18);color:var(--debil);border:1px solid rgba(187,59,40,.35)}
+  .ps-flag.retro{background:rgba(127,176,196,.16);color:var(--friend);border:1px solid rgba(127,176,196,.35)}
+  .ps-flag.vg{background:rgba(62,125,87,.18);color:var(--exalt);border:1px solid rgba(62,125,87,.38)}
+  .ps-flag.mool{background:rgba(184,134,11,.14);color:var(--gold2);border:1px solid rgba(184,134,11,.34)}
   .ps-bav-bar{display:flex;gap:2px;margin-top:6px;align-items:center}
   .ps-bav-dot{width:9px;height:9px;border-radius:2px;background:var(--line)}
   .ps-bav-dot.on{background:var(--gold2)}
@@ -585,26 +711,26 @@
   .dt-label{font-size:10.5px;color:var(--muted);margin-bottom:4px;letter-spacing:.04em}
   .dt-overview{position:relative;height:12px;border-radius:4px;overflow:hidden;background:var(--panel2);border:1px solid var(--line);margin-bottom:12px}
   .dt-ov-seg{position:absolute;top:0;height:100%;border-right:1px solid rgba(0,0,0,.25)}
-  .dt-ov-needle{position:absolute;top:0;bottom:0;width:2px;background:#fff;opacity:.9;z-index:2;border-radius:1px}
+  .dt-ov-needle{position:absolute;top:0;bottom:0;width:2px;background:var(--gold2);opacity:.92;z-index:2;border-radius:1px}
   .dt-zoom-wrap{position:relative;margin-bottom:0}
   .dt-maha-row{position:relative;height:30px;margin-bottom:3px}
   .dt-antar-row{position:relative;height:20px}
   .dt-seg{position:absolute;top:0;height:100%;border-radius:3px;overflow:hidden;display:flex;align-items:center;padding:0 5px;font-size:9.5px;font-weight:700;color:rgba(0,0,0,.8);cursor:default;border-right:2px solid rgba(0,0,0,.18);box-sizing:border-box;transition:.12s opacity}
   .dt-seg:hover{opacity:.82;z-index:4}
   .dt-seg-lbl{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;pointer-events:none}
-  .dt-now-line{position:absolute;top:0;width:2px;background:#fff;z-index:3;pointer-events:none;border-radius:1px}
-  .dt-now-line::before{content:"NOW";position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:8.5px;font-weight:800;color:#fff;white-space:nowrap;letter-spacing:.04em}
+  .dt-now-line{position:absolute;top:0;width:2px;background:var(--gold2);z-index:3;pointer-events:none;border-radius:1px}
+  .dt-now-line::before{content:"NOW";position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:8.5px;font-weight:800;color:var(--gold2);white-space:nowrap;letter-spacing:.04em}
   .dt-axis{position:relative;height:20px;margin-top:5px;margin-bottom:10px}
   .dt-tick{position:absolute;font-size:10px;color:var(--muted);transform:translateX(-50%);white-space:nowrap;top:0}
   .dt-tick::before{content:"";position:absolute;top:-7px;left:50%;width:1px;height:5px;background:var(--line)}
   .dt-cur-card{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.6}
   .dt-cur-maha{font-weight:800;font-size:15px;color:var(--gold2);margin-bottom:3px}
-  .dt-cur-antar{color:#dfe4f6;margin-bottom:4px}
+  .dt-cur-antar{color:var(--ink);margin-bottom:4px}
   .dt-cur-next{font-size:11.5px;color:var(--muted)}
   .dt-no-data{padding:22px;text-align:center;color:var(--muted);font-size:13px}
 
   /* ===== Life Predictor (VedAstro-style timeline) ===== */
-  .lp-wrap{padding:18px 20px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+  .lp-wrap{padding:18px 20px;background:linear-gradient(180deg,var(--panel),color-mix(in srgb,var(--panel2) 58%,var(--panel)));border:1px solid var(--line);border-radius:14px}
   .lp-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
   .lp-hdr h4{margin:0;font-size:14px;font-weight:700;color:var(--gold2)}
   .lp-hdr-note{font-size:11.5px;color:var(--muted);max-width:520px;line-height:1.45}
@@ -614,7 +740,7 @@
   .lp-row.lp-smart{height:32px}
   .lp-btn{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;
     transition:background var(--dur) var(--ease),border-color var(--dur) var(--ease)}
-  .lp-btn:hover{border-color:var(--gold)}
+  .lp-btn:hover{border-color:var(--gold);background:var(--panel)}
   .lp-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-bottom:12px}
   .lp-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:4px}
   .lp-scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:8px;-webkit-overflow-scrolling:touch}
@@ -629,8 +755,8 @@
   .lp-seg.lp-active{box-shadow:0 0 0 2px var(--gold) inset;z-index:3}
   .lp-seg-lbl{position:absolute;inset:0;display:flex;align-items:center;padding:0 4px;font-size:9px;font-weight:700;color:rgba(255,255,255,.92);
     overflow:hidden;white-space:nowrap;text-overflow:ellipsis;pointer-events:none;text-shadow:0 1px 2px rgba(0,0,0,.45)}
-  .lp-now{position:absolute;top:0;bottom:0;width:2px;background:#fff;z-index:5;pointer-events:none;border-radius:1px}
-  .lp-now::before{content:"NOW";position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:800;color:#fff;white-space:nowrap}
+  .lp-now{position:absolute;top:0;bottom:0;width:2px;background:var(--gold2);z-index:5;pointer-events:none;border-radius:1px}
+  .lp-now::before{content:"NOW";position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:800;color:var(--gold2);white-space:nowrap}
   .lp-axis{position:relative;height:18px;margin-top:6px}
   .lp-tick{position:absolute;font-size:10px;color:var(--muted);transform:translateX(-50%);white-space:nowrap;top:0}
   .lp-tick::before{content:"";position:absolute;top:-6px;left:50%;width:1px;height:4px;background:var(--line)}
@@ -638,13 +764,13 @@
   .lp-detail.show{display:block}
   .lp-detail-hdr{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}
   .lp-vbadge{flex:0 0 auto;padding:10px 14px;border-radius:12px;min-width:110px;text-align:center;font-weight:800;font-size:13px;line-height:1.25}
-  .lp-vbadge.vd-exceptional,.lp-vbadge.vd-strong{background:#1d3a20;color:var(--exalt)}
-  .lp-vbadge.vd-favorable{background:#1e3220;color:#6fcf87}
-  .lp-vbadge.vd-mixed{background:#2a2e40;color:var(--accent)}
-  .lp-vbadge.vd-challenging,.lp-vbadge.vd-difficult{background:#2d1a1a;color:var(--debil)}
+  .lp-vbadge.vd-exceptional,.lp-vbadge.vd-strong{background:color-mix(in srgb,var(--exalt) 22%,transparent);color:var(--exalt);border:1px solid color-mix(in srgb,var(--exalt) 38%,transparent)}
+  .lp-vbadge.vd-favorable{background:color-mix(in srgb,var(--exalt) 14%,transparent);color:var(--exalt);border:1px solid color-mix(in srgb,var(--exalt) 30%,transparent)}
+  .lp-vbadge.vd-mixed{background:var(--panel);color:var(--muted);border:1px solid var(--line)}
+  .lp-vbadge.vd-challenging,.lp-vbadge.vd-difficult{background:color-mix(in srgb,var(--debil) 18%,transparent);color:var(--debil);border:1px solid color-mix(in srgb,var(--debil) 34%,transparent)}
   .lp-detail-title{font-size:16px;font-weight:800;margin:0 0 2px}
   .lp-detail-sub{font-size:12px;color:var(--muted);margin-bottom:6px}
-  .lp-detail-note{font-size:13px;color:#dfe4f6;line-height:1.55}
+  .lp-detail-note{font-size:13px;color:var(--ink);line-height:1.55}
   .lp-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
   .lp-tag{font-size:11px;padding:3px 9px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--muted)}
   .lp-empty{padding:24px;text-align:center;color:var(--muted);font-size:13px;line-height:1.55}
@@ -785,9 +911,11 @@
 
   /* ===== LIGHT THEME ===== */
   html.light{
-    --bg:#f4f6fb; --bg2:#edf0f8; --panel:#ffffff; --panel2:#f0f3fa; --line:#cdd5ee;
-    --ink:#1a1d35; --muted:#5562a0; --gold:#9a7010; --gold2:#7a5500; --accent:#2850c8;
-    --exalt:#1a7540; --debil:#bb2020; --own:#9a7010; --friend:#1060b0; --enemy:#bb5020; --neutral:#5562a0;
+    --bg:#f5f1e8; --bg2:#efe9db; --panel:#fffdf7; --panel2:#f3ecdc;
+    --line:#e0d4bb; --ink:#2b2620; --muted:#7a6c55;
+    --gold:#8f6200; --gold2:#744d06; --terracotta:#b5552f; --accent:#b5552f;
+    --exalt:#3e7d57; --debil:#bb3b28;
+    --own:#b8860b; --friend:#2f6f86; --enemy:#bb3b28; --neutral:#7a6c55;
   }
   html.light body{background:var(--bg);color:var(--ink)}
   html.light header.top{background:rgba(244,246,251,.92)}
@@ -799,35 +927,35 @@
   html.light .gcard,html.light .detail,html.light .quiz{background:linear-gradient(180deg,#fff,var(--bg2))}
   html.light .nakband{background:linear-gradient(120deg,#f0f4ff,#e8ecf8)}
   html.light .hero-verdict{background:linear-gradient(120deg,var(--panel2),var(--bg2))}
-  html.light .chart-story{background:linear-gradient(160deg,#f0f4ff,#f8faff)}
-  html.light .mode.active,html.light .ctab.active{color:#fff}
-  html.light .ctab.active{background:var(--gold);border-color:var(--gold);color:#fff}
-  html.light .dt-now-badge{color:#fff}
-  html.light .bav-table td.hi5{background:#d0f0dc;color:#0a5a22}
-  html.light .bav-table td.hi4{background:#ddf0e4;color:#1a6a32}
-  html.light .bav-table td.lo2{background:#fce8e8;color:#992020}
-  html.light .bav-table td.lo1{background:#fad8d8;color:#881818}
-  html.light .bav-table td.sav-hi{background:#d0f0dc;color:#0a5a22}
-  html.light .bav-table td.sav-lo{background:#fce8e8;color:#992020}
-  html.light .bav-score-badge.hi{background:#d0f0dc;color:#0a5a22}
-  html.light .bav-score-badge.lo{background:#fce8e8;color:#992020}
-  html.light .ps-badge.exalted{background:#d0f0dc;color:#0a5a22}
-  html.light .ps-badge.mool{background:#ccf0ee;color:#0a4848}
-  html.light .ps-badge.own{background:#f0eeb8;color:#786010}
-  html.light .ps-badge.friend{background:#d4e8ff;color:#0848a0}
+  html.light .chart-story{background:var(--panel)}
+  html.light .mode.active,html.light .ctab.active{color:#2a1a0c}
+  html.light .ctab.active{background:linear-gradient(135deg,var(--gold),var(--terracotta));border-color:transparent;color:#2a1a0c}
+  html.light .dt-now-badge{color:#2a1a0c}
+  html.light .bav-table td.hi5{background:rgba(62,125,87,.18);color:#235e3e}
+  html.light .bav-table td.hi4{background:rgba(62,125,87,.12);color:#2f6a49}
+  html.light .bav-table td.lo2{background:rgba(187,59,40,.14);color:#9e3324}
+  html.light .bav-table td.lo1{background:rgba(187,59,40,.22);color:#8c271a}
+  html.light .bav-table td.sav-hi{background:rgba(62,125,87,.18);color:#235e3e}
+  html.light .bav-table td.sav-lo{background:rgba(187,59,40,.16);color:#9e3324}
+  html.light .bav-score-badge.hi{background:rgba(62,125,87,.18);color:#235e3e}
+  html.light .bav-score-badge.lo{background:rgba(187,59,40,.18);color:#9e3324}
+  html.light .ps-badge.exalted{background:rgba(62,125,87,.16);color:#235e3e}
+  html.light .ps-badge.mool{background:rgba(94,131,75,.18);color:#4f6f2c}
+  html.light .ps-badge.own{background:rgba(184,134,11,.18);color:#7a5d18}
+  html.light .ps-badge.friend{background:rgba(127,176,196,.18);color:#2f6f86}
   html.light .ps-badge.neutral{background:var(--panel2);color:var(--muted);border:1px solid var(--line)}
-  html.light .ps-badge.enemy{background:#f8e4cc;color:#884018}
-  html.light .ps-badge.debil{background:#fce8e8;color:#992020}
-  html.light .ps-fn.yogakaraka{background:linear-gradient(135deg,#e4bc48,#eccf60);color:#3a2800}
-  html.light .ps-fn.benefic{background:#d0f0dc;color:#0a5a22}
-  html.light .ps-fn.mixed{background:#f0eeb8;color:#786010}
+  html.light .ps-badge.enemy{background:rgba(182,103,72,.18);color:#8a4c2f}
+  html.light .ps-badge.debil{background:rgba(187,59,40,.18);color:#9e3324}
+  html.light .ps-fn.yogakaraka{background:linear-gradient(135deg,var(--gold),var(--terracotta));color:#3a2800}
+  html.light .ps-fn.benefic{background:rgba(62,125,87,.16);color:#235e3e}
+  html.light .ps-fn.mixed{background:rgba(184,134,11,.16);color:#7a5d18}
   html.light .ps-fn.neutral{background:var(--panel2);color:var(--muted);border:1px solid var(--line)}
-  html.light .ps-fn.malefic{background:#fce8e8;color:#992020}
-  html.light .ps-fn.shadow{background:#ede0ff;color:#5810a0}
-  html.light .ps-flag.combust{background:#fce8e8;color:#992020;border-color:rgba(200,60,60,.3)}
-  html.light .ps-flag.retro{background:#d4e8ff;color:#0848a0;border-color:rgba(40,80,200,.3)}
-  html.light .ps-flag.vg{background:#d0f0dc;color:#0a5a22;border-color:rgba(26,117,64,.3)}
-  html.light .ps-flag.mool{background:#ccf0ee;color:#0a4848;border-color:rgba(10,72,72,.3)}
+  html.light .ps-fn.malefic{background:rgba(187,59,40,.18);color:#9e3324}
+  html.light .ps-fn.shadow{background:rgba(160,132,76,.18);color:#7d6838}
+  html.light .ps-flag.combust{background:rgba(187,59,40,.16);color:#9e3324;border-color:rgba(187,59,40,.3)}
+  html.light .ps-flag.retro{background:rgba(127,176,196,.16);color:#2f6f86;border-color:rgba(127,176,196,.3)}
+  html.light .ps-flag.vg{background:rgba(62,125,87,.14);color:#235e3e;border-color:rgba(62,125,87,.3)}
+  html.light .ps-flag.mool{background:rgba(184,134,11,.14);color:#7a5d18;border-color:rgba(184,134,11,.3)}
   html.light .tr-badge.good{background:#d0f0dc;color:#0a5a22}
   html.light .tr-badge.bad{background:#fce8e8;color:#992020}
   html.light .tr-badge.vedha{background:#fff0c8;color:#7a5000}
@@ -842,9 +970,9 @@
   html.light .yg-grade.B{background:#d0f0dc;color:#0a5a22}
   html.light .yg-grade.C{background:#fce8e8;color:#992020}
   html.light .yg-desc{color:var(--ink)}
-  html.light .ol-best-banner{background:linear-gradient(90deg,#d4eedd,#cbead5);border-color:#4a8a5a;color:#1a4028}
-  html.light .ol-year-card.ol-good{background:linear-gradient(135deg,#e4f2ea,var(--panel2));border-color:#4a8a5a}
-  html.light .ol-year-card.ol-weak{background:linear-gradient(135deg,#fce8e8,var(--panel2));border-color:#bb3030}
+  html.light .ol-best-banner{background:linear-gradient(135deg,color-mix(in srgb,var(--exalt) 20%,var(--panel2)),color-mix(in srgb,var(--gold) 14%,var(--panel2)));border-color:color-mix(in srgb,var(--exalt) 34%,var(--line));color:var(--ink)}
+  html.light .ol-year-card.ol-good{background:linear-gradient(135deg,color-mix(in srgb,var(--exalt) 16%,var(--panel2)),var(--panel2));border-color:color-mix(in srgb,var(--exalt) 38%,var(--line))}
+  html.light .ol-year-card.ol-weak{background:linear-gradient(135deg,color-mix(in srgb,var(--debil) 14%,var(--panel2)),var(--panel2));border-color:color-mix(in srgb,var(--debil) 42%,var(--line))}
   html.light .bb-cond.pos{background:rgba(208,240,220,.6);border-color:rgba(26,117,64,.25)}
   html.light .bb-cond.neg{background:rgba(252,232,232,.6);border-color:rgba(187,32,32,.2)}
   html.light .bb-verdict-bar.v-strong{background:rgba(208,240,220,.5);border-color:rgba(26,117,64,.3)}
@@ -853,8 +981,8 @@
   html.light .bb-sav-badge.bb-sav-lo{background:#fce8e8;color:#992020}
   html.light .sl-badge.sav-hi{background:#d0f0dc;color:#0a5a22}
   html.light .sl-badge.sav-lo{background:#fce8e8;color:#992020}
-  html.light .opt.right{background:rgba(26,117,64,.15);border-color:var(--exalt)}
-  html.light .opt.wrong{background:rgba(187,32,32,.15);border-color:var(--debil)}
+  html.light .opt.right{background:color-mix(in srgb,var(--exalt) 16%,var(--panel2));border-color:color-mix(in srgb,var(--exalt) 48%,var(--line))}
+  html.light .opt.wrong{background:color-mix(in srgb,var(--debil) 14%,var(--panel2));border-color:color-mix(in srgb,var(--debil) 48%,var(--line))}
   html.light .dp-wrap{background:var(--panel)}
   html.light .dp-lord-card{background:var(--panel2)}
   html.light .dp-themes-box{background:var(--panel2)}
@@ -922,13 +1050,13 @@ nav a:hover{background:rgba(122,162,255,0.08) !important;color:var(--ink);text-s
 
 /* Glassmorphic sidebar */
 .charts-sidebar{
-  background:rgba(11,15,34,0.72) !important;
-  backdrop-filter:blur(16px) !important;
-  -webkit-backdrop-filter:blur(16px) !important;
-  border:1px solid rgba(80,100,200,0.18) !important;
-  box-shadow:0 8px 32px rgba(0,0,0,0.35) !important;
+  background:var(--panel) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  border:1px solid var(--line) !important;
+  box-shadow:var(--shadow-1) !important;
 }
-.ctab.active{box-shadow:0 0 14px rgba(231,185,78,0.3),0 2px 8px rgba(0,0,0,0.3) !important}
+.ctab.active{box-shadow:0 8px 18px rgba(0,0,0,0.22),0 0 0 1px rgba(255,255,255,.08) inset !important}
 
 /* Enhanced panels */
 .panel{
@@ -946,59 +1074,52 @@ nav a:hover{background:rgba(122,162,255,0.08) !important;color:var(--ink);text-s
 
 /* Planet cards — premium */
 .ps-card{
-  background:rgba(18,24,52,0.78) !important;
-  border-color:rgba(55,75,165,0.28) !important;
+  background:var(--panel2) !important;
+  border-color:var(--line) !important;
   transition:border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease),transform var(--dur) var(--ease) !important;
   position:relative;overflow:hidden;
 }
 .ps-card::before{
   content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(122,162,255,0.18),transparent);
+  background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--gold) 36%,transparent),transparent);
   pointer-events:none;
 }
 .ps-card:hover{
   transform:translateY(-2px);
-  border-color:rgba(122,162,255,0.45) !important;
-  box-shadow:0 8px 28px rgba(0,0,0,0.4),0 0 18px rgba(80,100,200,0.1) !important;
+  border-color:color-mix(in srgb,var(--gold) 64%,var(--line)) !important;
+  box-shadow:0 10px 26px rgba(0,0,0,0.28),0 0 0 1px color-mix(in srgb,var(--gold) 20%,transparent) inset !important;
 }
-.ps-card[data-planet="Su"]:hover{border-color:rgba(255,176,40,0.5)!important;box-shadow:0 8px 28px rgba(0,0,0,0.4),0 0 18px rgba(255,176,40,0.07)!important}
-.ps-card[data-planet="Mo"]:hover{border-color:rgba(180,210,255,0.5)!important;box-shadow:0 8px 28px rgba(0,0,0,0.4),0 0 18px rgba(180,210,255,0.07)!important}
-.ps-card[data-planet="Ma"]:hover{border-color:rgba(239,106,90,0.5)!important;box-shadow:0 8px 28px rgba(0,0,0,0.4),0 0 18px rgba(239,106,90,0.07)!important}
-.ps-card[data-planet="Ju"]:hover{border-color:rgba(231,185,78,0.5)!important;box-shadow:0 8px 28px rgba(0,0,0,0.4),0 0 18px rgba(231,185,78,0.07)!important}
-.ps-card[data-planet="Ve"]:hover{border-color:rgba(255,180,210,0.5)!important;box-shadow:0 8px 28px rgba(0,0,0,0.4),0 0 18px rgba(255,180,210,0.07)!important}
-.ps-card[data-planet="Sa"]:hover{border-color:rgba(128,96,200,0.5)!important;box-shadow:0 8px 28px rgba(0,0,0,0.4),0 0 18px rgba(128,96,200,0.07)!important}
-.ps-card[data-planet="Me"]:hover{border-color:rgba(79,208,192,0.5)!important;box-shadow:0 8px 28px rgba(0,0,0,0.4),0 0 18px rgba(79,208,192,0.07)!important}
-.ps-card[data-planet="Ra"]:hover{border-color:rgba(100,70,180,0.5)!important;box-shadow:0 8px 28px rgba(0,0,0,0.4),0 0 18px rgba(80,50,160,0.07)!important}
+.ps-card[data-planet="Su"]:hover,.ps-card[data-planet="Mo"]:hover,.ps-card[data-planet="Ma"]:hover,.ps-card[data-planet="Ju"]:hover,.ps-card[data-planet="Ve"]:hover,.ps-card[data-planet="Sa"]:hover,.ps-card[data-planet="Me"]:hover,.ps-card[data-planet="Ra"]:hover{border-color:color-mix(in srgb,var(--gold) 64%,var(--line))!important;box-shadow:0 10px 26px rgba(0,0,0,0.28),0 0 0 1px color-mix(in srgb,var(--gold) 20%,transparent) inset!important}
 
 /* Planet glyphs — glowing */
 .gdot{box-shadow:0 0 6px 1px currentColor;filter:brightness(1.1);transition:.15s transform}
 .gdot:hover{transform:scale(1.18)}
 
 /* House strip */
-.hs-cell{background:rgba(18,24,52,0.65)!important;border-color:rgba(50,70,155,0.22)!important;transition:.15s all}
-.hs-cell.hs-clk:hover{border-color:rgba(231,185,78,0.5)!important;background:rgba(26,32,65,0.75)!important;box-shadow:0 0 12px rgba(231,185,78,0.08)}
+.hs-cell{background:var(--panel2)!important;border-color:var(--line)!important;transition:.15s all}
+.hs-cell.hs-clk:hover{border-color:color-mix(in srgb,var(--gold) 62%,var(--line))!important;background:var(--panel)!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--gold) 22%,transparent) inset}
 
 /* Dasha timeline */
-.dt-wrap{background:rgba(11,16,36,0.75)!important;backdrop-filter:blur(10px)!important;border-color:rgba(60,80,180,0.16)!important;box-shadow:0 4px 24px rgba(0,0,0,0.28)!important}
-.dt-cur-card{background:rgba(18,24,52,0.75)!important;border-color:rgba(55,75,165,0.25)!important}
+.dt-wrap{background:var(--panel)!important;backdrop-filter:none!important;border-color:var(--line)!important;box-shadow:var(--shadow-1)!important}
+.dt-cur-card{background:var(--panel2)!important;border-color:var(--line)!important}
 
 /* Dasha engine panel */
 .dp-wrap{background:rgba(16,21,48,0.72)!important;backdrop-filter:blur(10px)!important}
 
 /* Modal glassmorphic */
-.modal .card{backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);background:rgba(16,21,50,0.95)!important;border:1px solid rgba(80,100,200,0.2)!important;box-shadow:0 24px 80px rgba(0,0,0,0.6),0 0 40px rgba(80,100,200,0.05)!important}
+.modal .card{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--panel)!important;border:1px solid var(--line)!important;box-shadow:var(--shadow-2)!important}
 
 /* Nakshatra band */
 .nakband{background:linear-gradient(120deg,rgba(22,27,62,0.82),rgba(18,22,52,0.82))!important;border-color:rgba(70,90,185,0.22)!important;backdrop-filter:blur(8px)}
 
 /* BAV insight */
-.bav-insight{background:rgba(11,16,36,0.75)!important;border-color:rgba(55,75,165,0.22)!important}
+.bav-insight{background:var(--panel)!important;border-color:var(--line)!important}
 
 /* Hero verdict */
 .hero-verdict{border-color:rgba(60,80,180,0.22)!important;box-shadow:0 4px 20px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.03)!important}
 
 /* Chart story */
-.chart-story{background:linear-gradient(160deg,rgba(14,20,48,0.85),rgba(9,12,26,0.85))!important;border-color:rgba(60,80,180,0.16)!important;backdrop-filter:blur(8px)}
+.chart-story{background:var(--panel)!important;border-color:var(--line)!important;backdrop-filter:none}
 
 /* Yogakaraka badge pulse */
 .ps-fn.yogakaraka{box-shadow:0 0 8px rgba(231,185,78,0.4);animation:yk-pulse 2.8s ease-in-out infinite}
@@ -1010,23 +1131,23 @@ section{border-bottom-color:rgba(60,80,180,0.14)!important}
 /* ===== CHART VIEW TOGGLE ===== */
 .chart-view-toggle{display:flex;gap:8px;margin-bottom:12px;align-items:center;flex-wrap:wrap}
 .cvt-btn{
-  background:rgba(16,21,48,0.78);border:1px solid rgba(55,75,165,0.32);color:var(--muted);
+  background:var(--panel2);border:1px solid var(--line);color:var(--muted);
   border-radius:10px;padding:8px 16px;font-size:12.5px;font-weight:600;cursor:pointer;
-  transition:.15s all;backdrop-filter:blur(8px);letter-spacing:.02em;
+  transition:.15s all;backdrop-filter:none;letter-spacing:.02em;
 }
-.cvt-btn.active{background:rgba(38,58,120,0.55);border-color:rgba(122,162,255,0.52);color:var(--accent);box-shadow:0 0 16px rgba(122,162,255,0.14),inset 0 0 10px rgba(122,162,255,0.05)}
-.cvt-btn:hover:not(.active){border-color:rgba(122,162,255,0.3);color:var(--ink);background:rgba(22,28,58,0.8)}
+.cvt-btn.active{background:linear-gradient(135deg,var(--gold),var(--terracotta));border-color:transparent;color:#2a1a0c;box-shadow:0 8px 18px rgba(0,0,0,0.22)}
+.cvt-btn:hover:not(.active){border-color:color-mix(in srgb,var(--gold) 54%,var(--line));color:var(--ink);background:var(--panel)}
 
 /* ===== BHAVA MANDALA ===== */
 #bhavaMandala{
-  border:1px solid rgba(70,90,200,0.18);border-radius:16px;overflow:hidden;
-  background:radial-gradient(ellipse at 50% 35%,#0f1640 0%,#080b1c 70%);
-  box-shadow:0 8px 40px rgba(0,0,0,0.5),inset 0 1px 0 rgba(122,162,255,0.06);
+  border:1px solid var(--line);border-radius:16px;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 35%,color-mix(in srgb,var(--gold) 14%,var(--panel2)) 0%,var(--panel) 74%);
+  box-shadow:var(--shadow-1),inset 0 1px 0 rgba(255,255,255,.04);
   position:relative;
 }
 #bhavaMandala::before{
   content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(122,162,255,0.008) 2px,rgba(122,162,255,0.008) 3px);
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,color-mix(in srgb,var(--gold) 10%,transparent) 2px,color-mix(in srgb,var(--gold) 10%,transparent) 3px);
   animation:scan-drift 12s linear infinite;
 }
 @keyframes scan-drift{from{background-position:0 0}to{background-position:0 60px}}
@@ -1060,20 +1181,20 @@ html.light .bm-hcell{background:rgba(240,244,255,0.7);border-color:rgba(80,100,2
 /* Light theme overrides */
 html.light .panel{background:rgba(255,255,255,0.88)!important;backdrop-filter:blur(12px)!important;border-color:rgba(80,100,200,0.12)!important;box-shadow:0 4px 24px rgba(0,0,0,0.07),inset 0 1px 0 rgba(255,255,255,0.8)!important}
 html.light .panel h4{background:linear-gradient(90deg,#7a5500 40%,rgba(120,80,0,0.55));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-html.light .ps-card{background:rgba(248,250,255,0.9)!important;border-color:rgba(80,100,200,0.14)!important}
-html.light .hs-cell{background:rgba(240,244,255,0.82)!important;border-color:rgba(80,100,200,0.14)!important}
-html.light .charts-sidebar{background:rgba(248,250,255,0.88)!important;backdrop-filter:blur(14px)!important;border-color:rgba(80,100,200,0.12)!important}
+html.light .ps-card{background:var(--panel2)!important;border-color:var(--line)!important}
+html.light .hs-cell{background:var(--panel2)!important;border-color:var(--line)!important}
+html.light .charts-sidebar{background:var(--panel)!important;backdrop-filter:none!important;border-color:var(--line)!important}
 html.light header.top{background:rgba(244,246,251,0.92)!important;border-bottom-color:rgba(80,100,200,0.14)!important;box-shadow:0 1px 20px rgba(0,0,0,0.08)!important}
 html.light .brand{background:linear-gradient(110deg,#1a1d35 20%,#9a7010 70%,#2850c8);-webkit-background-clip:text;background-clip:text;color:transparent;filter:none}
-html.light .cvt-btn{background:rgba(240,244,255,0.82);border-color:rgba(80,100,200,0.18);color:var(--muted)}
-html.light .cvt-btn.active{background:rgba(200,214,255,0.8);border-color:rgba(50,80,200,0.4);color:#2040a0;box-shadow:none}
-html.light #bhavaMandala{background:radial-gradient(ellipse at 50% 35%,#e8edff 0%,#f0f3ff 70%);border-color:rgba(80,100,200,0.18)}
+html.light .cvt-btn{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+html.light .cvt-btn.active{background:linear-gradient(135deg,var(--gold),var(--terracotta));border-color:transparent;color:#2a1a0c;box-shadow:none}
+html.light #bhavaMandala{background:radial-gradient(ellipse at 50% 35%,color-mix(in srgb,var(--gold) 16%,var(--panel2)) 0%,var(--panel) 70%);border-color:var(--line)}
 html.light #cosmos-bg{display:none}
 html.light .ps-fn.yogakaraka{animation:none}
-html.light .dt-wrap{background:rgba(255,255,255,0.88)!important;backdrop-filter:blur(10px)!important;border-color:rgba(80,100,200,0.12)!important}
+html.light .dt-wrap{background:var(--panel)!important;backdrop-filter:none!important;border-color:var(--line)!important}
 html.light .nakband{background:linear-gradient(120deg,#f0f4ff,#e8ecf8)!important;backdrop-filter:none}
 html.light .bav-insight{background:var(--panel2)!important;border-color:var(--line)!important}
-html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0.97)!important;border-color:rgba(80,100,200,0.14)!important;box-shadow:0 20px 60px rgba(0,0,0,0.15)!important}
+html.light .modal .card{backdrop-filter:none;background:var(--panel)!important;border-color:var(--line)!important;box-shadow:var(--shadow-2)!important}
 
 /* Calm overrides — flatter, quieter surfaces */
 #cosmos-bg{opacity:.4}
@@ -1176,14 +1297,16 @@ html.light .brand{color:var(--ink)!important}
   .cmp-controls{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px}
   .cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   @media(max-width:680px){.cmp-grid{grid-template-columns:1fr}}
-  .cmp-col{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .cmp-col{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
   .cmp-col h4{margin:0 0 10px;font-size:var(--text-md);color:var(--gold2)}
-  .cmp-row{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid rgba(42,51,96,.4);font-size:var(--text-sm)}
+  .cmp-row{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:var(--text-sm)}
   .cmp-row:last-child{border-bottom:none}
   .cmp-row b{color:var(--muted);font-weight:600}
-  .cmp-row span{text-align:right;color:#dfe4f6}
+  .cmp-row span{text-align:right;color:var(--ink)}
   .cmp-syn{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:var(--text-sm);line-height:1.6}
   .cmp-syn .cs-tag{display:inline-block;font-size:11px;padding:2px 9px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);margin:2px 4px 2px 0}
+  .cmp-sign,.cmp-dasha{display:inline-flex;align-items:center;gap:6px;vertical-align:middle}
+  .cmp-sign .emblem,.cmp-dasha .emblem{width:20px;height:20px}
 
   /* Colorblind-safe palette */
   html.cb{--exalt:#3a86ff;--debil:#fb8500;--friend:#4cc9f0;--enemy:#ffb703}
@@ -1191,16 +1314,29 @@ html.light .brand{color:var(--ink)!important}
   /* Print */
   @media print{
     #cosmos-bg,header.top,#readProgress,#backToTop,#toastWrap,#cmdPalette,nav.site-nav,
-    .chart-view-toggle,.chartbar,footer,#why,#grahas,#rashis,#bhavas,#synth,#bbavam,
-    #outlook,#lifepredictor,#compare,#quiz,.charts-sidebar{display:none!important}
-    body{background:#fff!important;color:#000!important}
-    *{box-shadow:none!important;animation:none!important}
-    .panel,.cmp-col,.detail{break-inside:avoid;border-color:#ccc!important}
+    .chart-view-toggle,.chartbar,.charts-sidebar,#addModal,#nakModal,footer{display:none!important}
+    #hero,#why,#promptbuilder,#bbavam,#arudhas,#outlook,#lifepredictor,#compare,#quiz{display:none!important}
+    body{background:#fff!important;color:#111!important;padding-left:0!important}
+    .wrap{max-width:none!important;padding:0 12mm!important}
+    section{padding:14px 0 10px!important;border-bottom:1px solid #d8d8d8!important;break-inside:avoid}
+    *{box-shadow:none!important;animation:none!important;text-shadow:none!important;filter:none!important}
+    .panel,.ec-zone-card,.cmp-col,.detail,.quiz,.chart-story,.ol-ai-wrap,.lp-wrap,.pb-recipe,.watchfor{
+      break-inside:avoid;background:#fff!important;color:#111!important;border:1px solid #cfcfcf!important;backdrop-filter:none!important
+    }
+    .sub,.note,.chapref,.kv b,.story-label,.qmeta,.legend2,.bav-legend{color:#444!important}
+    a{color:#111!important;text-decoration:none!important}
+    .emblem .aura{display:none!important}
+    .emblem .ring-base{stroke:#a8a8a8!important}
+    .emblem .ring-gold,.emblem .stroke-gold{stroke:#7c5a1a!important}
+    .emblem .gold,.emblem .terra{fill:#7c5a1a!important}
+    .tok,.opt,.ctab,.ec-chip,.tag,.ps-badge,.ps-fn,.ps-flag,.ol-pill,.ol-ybadge{background:#fff!important;color:#111!important;border-color:#bcbcbc!important}
+    .charttable th,.charttable td,.varga-table th,.varga-table td,.ck-table th,.ck-table td,.bav-table th,.bav-table td,.av-table th,.av-table td{border-color:#cfcfcf!important}
   }
 
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .ec-zone-card:hover,.tok:hover,.opt:hover,.ol-year-card:hover{transform:none!important}
   #cosmos-bg{display:none}
 }
 </style>
@@ -1212,23 +1348,40 @@ html.light .brand{color:var(--ink)!important}
   <div class="brand">✦ Jyotish Atlas<small>Parashara's grammar, made interactive</small></div>
   <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="siteNav">Menu</button>
   <nav id="siteNav" class="site-nav">
-    <div class="nav-group">Learn the grammar</div>
-    <a href="#why">The idea</a>
-    <a href="#grahas">Grahas</a>
-    <a href="#rashis">Rashis</a>
-    <a href="#bhavas">Bhavas</a>
-    <a href="#synth">Synthesizer</a>
-    <div class="nav-group">Your chart</div>
-    <a href="#charts">My Charts</a>
-    <a href="#promptbuilder">Prompt Builder</a>
-    <a href="#bbavam">Bhavat Bhavam</a>
-    <a href="#arudhas">Graha Arudhas</a>
-    <div class="nav-group">Predict &amp; time</div>
-    <a href="#outlook">Life Outlook</a>
-    <a href="#lifepredictor">Life Predictor</a>
-    <div class="nav-group">More</div>
-    <a href="#compare">Compare</a>
-    <a href="#quiz">Practice</a>
+    <details class="nav-zone is-active" data-zone="learn" open>
+      <summary class="nav-zone-trigger">Learn</summary>
+      <div class="nav-zone-menu">
+        <a href="#why">The idea</a>
+        <a href="#grahas">Grahas</a>
+        <a href="#rashis">Rashis</a>
+        <a href="#bhavas">Bhavas</a>
+        <a href="#nakshatras">Nakshatras</a>
+      </div>
+    </details>
+    <details class="nav-zone" data-zone="synthesize">
+      <summary class="nav-zone-trigger">Synthesize</summary>
+      <div class="nav-zone-menu">
+        <a href="#synth">Synthesizer</a>
+        <a href="#bbavam">Bhavat Bhavam</a>
+        <a href="#arudhas">Graha Arudhas</a>
+        <a href="#compare">Compare</a>
+      </div>
+    </details>
+    <details class="nav-zone" data-zone="charts">
+      <summary class="nav-zone-trigger">My Charts</summary>
+      <div class="nav-zone-menu">
+        <a href="#charts">My Charts</a>
+        <a href="#promptbuilder">Prompt Builder</a>
+        <a href="#outlook">Life Outlook</a>
+        <a href="#lifepredictor">Life Predictor</a>
+      </div>
+    </details>
+    <details class="nav-zone" data-zone="practice">
+      <summary class="nav-zone-trigger">Practice</summary>
+      <div class="nav-zone-menu">
+        <a href="#quiz">Practice quiz</a>
+      </div>
+    </details>
   </nav>
   <div class="header-actions">
     <button type="button" id="activeChartPill" class="chart-pill" title="Active chart — click to manage" hidden><span class="cp-dot"></span><span class="cp-name"></span></button>
@@ -1241,8 +1394,24 @@ html.light .brand{color:var(--ink)!important}
 
 <div class="wrap" id="main">
 
-  <h1 class="hero">Astrology isn't a list to memorize. <span class="accent">It's a grammar you can learn.</span></h1>
-  <p class="lede">The <i>Brihat Parashara Hora Shastra</i> looks like 100 chapters of riddles. Underneath, it's a tiny set of building blocks that <b>recombine</b> — like letters into words. Learn the blocks, learn how they combine, and the sky starts to read like a sentence.</p>
+  <section id="hero" class="hero-warm">
+    <div class="hero-copy">
+      <div class="eyebrow">A living primer · <span class="devanagari">पराशर</span></div>
+      <h1 class="display hero-h">The <span class="em">grammar</span><br>of the heavens</h1>
+      <p class="hero-lede">Nine Grahas, twelve Rashis, twelve Bhavas — not a list to memorize, but a language to read. Learn the alphabet, then synthesize any chart.</p>
+      <div class="hero-cta">
+        <a class="ec-btn-primary" href="#grahas">Begin with the Grahas →</a>
+        <a class="ec-btn-ghost" href="#charts">Upload my chart</a>
+      </div>
+    </div>
+    <div class="hero-emblem" id="heroEmblem"></div>
+  </section>
+  <div class="hero-zones">
+    <a class="hero-zone-link" href="#why"><div class="ec-zone-card"><h4>Learn</h4><p>Build the Jyotish alphabet: Grahas, Rashis, Bhavas, and their core grammar.</p></div></a>
+    <a class="hero-zone-link" href="#synth"><div class="ec-zone-card"><h4>Synthesize</h4><p>Combine dignity, nakshatra, drishti, and bhava logic into one coherent reading.</p></div></a>
+    <a class="hero-zone-link" href="#charts"><div class="ec-zone-card"><h4>My Charts</h4><p>Load real charts, inspect Vargas and dasha timelines, and generate focused prompts.</p></div></a>
+    <a class="hero-zone-link" href="#quiz"><div class="ec-zone-card"><h4>Practice</h4><p>Reinforce the principles with quick recall rounds and application-style questions.</p></div></a>
+  </div>
 
   <section id="why" class="section-reveal">
     <div class="eyebrow">The core idea</div>
@@ -1287,6 +1456,14 @@ html.light .brand{color:var(--ink)!important}
     <div class="detail" id="bhavaDetail"></div>
   </section>
 
+  <section id="nakshatras" class="section-reveal">
+    <div class="eyebrow">Lunar mansions · fine grain</div>
+    <h2 class="display">The 27 Nakshatras</h2>
+    <p class="sub">Nakshatras are the Moon's 27 stations: the subtle layer beneath sign placement. Select one to read its lord, deity, symbol, and interpretive current.</p>
+    <div class="tokens" id="nakshatraTokens"></div>
+    <div class="detail" id="nakshatraDetail"></div>
+  </section>
+
   <!-- SYNTHESIZER -->
   <section id="synth" class="section-reveal">
     <div class="eyebrow">The grammar engine</div>
@@ -1306,11 +1483,18 @@ html.light .brand{color:var(--ink)!important}
         <div class="ctrl"><label for="sDeg">Degree <span class="degval" id="sDegVal">14.0°</span></label><input type="range" id="sDeg" min="0" max="29.9" step="0.5" value="14" aria-label="Degree in sign"></div>
         <div class="ctrl"><label for="sBhava">House</label><select id="sBhava" aria-label="House"></select></div>
       </div>
-      <div class="hero-verdict"><div class="badge" id="pBadge">≈</div><div><div class="ht" id="pTitle"></div><div class="hx" id="pText"></div></div></div>
-      <div class="nakband" id="pNak" role="button" tabindex="0" aria-label="Open nakshatra details"></div>
+      <div class="synth-placement">
+        <div class="synth-lead">
+          <div class="synth-emblem" id="pActiveEmblem"></div>
+          <div class="display title" id="pPlacement"></div>
+        </div>
+        <div class="meta" id="pPlacementMeta"></div>
+      </div>
+      <div class="synth-verdicts" id="pVerdicts"></div>
+      <div class="panel"><h4>Woven Reading</h4><div class="synth-reading" id="pReading"></div></div>
       <div class="result-grid">
-        <div class="panel"><h4>Strength · D-1 → D-9</h4><div id="pVargas"></div></div>
-        <div class="panel"><h4>How the meaning is built</h4><div class="steps" id="pSteps"></div></div>
+        <div class="panel"><h4>D-1 / D-9 Evidence</h4><div id="pVargas"></div></div>
+        <div class="panel"><h4>Applied Fragments</h4><div class="steps" id="pSteps"></div></div>
         <div class="panel"><h4>Drishti · what it aspects</h4><p class="note" id="aspText"></p><div class="houses" id="aspHouses"></div>
           <div class="legend2"><span><i style="background:var(--gold)"></i>occupies</span><span><i style="background:#28407a"></i>aspects</span></div></div>
       </div>
@@ -1337,7 +1521,7 @@ html.light .brand{color:var(--ink)!important}
   <!-- MY CHARTS -->
   <section id="charts" class="section-reveal">
     <div class="eyebrow">Apply it to a real chart</div>
-    <h2>My Charts</h2>
+    <h2 class="display">My Charts</h2>
     <p class="sub">Paste any natal chart (the planetary table from JHora / Parashara's Light — exactly like your <code>.txt</code> files) and the whole chart gets the D-1 → D-9 + lord treatment. Click any row to open it in the Synthesizer. Charts are saved in your browser.</p>
     <div class="charts-layout">
       <div class="charts-sidebar">
@@ -1345,7 +1529,7 @@ html.light .brand{color:var(--ink)!important}
         <div class="chartbar" id="chartTabs"></div>
       </div>
       <div class="charts-main">
-        <div id="chartEmpty" class="panel" style="text-align:center;color:var(--muted);padding:34px;display:none">
+        <div id="chartEmpty" class="panel ec-zone-card" style="text-align:center;color:var(--muted);padding:34px;display:none">
           No chart yet. <a href="#" id="addFirst"><b>＋ Add your chart</b></a> &nbsp;·&nbsp; <a href="#" id="demoFirst">load a demo</a>
         </div>
         <div id="chartView" style="display:none">
@@ -1355,20 +1539,20 @@ html.light .brand{color:var(--ink)!important}
         <span style="font-size:11px;color:var(--muted);margin-left:4px">— 3D zodiac wheel</span>
       </div>
       <div id="bhavaMandala" style="display:none;margin-bottom:14px"></div>
-      <div id="houseStripPanel" class="panel" style="margin-bottom:14px">
+      <div id="houseStripPanel" class="panel ec-zone-card" style="margin-bottom:14px">
         <h4 style="margin:0 0 10px">Houses · sign, occupants &amp; lord</h4>
         <div class="hs-grid" id="houseStripGrid"></div>
       </div>
-      <div class="ps-wrap panel" id="strengthDash" style="display:none">
+      <div class="ps-wrap panel ec-zone-card" id="strengthDash" style="display:none">
         <h4 style="margin:0 0 14px">Planets · Dignity · Functional Nature · Nakshatra</h4>
         <div class="ps-grid" id="psGrid"></div>
       </div>
-      <div class="varga-section panel" id="vargaPanel" style="display:none;margin-top:14px">
+      <div class="varga-section panel ec-zone-card" id="vargaPanel" style="display:none;margin-top:14px">
         <h4 style="margin:0 0 4px">Divisional Charts (Varga) · Shodasavarga</h4>
         <p class="note" style="margin:0 0 12px">Each <b>D-N</b> magnifies one domain of life (hover a column header). A planet strong across many vargas truly <i>delivers</i>; strong in D-1 but weak in the divisions is a promise that fades. <b>◆ gold</b> = <i>vargottama</i> — same sign in D-1 and that varga, a major strength. <b>Viṁśopaka Bala</b> (Ṣaḍvarga · /20) weights D-1·6, D-2·2, D-3·4, D-9·5, D-12·2, D-30·1 by dignity in each.</p>
         <div class="varga-wrap"><table class="varga-table" id="vargaTable"></table></div>
       </div>
-      <div class="jaimini-section panel" id="jaiminiPanel" style="display:none;margin-top:14px">
+      <div class="jaimini-section panel ec-zone-card" id="jaiminiPanel" style="display:none;margin-top:14px">
         <h4 style="margin:0 0 4px">Jaimini · Chara Kārakas, Kārakāṁśa &amp; Argala</h4>
         <p class="note" style="margin:0 0 12px">The <b>Chara Kārakas</b> are <i>movable</i> significators: the planet at the highest degree in its sign becomes the <b>Ātmakāraka</b> (soul significator), and the rest fall in order of descending degree.</p>
         <div class="jm-sub">Chara Kārakas</div>
@@ -1378,21 +1562,21 @@ html.light .brand{color:var(--ink)!important}
         <div class="jm-sub" style="margin-top:16px">Argala on the Lagna <span class="note">— who intervenes in your selfhood (effective when the intervening house outnumbers its obstruction)</span></div>
         <div class="varga-wrap" id="argBody"></div>
       </div>
-      <div class="avastha-section panel" id="avasthaPanel" style="display:none;margin-top:14px">
+      <div class="avastha-section panel ec-zone-card" id="avasthaPanel" style="display:none;margin-top:14px">
         <h4 style="margin:0 0 4px">Planetary Avasthas · states of a planet</h4>
         <p class="note" style="margin:0 0 12px">A planet can be well-placed yet unable to deliver. <b>Bālādi</b> reads its life-stage by degree (peaks at <i>Yuvā</i>), <b>Jāgradādi</b> its wakefulness, <b>Dīptādi</b> its condition. <b>Effective strength</b> leads with <b>dignity across D-1, D-9 &amp; D-10</b> plus <b>vargottama</b> — the primary strength — and only <i>modulates</i> by avastha, so an exalted, own-sign or vargottama planet stays strong even at a weak degree. The notes flag where promise (D-1) and delivery (D-9 / D-10) diverge.</p>
         <div class="varga-wrap" id="avBody"></div>
       </div>
-      <div class="bav-section panel" style="margin-top:14px">
+      <div class="bav-section panel ec-zone-card" style="margin-top:14px">
         <h4 style="margin:0 0 4px">Bhinna Ashtakavarga (BAV) — benefic points per house</h4>
         <p class="note" style="margin:0 0 12px">Each cell shows how many benefic points (0–8) that planet contributes to that house. <b>∑ SAV</b> is the house total across all 7 planets (≥30 strong, 25–29 average, &lt;25 weak). Gold outline = planet's natal house.</p>
         <div class="bav-table-wrap"><table class="bav-table" id="bavTable"></table></div>
         <div class="bav-legend">
-          <span><i style="background:#1d3a20;border:1px solid var(--exalt)"></i>5–8 strong</span>
-          <span><i style="background:#1e3220;border:1px solid #6fcf87"></i>4 solid</span>
+          <span><i style="background:rgba(62,125,87,.24);border:1px solid var(--exalt)"></i>5–8 strong</span>
+          <span><i style="background:rgba(62,125,87,.16);border:1px solid var(--exalt)"></i>4 solid</span>
           <span><i style="background:var(--panel2);border:1px solid var(--line)"></i>3 average</span>
-          <span><i style="background:#2d1a1a;border:1px solid var(--debil)"></i>2 weak</span>
-          <span><i style="background:#2a1818;border:1px solid #c0513c"></i>0–1 very weak</span>
+          <span><i style="background:rgba(187,59,40,.15);border:1px solid var(--debil)"></i>2 weak</span>
+          <span><i style="background:rgba(187,59,40,.24);border:1px solid var(--debil)"></i>0–1 very weak</span>
           <span style="border:1px solid var(--gold);border-radius:4px;padding:0 5px;color:var(--gold2)">outlined = natal house</span>
         </div>
         <div class="bav-insight" id="bavInsight"></div>
@@ -1402,7 +1586,7 @@ html.light .brand{color:var(--ink)!important}
       <div class="tr-wrap" id="transitPanel" style="display:none;margin-top:14px"></div>
       <div id="yogaPanel" style="display:none;margin-top:14px"></div>
       <div id="dashaPanel" style="display:none;margin-top:14px"></div>
-      <div class="sl-section panel" id="specialLagnas" style="display:none;margin-top:14px">
+      <div class="sl-section panel ec-zone-card" id="specialLagnas" style="display:none;margin-top:14px">
         <h4>Special Lagnas · Image · Wealth · Marriage</h4>
         <div class="sl-grid">
           <div class="sl-card" id="alCard"></div>
@@ -1410,7 +1594,7 @@ html.light .brand{color:var(--ink)!important}
           <div class="sl-card" id="ulCard"></div>
         </div>
       </div>
-      <div class="chart-story" id="chartStory" style="display:none">
+      <div class="chart-story ec-zone-card" id="chartStory" style="display:none">
         <div class="chart-story-header">
           <h4>✦ Chart Story</h4>
           <span class="sub">Synthesised from dignity · nakshatra · house position · BAV · D-9</span>
@@ -1443,9 +1627,9 @@ html.light .brand{color:var(--ink)!important}
 
   <section id="promptbuilder" class="section-reveal">
     <div class="eyebrow">The refined reading engine</div>
-    <h2>Prompt Builder</h2>
+    <h2 class="display">Prompt Builder</h2>
     <p class="sub">Pick a question. The builder assembles the <b>complete classical analytical stack</b> for it — the right houses, kārakas, divisional charts (D-1 → D-60), special lagnas, Jaimini kāraka, ashtakavarga, planetary avasthas and daśā timing — into one deeply layered prompt for Claude or Gemini.</p>
-    <div class="panel" style="padding:22px">
+    <div class="panel ec-zone-card" style="padding:22px">
       <div class="pb-question-wrap">
         <label for="pbQuestion">Ask anything personal <span class="note" style="font-weight:400;text-transform:none;letter-spacing:0">— optional; the prompt will centre on your exact question</span></label>
         <textarea id="pbQuestion" class="pb-question" rows="2" placeholder="e.g.  When will I get married?  ·  Should I change my job this year?  ·  Will my health improve?  ·  Is now a good time to buy property?"></textarea>
@@ -1475,9 +1659,9 @@ html.light .brand{color:var(--ink)!important}
 
   <section id="bbavam" class="section-reveal">
     <div class="eyebrow">Advanced technique · bhavat bhavam</div>
-    <h2>Relationship decoder</h2>
+    <h2 class="display">Relationship decoder</h2>
     <p class="sub">Every person in your life maps to a specific house. Any topic about that person maps to another house counted forward from there — <i>bhavat bhavam</i>, "from house to house." Select who you're asking about and what you want to know — the app shows exactly where to look in D-1 and the relevant divisional chart.</p>
-    <div class="panel" style="padding:22px">
+    <div class="panel ec-zone-card" style="padding:22px">
       <div class="bb-selectors">
         <div class="bb-sel-grp">
           <label>Chart</label>
@@ -1515,9 +1699,9 @@ html.light .brand{color:var(--ink)!important}
 
   <section id="arudhas" class="section-reveal">
     <div class="eyebrow">Jaimini · Planetary Reflections</div>
-    <h2>Graha Arudhas</h2>
+    <h2 class="display">Graha Arudhas</h2>
     <p class="sub">Each planet has a <i>Graha Arudha</i> — the material, external reflection of that planet's archetype. Since most planets rule two signs, they each cast two Arudhas. The rule (BPHS Ch.32): count how many signs the planet's owned sign is from the planet itself, then count that same number forward from the planet. Where this reflection lands is where that planetary energy — solar authority, lunar emotion, Martian drive — manifests as a visible, tangible force in your world. The final cluster analysis shows which houses receive the most reflections, revealing the dominant material arenas of your life.</p>
-    <div class="panel" style="padding:22px">
+    <div class="panel ec-zone-card" style="padding:22px">
       <div class="ar-controls">
         <div class="bb-sel-grp">
           <label>Chart</label>
@@ -1531,9 +1715,9 @@ html.light .brand{color:var(--ink)!important}
 
   <section id="lifepredictor" class="section-reveal">
     <div class="eyebrow">Full-life timeline</div>
-    <h2>Life Predictor</h2>
+    <h2 class="display">Life Predictor</h2>
     <p class="sub">A scrollable life map — each Antardasha colored by the same 4-layer Dasha Prediction Engine (natal dignity, functional role, Gochara, yogas). <b style="color:var(--exalt)">Green</b> favors delivery; <b style="color:var(--debil)">red</b> signals friction. Click any segment for details.</p>
-    <div class="panel" style="padding:22px">
+    <div class="panel ec-zone-card" style="padding:22px">
       <div class="ol-controls">
         <div class="bb-sel-grp">
           <label>Chart</label>
@@ -1551,9 +1735,9 @@ html.light .brand{color:var(--ink)!important}
 
   <section id="outlook" class="section-reveal">
     <div class="eyebrow">Life outlook · 2025 – 2029</div>
-    <h2>When is the right time?</h2>
+    <h2 class="display">When is the right time?</h2>
     <p class="sub">Jupiter and Saturn move slowly — roughly one sign per year and 2.5 years respectively. Where they land against your natal houses, crossed with SAV, reveals your strongest windows for each goal.</p>
-    <div class="panel" style="padding:22px">
+    <div class="panel ec-zone-card" style="padding:22px">
       <div class="ol-controls">
         <div class="bb-sel-grp">
           <label>Chart</label>
@@ -1575,9 +1759,9 @@ html.light .brand{color:var(--ink)!important}
 
   <section id="compare" class="section-reveal">
     <div class="eyebrow">Two charts, side by side</div>
-    <h2>Compare charts</h2>
+    <h2 class="display">Compare charts</h2>
     <p class="sub">Pick two saved charts to compare Lagna, Moon, current dasha and the dignity of every planet at a glance — useful for relationship synastry or weighing two nativities.</p>
-    <div class="panel" style="padding:22px">
+    <div class="panel ec-zone-card" style="padding:22px">
       <div class="cmp-controls">
         <div class="bb-sel-grp">
           <label for="cmpA">Chart A</label>
@@ -1595,9 +1779,9 @@ html.light .brand{color:var(--ink)!important}
 
   <section id="quiz" class="section-reveal">
     <div class="eyebrow">Make it stick</div>
-    <h2>Practice — decode the sky</h2>
+    <h2 class="display">Practice — decode the sky</h2>
     <p class="sub">Quick questions drawn from the blocks you just met. Reasoning beats memorizing — every answer shows why.</p>
-    <div class="quiz" id="quizBox"></div>
+    <div class="quiz ec-zone-card" id="quizBox"></div>
   </section>
 
   <footer>
@@ -1608,19 +1792,19 @@ html.light .brand{color:var(--ink)!important}
 <!-- ADD-CHART MODAL -->
 <div class="modal" id="addModal" role="dialog" aria-modal="true" aria-labelledby="addModalTitle" aria-hidden="true">
   <div class="card">
-    <h3 id="addModalTitle">Add a chart</h3>
+    <h3 id="addModalTitle" class="display">Add a chart</h3>
     <p class="note" style="margin:0 0 12px">Paste the planetary longitude table from your chart software — the lines listing <b>Lagna, Sun … Ketu</b> with sign &amp; degree. The parser reads the rest.</p>
     <input type="text" id="chartName" placeholder="Name (e.g. Mine, or a relative's)"/>
     <div style="display:flex;gap:12px;align-items:center;margin:12px 0">
-      <label class="btn" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px">📁 Upload a .txt file<input type="file" id="chartFile" accept=".txt,text/plain" style="display:none"></label>
+      <label class="btn ec-btn-primary upload-trigger" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px">📁 Upload a .txt file<input type="file" id="chartFile" accept=".txt,text/plain" style="display:none"></label>
       <span class="note">…or paste the text below ↓</span>
     </div>
     <textarea id="chartText" placeholder="Lagna     14 Vi 41' 55.19&quot; Hast  2  Vi  Ta&#10;Sun - BK  14 Le 14' 38.67&quot; PPha  1  Le  Le&#10;Moon - GK  5 Ar 26' 42.40&quot; Aswi  2  Ar  Ta&#10;..."></textarea>
     <div class="row-actions">
       <a href="#" id="fillDemo" class="note">paste a demo chart</a>
       <span style="flex:1"></span>
-      <button class="ghost" id="addCancel">Cancel</button>
-      <button class="btn" id="addSave">Parse &amp; save</button>
+      <button class="ghost ec-btn-ghost" id="addCancel">Cancel</button>
+      <button class="btn ec-btn-primary" id="addSave">Parse &amp; save</button>
     </div>
     <p class="note" id="parseMsg" style="margin-top:10px;min-height:16px"></p>
   </div>
@@ -1852,6 +2036,7 @@ function renderBhavaMandala(c,La){
   ct.innerHTML=`<div class="bm-container">${sv}</div>${caption}<div class="bm-houses">${houseRows}</div><div class="bm-legend">${leg}</div>`;
 }
 
+/* == DATA == */
 const SIGNS=["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"];
 const SIGN3=["Ar","Ta","Ge","Cn","Le","Vi","Li","Sc","Sg","Cp","Aq","Pi"];
 const SIGN_SKT=["Mesha","Vrishabha","Mithuna","Karka","Simha","Kanya","Tula","Vrishchika","Dhanu","Makara","Kumbha","Meena"];
@@ -1859,31 +2044,76 @@ const SIGN_SKT=["Mesha","Vrishabha","Mithuna","Karka","Simha","Kanya","Tula","Vr
 const GRAHAS=[
  {k:"Su",name:"Sun",skt:"Surya",gl:"☉",col:"#e8a33d",nature:"Mild malefic",guna:"Sattva",elem:"Fire",
   karakas:["Soul (Atma)","Father","King / authority","Vitality & ego","Health","Fame"],body:["Bones","Eyes (right)","Heart"],exalt:0,debil:6,own:[4],
-  desc:"The soul and the self. Surya is the king — radiant, authoritative, the source of vitality and purpose. He illumines but can also scorch (ego, pride).",day:"Sunday",chap:"Graha nature — BPHS"},
+  desc:"The soul and the self. Surya is the king — radiant, authoritative, the source of vitality and purpose. He illumines but can also scorch (ego, pride).",
+  bija:"सूर्य",
+  interp:"Atman-karaka in spirit, Surya is the central flame around which the chart organizes itself. He does not negotiate identity; he declares it. Wherever Surya stands, that house seeks dignity, visibility, and authorship. As natural significator of father, authority, vitality, and inner sovereignty, his condition shows whether one leads from alignment or from insecurity. Exalted in Mesha, he acts as clean initiative and brave self-definition. Debilitated in Tula, he learns balance, diplomacy, and partnership before radiance becomes stable. In Simha, his own sign, the heart's throne is natural: confidence, steadiness, and creative command rise. A strong Sun gives spine and direction. A strained Sun creates compensatory pride, status anxiety, or conflict with power. Classical reading asks not only \"Is the Sun strong?\" but \"Is this authority dharmic?\" because Surya's higher expression is duty, illumination, and right use of power.",
+  strong:"Dignity, vitality, a clear spine, recognition, healthy authority, and blessings from fatherly figures.",
+  afflicted:"Pride, brittle ego, clashes with superiors or father, exhaustion from over-identifying with role and status.",
+  day:"Sunday",chap:"Graha nature — BPHS"},
  {k:"Mo",name:"Moon",skt:"Chandra",gl:"☾",col:"#cfd8e6",nature:"Benefic (waxing)",guna:"Sattva",elem:"Water",
   karakas:["Mind (Manas)","Mother","Emotions","The public","Nourishment","Comfort"],body:["Blood & fluids","Lungs","Left eye"],exalt:1,debil:7,own:[3],
-  desc:"The mind and feelings. Chandra is the nurturer — receptive, changeable, reflective. Strong when full, vulnerable when dark; the most personal point in the chart.",day:"Monday",chap:"Graha nature — BPHS"},
+  desc:"The mind and feelings. Chandra is the nurturer — receptive, changeable, reflective. Strong when full, vulnerable when dark; the most personal point in the chart.",
+  bija:"चन्द्र",
+  interp:"Chandra is manas, the living mind that feels, remembers, reacts, and bonds. If Surya is identity, Chandra is lived experience: how safety is sensed, how emotions move, how belonging is formed. Through Chandra we read mother, nourishment, memory, and one's interface with the public mood. Exalted in Vrishabha, the mind stabilizes and receives deeply; debilitated in Vrischika, it can swing toward intensity, secrecy, and emotional overdrive before maturation. In Karka, her own sign, care and protectiveness flow naturally. A strong Moon gives emotional intelligence, adaptability, and social receptivity. A weak or afflicted Moon may show restlessness, mood volatility, anxious attachment, or inconsistent inner ground. Classical synthesis asks where the Moon sits, who aspects her, and which nakshatra she occupies, because these determine the texture of daily life. Chandra ultimately teaches rhythm: when to receive, when to rest, and how to regulate mind so insight can remain steady.",
+  strong:"Calm mind, empathy, emotional steadiness, public support, and a nourishing bond with home and mother-lineage.",
+  afflicted:"Mood instability, insecurity, over-sensitivity, attachment turbulence, or emotional decisions made under pressure.",
+  day:"Monday",chap:"Graha nature — BPHS"},
  {k:"Ma",name:"Mars",skt:"Mangala",gl:"♂",col:"#d8503a",nature:"Malefic",guna:"Tamas",elem:"Fire",
   karakas:["Energy & courage","Younger siblings","Land & property","Drive / aggression","War & competition","Engineers, soldiers"],body:["Muscles","Marrow","Blood (red)"],exalt:9,debil:3,own:[0,7],
-  desc:"The warrior. Mangala is raw drive, courage and force — protective when channeled, destructive when not. Commander of the planetary army.",day:"Tuesday",chap:"Graha nature — BPHS"},
+  desc:"The warrior. Mangala is raw drive, courage and force — protective when channeled, destructive when not. Commander of the planetary army.",
+  bija:"मंगल",
+  interp:"Mangala is directed fire: courage, force, precision, and the willingness to act when hesitation would cost too much. He governs stamina, conflict, engineering skill, younger siblings, and the martial intelligence required to cut through resistance. Exalted in Makara, his force becomes disciplined execution; debilitated in Karka, action can become reactive, emotionally flooded, or strategically diffuse. In Mesha and Vrischika, his own signs, initiative and intensity become native languages. A strong Mars protects boundaries, competes cleanly, and converts pressure into progress. An afflicted Mars tends toward impatience, conflict escalation, impulsive speech, or scattered aggression. Classical counsel is not to suppress Mars but to train him: schedule effort, choose worthy battles, and align will with dharma. When Mangala is integrated, he grants bravery without cruelty, ambition without chaos, and the power to build what weaker intentions only imagine.",
+  strong:"Courage, disciplined action, healthy boundaries, competitive success, technical execution, and protector energy.",
+  afflicted:"Anger spikes, rash decisions, conflict with siblings/peers, injury-proneness, or force used without timing and tact.",
+  day:"Tuesday",chap:"Graha nature — BPHS"},
  {k:"Me",name:"Mercury",skt:"Budha",gl:"☿",col:"#4caf7d",nature:"Variable (benefic with benefics)",guna:"Rajas",elem:"Earth",
   karakas:["Intellect & logic","Speech & writing","Commerce & trade","Skill / wit","Students","Nerves"],body:["Skin","Nervous system"],exalt:5,debil:11,own:[2,5],
-  desc:"The communicator. Budha is the clever prince — quick, analytical, adaptable. Takes the color of whatever it sits with (benefic with benefics, malefic with malefics).",day:"Wednesday",chap:"Graha nature — BPHS"},
+  desc:"The communicator. Budha is the clever prince — quick, analytical, adaptable. Takes the color of whatever it sits with (benefic with benefics, malefic with malefics).",
+  bija:"बुध",
+  interp:"Budha is discriminating intelligence: language, analysis, trade, pattern recognition, and the skill of timely response. He governs speech, writing, study, calculation, markets, and the nervous system's speed. Classical texts call him adaptive, taking the tone of company: with benefics he refines clarity and civility; with malefics he can become cunning or anxious. Exalted in Kanya, Budha reaches precision and technical mastery. Debilitated in Meena, logic may blur into diffusion unless anchored by discipline. In Mithuna and Kanya, his own signs, curiosity and method combine naturally. A strong Mercury gives articulation, negotiation skill, and practical intelligence. A strained Mercury shows overthinking, inconsistency, argumentativeness, or information without wisdom. Budha's remedy is craft: write, measure, edit, and verify. Through him, scattered thought becomes useful knowledge and useful knowledge becomes right action.",
+  strong:"Clear speech, agile intellect, learning speed, commercial skill, negotiation ability, and practical problem-solving.",
+  afflicted:"Overthinking, nervous strain, mixed messaging, manipulative communication, or cleverness disconnected from ethics.",
+  day:"Wednesday",chap:"Graha nature — BPHS"},
  {k:"Ju",name:"Jupiter",skt:"Guru",gl:"♃",col:"#e3b94e",nature:"Great benefic",guna:"Sattva",elem:"Ether",
   karakas:["Wisdom & dharma","Children","Wealth & fortune","Teacher / guru","Faith & ethics","Expansion"],body:["Fat","Liver","Thighs"],exalt:3,debil:9,own:[8,11],
-  desc:"The guru. Brihaspati is grace, wisdom and growth — the great benefic. Expands and blesses whatever he touches; teacher of the gods.",day:"Thursday",chap:"Graha nature — BPHS"},
+  desc:"The guru. Brihaspati is grace, wisdom and growth — the great benefic. Expands and blesses whatever he touches; teacher of the gods.",
+  bija:"गुरु",
+  interp:"Guru is expansion with meaning: wisdom, ethics, teaching, grace, children, and the ability to see larger order behind immediate events. He is not mere growth, but dharmic growth. Exalted in Karka, compassion and protection become abundant. Debilitated in Makara, faith can narrow into caution or transactional thinking unless consciously uplifted. In Dhanu and Meena, his own signs, philosophy and devotion flow naturally. A strong Jupiter grants counsel, hope, fortune through merit, and benefic timing in education, lineage, and guidance. A weakened Jupiter may show dogma, excess optimism without structure, or mistrust of higher principles. Classical interpretation checks whether Guru is living as teacher, advisor, or protector in the house he occupies. When integrated, he stabilizes conscience, aligns ambition with virtue, and turns knowledge into blessings for others, not just personal gain.",
+  strong:"Wisdom, ethical clarity, benevolence, guidance, children-related blessings, prosperity through dharmic alignment.",
+  afflicted:"Dogmatism, misplaced trust, moral confusion, over-expansion, or missed opportunities from weak conviction.",
+  day:"Thursday",chap:"Graha nature — BPHS"},
  {k:"Ve",name:"Venus",skt:"Shukra",gl:"♀",col:"#e58fb0",nature:"Benefic",guna:"Rajas",elem:"Water",
   karakas:["Love & relationships","Spouse","Art, beauty, music","Luxury & vehicles","Pleasure","Diplomacy"],body:["Reproductive system","Kidneys","Semen/ova"],exalt:11,debil:5,own:[1,6],
-  desc:"The lover-poet. Shukra is harmony, beauty and desire — guru of the asuras, master of the arts and of all worldly delight.",day:"Friday",chap:"Graha nature — BPHS"},
+  desc:"The lover-poet. Shukra is harmony, beauty and desire — guru of the asuras, master of the arts and of all worldly delight.",
+  bija:"शुक्र",
+  interp:"Shukra governs attraction, reciprocity, sensual intelligence, aesthetics, and the civilizing arts that make life sweet and shareable. He is spouse-karaka and the principle of harmonization: how one values, chooses, and bonds. Exalted in Meena, love becomes devotional, generous, and refined. Debilitated in Kanya, affection can become overly analytical, conditional, or difficult to soften. In Vrishabha and Tula, his own signs, pleasure and relational balance become native strengths. A strong Venus gives magnetism, artistic taste, diplomacy, and relational repair capacity. An afflicted Venus can show excess indulgence, dependency, vanity, relational triangulation, or confusion between comfort and commitment. Classical reading asks whether Shukra uplifts desire toward refinement or drags it toward compulsion. Integrated Venus brings beauty with restraint, intimacy with respect, and prosperity through relationship intelligence.",
+  strong:"Harmony, relational grace, artistic talent, diplomacy, fertility/comfort, and refined enjoyment without losing balance.",
+  afflicted:"Relationship drama, indulgence, aesthetic vanity, weak boundaries, or pleasure-seeking that drains vitality and focus.",
+  day:"Friday",chap:"Graha nature — BPHS"},
  {k:"Sa",name:"Saturn",skt:"Shani",gl:"♄",col:"#7f8db0",nature:"Malefic",guna:"Tamas",elem:"Air",
   karakas:["Discipline & time","Longevity","Sorrow & delay","The masses / labour","Detachment","Servants, elders"],body:["Nerves","Teeth","Skeleton"],exalt:6,debil:0,own:[9,10],
-  desc:"The judge. Shani is time, karma and consequence — slow, strict, fair. He delays and restricts, but rewards patience and honest effort like no other.",day:"Saturday",chap:"Graha nature — BPHS"},
+  desc:"The judge. Shani is time, karma and consequence — slow, strict, fair. He delays and restricts, but rewards patience and honest effort like no other.",
+  bija:"शनि",
+  interp:"Shani is the law of time: delay, pressure, sobriety, repetition, endurance, and earned authority. He strips illusion and asks what remains when comfort is removed. Through him we read labor, institutions, old age, responsibility, and karmic accountability. Exalted in Tula, Saturn applies justice with balance and social intelligence. Debilitated in Mesha, impatience can clash with process and consequence. In Makara and Kumbha, his own signs, discipline and structural thinking deepen. A strong Saturn grants resilience, mastery, credibility, and long-term results that outlast trends. A strained Saturn can produce fear, pessimism, isolation, chronic delay, or harsh self-judgment. Classical teaching is clear: Saturn does not deny without reason; he matures through effort. When integrated, Shani makes character dependable, work meaningful, and success durable because it is built on reality, not impulse.",
+  strong:"Discipline, endurance, realism, stable authority, strategic patience, and success built for the long run.",
+  afflicted:"Fear, rigidity, loneliness, delay-fatigue, scarcity thinking, or karmic lessons repeated until responsibility is embraced.",
+  day:"Saturday",chap:"Graha nature — BPHS"},
  {k:"Ra",name:"Rahu",skt:"Rahu",gl:"☊",col:"#9a8fb6",nature:"Shadowy malefic",guna:"Tamas",elem:"Air",
   karakas:["Obsession & desire","Foreign / unconventional","Illusion (Maya)","Sudden events","Technology, outsiders","Amplification"],body:["—"],exalt:-1,debil:-1,own:[],
-  desc:"The dragon's head — a shadow point, not a body. Rahu magnifies, craves and disrupts; worldly hunger and the unfamiliar. (Exaltation varies — often Taurus or Gemini.)",day:"—",chap:"Nodes — BPHS"},
+  desc:"The dragon's head — a shadow point, not a body. Rahu magnifies, craves and disrupts; worldly hunger and the unfamiliar. (Exaltation varies — often Taurus or Gemini.)",
+  bija:"राहु",
+  interp:"Rahu is appetite without satiety: ambition, amplification, disruption, foreignness, taboo-breaking, and the hunger to experience what is not yet mastered. As a chaya-graha, he works through obsession, fascination, and boundary-crossing rather than stable essence. Rahu can produce rapid gains, unusual visibility, and modern or unconventional pathways, especially in technology, politics, and transgressive domains. Yet unchecked Rahu clouds discernment, inflates urgency, and mistakes intensity for truth. Classical reading tracks Rahu's sign-lord, house, and associations, because Rahu behaves like the company he keeps. Strongly integrated Rahu gives strategic audacity and the courage to innovate beyond inherited limits. Afflicted Rahu manifests as compulsive desire, confusion, image addiction, or ethically costly shortcuts. Rahu's maturation is not suppression but wise containment: directing appetite toward mastery rather than endless consumption.",
+  strong:"Bold innovation, unconventional opportunity, strategic risk-taking, global/outsider advantages, and fast pattern disruption.",
+  afflicted:"Obsessive craving, confusion, reputational volatility, addictive loops, or success pursued without ethical center.",
+  day:"—",chap:"Nodes — BPHS"},
  {k:"Ke",name:"Ketu",skt:"Ketu",gl:"☋",col:"#9a8b7a",nature:"Shadowy malefic",guna:"Tamas",elem:"Fire",
   karakas:["Detachment & moksha","Past-life karma","Spirituality / insight","Sudden loss","Mysticism","Subtraction"],body:["—"],exalt:-1,debil:-1,own:[],
-  desc:"The dragon's tail — the other shadow point. Ketu cuts away, withdraws and seeks liberation; flashes of intuition through letting go. (Exaltation often Scorpio or Sagittarius.)",day:"—",chap:"Nodes — BPHS"}
+  desc:"The dragon's tail — the other shadow point. Ketu cuts away, withdraws and seeks liberation; flashes of intuition through letting go. (Exaltation often Scorpio or Sagittarius.)",
+  bija:"केतु",
+  interp:"Ketu is severance, interiorization, and moksha-oriented intelligence. Where Rahu grasps, Ketu releases. As a shadow graha, Ketu can indicate prior mastery, disinterest in worldly reward, and sudden breaks that force inner clarity. He grants intuition, subtle perception, and spiritual penetration when the mind is quiet. In material contexts, however, Ketu may produce discontinuity, under-engagement, or dissatisfaction with roles that once seemed desirable. Classical interpretation studies Ketu through house, sign-lord, and planetary company, because Ketu channels the environment while reducing attachment to its fruits. A strong Ketu supports research, contemplation, occult inquiry, and non-egoic service. An afflicted Ketu may manifest as withdrawal, isolation, fragmentation, or \"cutting\" before understanding. Ketu's wisdom is precision through subtraction: remove noise, remember essence, and act from truth rather than compulsion.",
+  strong:"Intuition, detachment, spiritual depth, research insight, subtle perception, and freedom from needless entanglement.",
+  afflicted:"Disconnection, abrupt breaks, apathy, alienation, or avoidance of practical duties in the name of detachment.",
+  day:"—",chap:"Nodes — BPHS"}
 ];
 const GBYK={}; GRAHAS.forEach(g=>GBYK[g.k]=g);
 const FRIEND={
@@ -1896,26 +2126,54 @@ const FRIEND={
 const SIGN_LORD=["Ma","Ve","Me","Mo","Su","Me","Ve","Ma","Ju","Sa","Sa","Ju"];
 const INDU_VAL={Su:30,Mo:16,Ma:6,Me:8,Ju:10,Ve:12,Sa:1};
 const ELEM={Fire:"#e7795a",Earth:"#c4a368",Air:"#7fb0e0",Water:"#5fc9c2"};
+const RASHI_BIJA=["मेष","वृषभ","मिथुन","कर्क","सिंह","कन्या","तुला","वृश्चिक","धनु","मकर","कुम्भ","मीन"];
+const RASHI_INTERP=[
+  "Mesha, the ram: cardinal fire ruled by Mangala. It is the zodiac's first impulse — direct, initiating, and unafraid of friction. Planets here act quickly, prefer autonomy, and learn through action before theory. Surya exalts here, while Shani falls: initiative thrives, patience must be cultivated. In Kalapurusha it governs the head, so the sign speaks through identity, bold starts, and leadership under pressure.",
+  "Vrishabha is fixed earth ruled by Shukra: steady, sensorial, and value-centered. It preserves, accumulates, and stabilizes what faster signs begin. Planets in Taurus seek durability, comfort, and tangible outcomes. Chandra exalts here, making emotional steadiness and nourishment strong themes. As face and throat in Kalapurusha, it governs voice, taste, and resource orientation — beauty with endurance rather than urgency.",
+  "Mithuna is dual air ruled by Budha: curious, linguistic, and mentally mobile. It connects ideas, people, and systems with wit and adaptability. Planets here become conversational and versatile, but can scatter without focus. As arms and shoulders in Kalapurusha, Gemini signifies reach, exchange, and skillful coordination. Its gift is intelligent movement between perspectives; its lesson is committing thought into coherent direction.",
+  "Karka is cardinal water ruled by Chandra: protective, receptive, and memory-rich. It responds through feeling first, then strategy. Planets in Cancer seek safety, belonging, and emotional coherence before outward expansion. Mangala debilitates here, showing that force must soften into care to work well. As chest and heart in Kalapurusha, this sign governs nurture, home, and inner anchoring — the power of emotional intelligence.",
+  "Simha is fixed fire ruled by Surya: radiant, sovereign, and creatively expressive. It seeks noble authorship, recognition, and principled leadership. Planets in Leo want to stand visibly and act from center rather than imitation. As stomach/solar center in Kalapurusha, it governs confidence, will, and personal authority. Its strength is dignity and generosity; its imbalance is pride when validation replaces purpose.",
+  "Kanya is dual earth ruled by Budha: analytical, methodical, and precision-oriented. It refines, edits, diagnoses, and improves systems through detail. Planets here become practical and service-driven, sometimes overly critical when perfection dominates proportion. Budha exalts in Kanya, so intellect and craft are potent. As hips and gut in Kalapurusha, Virgo governs assimilation, sorting, and functional order — intelligence applied to utility.",
+  "Tula is cardinal air ruled by Shukra: balancing, relational, and justice-seeking. It measures two sides, negotiates proportion, and civilizes conflict through fairness. Planets in Libra become partnership-aware and diplomatic, though indecision can arise when harmony is over-prioritized. Shani exalts here while Surya falls, emphasizing social order over unilateral ego. As lower abdomen in Kalapurusha, Libra governs exchange, agreement, and shared equilibrium.",
+  "Vrischika is fixed water ruled by Mangala: intense, strategic, and transformative. It penetrates beneath appearances, holding power in secrecy, endurance, and psychological depth. Planets here gain focus and resilience, but can become guarded or extreme without trust. Chandra debilitates in Scorpio, highlighting emotional volatility when depth lacks regulation. As pelvis/genitals in Kalapurusha, it governs vulnerability, regeneration, and irreversible change.",
+  "Dhanu is dual fire ruled by Guru: expansive, principled, and horizon-seeking. It pursues meaning, law, philosophy, pilgrimage, and high learning. Planets here orient toward growth and future vision, sometimes outrunning practical detail. As thighs in Kalapurusha, Sagittarius signifies movement, direction, and purposeful journey. Its gift is faith with breadth; its shadow is certainty without verification.",
+  "Makara is cardinal earth ruled by Shani: structured, disciplined, and outcome-driven. It builds slowly, respects hierarchy, and values proof over promise. Planets in Capricorn become strategic, realistic, and endurance-based. Mangala exalts here and Guru debilitates, showing pragmatic execution can dominate idealism. As knees in Kalapurusha, Capricorn governs effort under load, responsible ambition, and institutional competence.",
+  "Kumbha is fixed air ruled by Shani: conceptual, collective, and future-oriented. It systems social vision, networks ideas, and challenges stagnant conventions. Planets here become objective and reformist, sometimes detached from personal emotion. As calves and ankles in Kalapurusha, Aquarius signifies circulation, distribution, and collective pathways. Its strength is principled innovation; its risk is abstraction without human warmth.",
+  "Meena is dual water ruled by Guru: porous, compassionate, and imaginal. It dissolves rigid boundaries and reconnects life to devotion, empathy, and transcendence. Planets here become intuitive and symbolic, though clarity may blur without grounding. Shukra exalts in Pisces while Budha debilitates, highlighting heart-led refinement over dry analysis. As feet in Kalapurusha, Pisces governs surrender, completion, and spiritual direction."
+];
 const RASHIS=SIGNS.map((s,i)=>({
   name:s,skt:SIGN_SKT[i],lord:SIGN_LORD[i],elem:["Fire","Earth","Air","Water"][i%4],
   mode:["Movable (Chara)","Fixed (Sthira)","Dual (Dvisvabhava)"][i%3],gender:(i%2===0)?"Male / odd":"Female / even",
   body:["Head","Face & neck","Arms & shoulders","Chest & heart","Stomach","Hips & gut","Navel & lower abdomen","Pelvis & genitals","Thighs","Knees","Calves & ankles","Feet"][i],
   symbol:["Ram","Bull","Twins","Crab","Lion","Maiden","Scales","Scorpion","Archer","Sea-goat","Water-bearer","Fishes"][i],
-  traits:[["pioneering","impulsive","bold"],["steady","sensual","stubborn"],["curious","communicative","restless"],["nurturing","moody","protective"],["regal","proud","creative"],["analytical","precise","critical"],["balanced","relational","indecisive"],["intense","secretive","transformative"],["philosophical","free","optimistic"],["ambitious","disciplined","cautious"],["inventive","detached","humanitarian"],["compassionate","dreamy","boundless"]][i]
+  traits:[["pioneering","impulsive","bold"],["steady","sensual","stubborn"],["curious","communicative","restless"],["nurturing","moody","protective"],["regal","proud","creative"],["analytical","precise","critical"],["balanced","relational","indecisive"],["intense","secretive","transformative"],["philosophical","free","optimistic"],["ambitious","disciplined","cautious"],["inventive","detached","humanitarian"],["compassionate","dreamy","boundless"]][i],
+  bija:RASHI_BIJA[i],interp:RASHI_INTERP[i]
 }));
 const BHAVAS=[
- {n:1,skt:"Tanu",en:"Self & body",cat:"Kendra · Trikona",kar:["physical body","personality","head","vitality","life direction"]},
- {n:2,skt:"Dhana",en:"Wealth & speech",cat:"Maraka",kar:["accumulated wealth","family","speech","food","face & eyes"]},
- {n:3,skt:"Sahaja",en:"Courage & siblings",cat:"Upachaya · Kama",kar:["younger siblings","courage & effort","communication","short travel","hands, skills"]},
- {n:4,skt:"Sukha",en:"Home & heart",cat:"Kendra · Moksha",kar:["mother","home & property","vehicles","inner peace","heart, chest"]},
- {n:5,skt:"Putra",en:"Creativity & children",cat:"Trikona · Dharma",kar:["children","intelligence","romance","past-life merit","mantra"]},
- {n:6,skt:"Ari",en:"Obstacles & service",cat:"Upachaya · Dusthana",kar:["enemies & competition","disease","debts","daily work & service","obstacles overcome"]},
- {n:7,skt:"Yuvati",en:"Partnership",cat:"Kendra · Maraka",kar:["spouse","marriage","business partners","open relations","trade"]},
- {n:8,skt:"Randhra",en:"Transformation",cat:"Dusthana · Moksha",kar:["longevity & death","sudden events","occult & research","inheritance","deep change"]},
- {n:9,skt:"Dharma",en:"Fortune & belief",cat:"Trikona · Dharma",kar:["fortune & grace","father","guru","higher learning","pilgrimage, ethics"]},
- {n:10,skt:"Karma",en:"Karma & authority",cat:"Kendra · Artha",kar:["primary sustained action","authority & command","public recognition","reputation","any principal role in the world"]},
- {n:11,skt:"Labha",en:"Gains & networks",cat:"Upachaya · Kama",kar:["income & gains","elder siblings","fulfilled desires","social networks","large goals"]},
- {n:12,skt:"Vyaya",en:"Loss & liberation",cat:"Dusthana · Moksha",kar:["expenditure & loss","foreign lands","isolation, retreat","moksha","bed, sleep, the beyond"]}
+ {n:1,skt:"Tanu",en:"Self & body",cat:"Kendra · Trikona",kar:["physical body","personality","head","vitality","life direction"],
+  interp:"The first house is embodiment itself: body, vitality, temperament, and the way life is approached. As both Kendra and Trikona, it is simultaneously structural and grace-bearing — the chart's central axis of agency. Planets here become highly visible in character and behavior. A strong lagna and lagnesha stabilize every other promise; a weakened one makes all outcomes harder to sustain."},
+ {n:2,skt:"Dhana",en:"Wealth & speech",cat:"Maraka",kar:["accumulated wealth","family","speech","food","face & eyes"],
+  interp:"The second house governs stored value: finances, food, family culture, and speech. It shows what is accumulated and how one uses voice, memory, and values in practical life. As a maraka house it also carries mortality-linked timing factors, so benefic support here is prized. Planets in the 2nd shape earning style, verbal impact, and relationship to security."},
+ {n:3,skt:"Sahaja",en:"Courage & siblings",cat:"Upachaya · Kama",kar:["younger siblings","courage & effort","communication","short travel","hands, skills"],
+  interp:"The third house is effort, initiative, communication skill, and practiced courage. It is an Upachaya: results improve with repetition, discipline, and deliberate risk. Younger siblings, short journeys, media, writing, and hands-on craft also live here. Planets in the 3rd reward action more than theory; confidence grows by doing, not waiting."},
+ {n:4,skt:"Sukha",en:"Home & heart",cat:"Kendra · Moksha",kar:["mother","home & property","vehicles","inner peace","heart, chest"],
+  interp:"The fourth house is emotional foundation: mother, home, land, vehicles, and inner contentment. As a Kendra, it anchors life materially and psychologically; as Moksha, it points to inner rest and belonging. Planets here strongly affect domestic atmosphere and the felt quality of safety. A well-supported 4th gives rootedness and peace; stress here unsettles both heart and home."},
+ {n:5,skt:"Putra",en:"Creativity & children",cat:"Trikona · Dharma",kar:["children","intelligence","romance","past-life merit","mantra"],
+  interp:"The fifth house is creative intelligence, children, learning, mantra, and purva-punya (stored merit). As a Trikona it carries grace and inspiration, showing how insight becomes expression. It governs romance, speculation, and the capacity to generate meaningful outcomes from inner vision. Strong 5th-house factors often mark talent, memory, and dharmic creativity."},
+ {n:6,skt:"Ari",en:"Obstacles & service",cat:"Upachaya · Dusthana",kar:["enemies & competition","disease","debts","daily work & service","obstacles overcome"],
+  interp:"The sixth house is conflict terrain: debts, disease, competition, litigation, and service labor. It is both Dusthana and Upachaya, meaning difficult but improvable through effort and discipline. Planets here often indicate problem-solving under pressure, and victory over obstacles through routine and skill. The 6th does not deny struggle; it teaches mastery through repeated engagement."},
+ {n:7,skt:"Yuvati",en:"Partnership",cat:"Kendra · Maraka",kar:["spouse","marriage","business partners","open relations","trade"],
+  interp:"The seventh house governs marriage, partnership, contracts, clients, and all direct one-to-one mirrors. As Kendra it is a major pillar of worldly life, showing how one meets the other. As maraka, it can also participate in critical timing frameworks. Planets in the 7th shape relational style, attraction patterns, and business alliances."},
+ {n:8,skt:"Randhra",en:"Transformation",cat:"Dusthana · Moksha",kar:["longevity & death","sudden events","occult & research","inheritance","deep change"],
+  interp:"The eighth house governs hidden processes: longevity, sudden reversals, vulnerability, inheritance, occult inquiry, and deep transformation. As Dusthana it brings uncertainty and intensity; as Moksha it can open profound inner evolution. Planets here operate below the surface and often mature through crisis. The 8th is where control is tested and depth is forged."},
+ {n:9,skt:"Dharma",en:"Fortune & belief",cat:"Trikona · Dharma",kar:["fortune & grace","father","guru","higher learning","pilgrimage, ethics"],
+  interp:"The ninth house is dharma, grace, philosophy, father/guru influences, and higher meaning. As Trikona and Dharma house, it blesses perspective, ethics, and beneficial timing when aligned with principle. It governs pilgrimage, scripture, higher study, and the worldview that directs choices. Strong 9th-house support often protects through wisdom and right orientation."},
+ {n:10,skt:"Karma",en:"Karma & authority",cat:"Kendra · Artha",kar:["primary sustained action","authority & command","public recognition","reputation","any principal role in the world"],
+  interp:"The tenth, the Midheaven, is visible karma: vocation, authority, responsibility, and public standing. As Kendra it is structural; as Artha it concerns achievement and worldly function. Planets here broadcast strongly and shape reputation over time. This house shows not only profession, but the principal role through which one carries duty into the world."},
+ {n:11,skt:"Labha",en:"Gains & networks",cat:"Upachaya · Kama",kar:["income & gains","elder siblings","fulfilled desires","social networks","large goals"],
+  interp:"The eleventh house is gains, income channels, elder siblings, networks, and large-scale aspirations. As Upachaya, it improves with strategy, alliances, and sustained effort. It reflects how desire is organized into achievable outcomes and how communities amplify opportunity. Planets in the 11th often increase reach, patronage, and result-oriented momentum."},
+ {n:12,skt:"Vyaya",en:"Loss & liberation",cat:"Dusthana · Moksha",kar:["expenditure & loss","foreign lands","isolation, retreat","moksha","bed, sleep, the beyond"],
+  interp:"The twelfth house governs expenditure, release, sleep, retreat, foreign residence, and final letting-go. As Dusthana it can indicate drain; as Moksha it also opens surrender, contemplation, and spiritual completion. Planets here may work invisibly, behind the scenes, or in distant contexts. Healthy 12th-house expression converts loss into liberation and solitude into clarity."}
 ];
 
 /* SAV house interpretations — indexed 0-11 (H1-H12) */
@@ -1976,6 +2234,57 @@ const NAK=[
  {n:"Uttara Bhadrapada",l:"Sa",d:"Ahir Budhnya",s:"back legs of a cot / serpent",t:"depth, restraint, calm after storm",g:"Manushya (human)",sh:"the power to bring rain &amp; stability",st:"Ahir Budhnya, the serpent of the deep sea. Hidden depth, restraint and wisdom — the still, fertile calm that settles after the storm."},
  {n:"Revati",l:"Me",d:"Pushan",s:"fish / drum",t:"nourishment, safe passage, completion",g:"Deva (divine)",sh:"the power to nourish &amp; give passage",st:"The final nakshatra. Pushan, the shepherd-god, guides souls and travellers safely to their destination. Completion, transcendence and a gentle, nourishing farewell."}
 ];
+NAK.forEach(n=>{
+  if(!n.interp){
+    n.interp=`${n.st} In delineation, ${n.n} channels ${n.t}; ${n.d} presides, and the symbol ${n.s} shows how that current manifests in life.`;
+  }
+});
+/* == EMBLEM SYSTEM == */
+const TAU=Math.PI*2;
+function _rays(n,r1,r2){let s='';for(let i=0;i<n;i++){const a=i/n*TAU-Math.PI/2;
+  const x1=(50+Math.cos(a)*r1).toFixed(1),y1=(50+Math.sin(a)*r1).toFixed(1),
+        x2=(50+Math.cos(a)*r2).toFixed(1),y2=(50+Math.sin(a)*r2).toFixed(1);
+  s+=`<line class="stroke-gold" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke-width="2"/>`;}return s;}
+function _dots(n,r){let s='';for(let i=0;i<n;i++){const a=i/n*TAU-Math.PI/2;
+  s+=`<circle class="gold" cx="${(50+Math.cos(a)*r).toFixed(1)}" cy="${(50+Math.sin(a)*r).toFixed(1)}" r="1.4"/>`;}return s;}
+// inner art per graha key — centered on (50,50), classical Vedic cues
+const EMBLEM_ART={
+  Su:()=>`${_rays(12,30,40)}<circle class="gold" cx="50" cy="50" r="20"/><circle class="ink" cx="50" cy="50" r="3.4"/>`,
+  Mo:()=>`<path class="stroke-gold" d="M58 32 A22 22 0 1 0 58 68 A17 17 0 1 1 58 32 Z" stroke-width="2" fill="var(--ink)" fill-opacity=".08"/>`,
+  Ma:()=>`<path class="gold" d="M50 28 L57 50 L50 46 L43 50 Z"/><path class="terra" d="M50 40 L54 66 L50 60 L46 66 Z"/>`,
+  Me:()=>`${_dots(2,26)}<circle class="stroke-gold" cx="50" cy="52" r="11" stroke-width="2"/><path class="stroke-gold" d="M50 41 V31 M44 35 H56" stroke-width="2"/>`,
+  Ju:()=>`${_dots(8,32)}<path class="stroke-gold" d="M40 38 Q60 38 56 56 Q54 66 44 64" stroke-width="2.4"/><line class="stroke-gold" x1="36" y1="56" x2="58" y2="56" stroke-width="2.4"/>`,
+  Ve:()=>`${_rays(6,28,36)}<circle class="stroke-gold" cx="50" cy="46" r="12" stroke-width="2"/><path class="stroke-gold" d="M50 58 V70 M44 64 H56" stroke-width="2"/>`,
+  Sa:()=>`<circle class="stroke-gold" cx="50" cy="50" r="22" stroke-width="5" stroke-opacity=".5"/><ellipse class="stroke-gold" cx="50" cy="50" rx="30" ry="9" stroke-width="1.4" transform="rotate(-18 50 50)"/>`,
+  Ra:()=>`<path class="stroke-gold" d="M34 60 Q34 34 50 34 Q66 34 66 60" stroke-width="3"/><path class="terra" d="M50 34 l-5 -8 h10 z"/>`,
+  Ke:()=>`<path class="stroke-gold" d="M34 40 Q34 66 50 66 Q66 66 66 40" stroke-width="3"/><path class="terra" d="M50 66 l-5 8 h10 z"/>`
+};
+// returns an <svg> string; opts: {size=64, focus=false, bija=''}
+function grahaEmblem(k,opts={}){
+  const size=opts.size||64, art=(EMBLEM_ART[k]||EMBLEM_ART.Su)();
+  const g=GBYK[k]||{}; const label=(g.skt||k)+" emblem";
+  const aura=`<circle class="aura gold" cx="50" cy="50" r="46"/>`;
+  const bija=opts.bija?`<text x="50" y="${k==='Su'?'55':'90'}" text-anchor="middle" class="${k==='Su'?'ink':'gold'}" font-family="var(--font-sans)" font-size="${k==='Su'?'14':'13'}">${opts.bija}</text>`:'';
+  return `<svg class="emblem${opts.focus?' focus':''}" width="${size}" height="${size}" viewBox="0 0 100 100" role="img" aria-label="${label}">`
+    +aura
+    +`<circle class="ring-base" cx="50" cy="50" r="44" fill="none" stroke-width="5"/>`
+    +`<circle class="ring-gold" cx="50" cy="50" r="44" fill="none" stroke-width="1"/>`
+    +art+bija+`</svg>`;
+}
+// Rashi roundel: element-tinted ring + classical unicode glyph in display face
+const RASHI_GLYPH=["♈","♉","♊","♋","♌","♍","♎","♏","♐","♑","♒","♓"];
+const ELEM_TINT={Fire:"var(--terracotta)",Earth:"#9a8a5e",Air:"var(--friend)",Water:"#6f9fb0"};
+function rashiEmblem(i,opts={}){
+  const size=opts.size||56, r=RASHIS[i]||{}, tint=ELEM_TINT[r.elem]||"var(--gold)";
+  return `<svg class="emblem${opts.focus?' focus':''}" width="${size}" height="${size}" viewBox="0 0 100 100" role="img" aria-label="${(r.skt||'')} roundel">`
+    +`<circle class="aura" cx="50" cy="50" r="46" fill="${tint}"/>`
+    +`<circle class="ring-base" cx="50" cy="50" r="44" fill="none" stroke-width="5"/>`
+    +`<circle cx="50" cy="50" r="44" fill="none" stroke="${tint}" stroke-width="1.4" opacity=".7"/>`
+    +`<circle cx="50" cy="50" r="33" fill="none" stroke="${tint}" stroke-width=".8" opacity=".4"/>`
+    +`<text x="50" y="64" text-anchor="middle" fill="${tint}" font-family="var(--font-display)" font-size="40">${RASHI_GLYPH[i]}</text>`
+    +`</svg>`;
+}
+document.getElementById("heroEmblem")?.insertAdjacentHTML("beforeend", grahaEmblem("Su",{size:190,focus:true,bija:"सू"}));
 function nakInfo(lon){const span=40/3;lon=((lon%360)+360)%360;const idx=Math.floor(lon/span);const pada=Math.floor((lon-idx*span)/(span/4))+1;return Object.assign({idx,pada},NAK[idx]);}
 const VIMY={Ke:7,Ve:20,Su:6,Mo:10,Ma:7,Ra:18,Ju:16,Sa:19,Me:17};
 const DASHA_SEQ_K=["Ke","Ve","Su","Mo","Ma","Ra","Ju","Sa","Me"];
@@ -2302,38 +2611,103 @@ function vrow(label,sign,dg){
 /* ===== token explorers ===== */
 function explorer(tokensId,detailId,items,renderTok,renderDetail){
   const tEl=document.getElementById(tokensId),dEl=document.getElementById(detailId);
+  const setActiveToken=t=>{
+    [...tEl.children].forEach(c=>{
+      c.classList.remove("active");
+      const em=c.querySelector(".emblem");
+      if(em) em.classList.remove("focus");
+    });
+    t.classList.add("active");
+    const em=t.querySelector(".emblem");
+    if(em) em.classList.add("focus");
+  };
   items.forEach((it,i)=>{
     const t=document.createElement("button");t.type="button";t.className="tok"+(i===0?" active":"");t.innerHTML=renderTok(it);
-    t.onclick=()=>{[...tEl.children].forEach(c=>c.classList.remove("active"));t.classList.add("active");dEl.innerHTML=renderDetail(it);};
+    t.onclick=()=>{setActiveToken(t);dEl.innerHTML=renderDetail(it);};
     tEl.appendChild(t);
   });
+  const first=tEl.querySelector(".tok");
+  if(first) setActiveToken(first);
   dEl.innerHTML=renderDetail(items[0]);
 }
-explorer("grahaTokens","grahaDetail",GRAHAS,g=>`${glyphDot(g)}${g.name}`,g=>{
-  const dignity=g.exalt<0?"—":`Exalts in <b style="color:var(--exalt)">${SIGNS[g.exalt]}</b>, falls in <b style="color:var(--debil)">${SIGNS[g.debil]}</b>`;
+explorer("grahaTokens","grahaDetail",GRAHAS,g=>`${grahaEmblem(g.k,{size:26})}<span>${g.name}</span>`,g=>{
   const own=g.own.length?g.own.map(o=>SIGNS[o]).join(", "):"—";
-  return `<h3>${glyphDot(g)} ${g.name} <span class="skt">· ${g.skt} ${g.gl}</span></h3>
-    <p style="margin:8px 0;color:#dfe4f6">${g.desc}</p>
-    <div class="tags">${g.karakas.map(k=>`<span class="tag">${k}</span>`).join("")}</div>
-    <div class="kv"><b>Nature</b><span>${g.nature} · ${g.guna} guna · ${g.elem}</span>
-      <b>Dignity</b><span>${dignity}</span><b>Own sign(s)</b><span>${own}</span>
-      <b>Body (BPHS)</b><span>${g.body.join(", ")}</span><b>Weekday</b><span>${g.day}</span></div>
-    <div class="chapref">📖 ${g.chap}. A planet's whole meaning grows from this one nature — the rest is context.</div>`;
+  const dignityChips=g.exalt<0
+    ? `<span class="ec-chip gold">Node dignities vary by parampara</span>`
+    : `<span class="ec-chip good">Exalts · ${SIGNS[g.exalt]}</span><span class="ec-chip bad">Falls · ${SIGNS[g.debil]}</span><span class="ec-chip gold">Owns · ${own}</span>`;
+  return `<div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap">
+    <div style="flex:0 0 auto">${grahaEmblem(g.k,{size:120,focus:true,bija:g.bija})}</div>
+    <div style="flex:1;min-width:260px">
+      <h3>${g.name} <span class="skt">· <span class="devanagari">${g.bija}</span> · <i>${g.skt}</i></span></h3>
+      <div class="tags" style="margin-top:8px">${dignityChips}</div>
+      <p class="dropcap" style="margin:14px 0 0;color:#dfe4f6;line-height:1.72">${g.interp}</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px">
+        <div style="background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:12px">
+          <div class="eyebrow" style="font-size:9.5px;margin-bottom:7px">Karakatvas</div>
+          <div class="tags">${g.karakas.map(k=>`<span class="tag">${k}</span>`).join("")}</div>
+        </div>
+        <div style="background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:12px">
+          <div class="eyebrow" style="font-size:9.5px;margin-bottom:7px">Nature &amp; Body</div>
+          <div class="kv" style="margin-top:0;grid-template-columns:95px 1fr">
+            <b>Nature</b><span>${g.nature}</span>
+            <b>Guna</b><span>${g.guna}</span>
+            <b>Element</b><span>${g.elem}</span>
+            <b>Body</b><span>${g.body.join(", ")}</span>
+            <b>Weekday</b><span>${g.day}</span>
+          </div>
+        </div>
+      </div>
+      <div class="watchfor"><div class="label">Strong Expression</div><div style="color:#dfe4f6">${g.strong}</div></div>
+      <div class="watchfor" style="border-left-color:var(--debil)"><div class="label" style="color:var(--debil)">When Afflicted</div><div style="color:#dfe4f6">${g.afflicted}</div></div>
+      <div class="chapref">📖 ${g.chap}. Read dignity and house context before making predictions.</div>
+    </div>
+  </div>`;
 });
-explorer("rashiTokens","rashiDetail",RASHIS,r=>`<span class="gl" style="background:${ELEM[r.elem]};color:${badgeInk(ELEM[r.elem])}">${r.name[0]}</span>${r.name}`,r=>{
+explorer("rashiTokens","rashiDetail",RASHIS,r=>`${rashiEmblem(RASHIS.indexOf(r),{size:24})}<span>${r.name}</span>`,r=>{
   const lord=GBYK[r.lord];
-  return `<h3><span class="gl" style="background:${ELEM[r.elem]};color:${badgeInk(ELEM[r.elem])}">${r.name[0]}</span> ${r.name} <span class="skt">· ${r.skt} · the ${r.symbol}</span></h3>
-    <div class="tags">${r.traits.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
-    <div class="kv"><b>Ruler</b><span>${glyphDot(lord)} ${lord.name} — its agenda shapes this sign</span>
-      <b>Element</b><span style="color:${ELEM[r.elem]}">${r.elem}</span><b>Modality</b><span>${r.mode}</span>
-      <b>Polarity</b><span>${r.gender}</span><b>Body (Kalapurusha)</b><span>${r.body}</span></div>
-    <div class="chapref">📖 Rashi nature — BPHS. Element = temperament, modality = start/sustain/adapt, ruler = who runs it. A planet here is "dressed" in these qualities.</div>`;
+  const ri=RASHIS.indexOf(r);
+  return `<div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
+    <div style="flex:0 0 auto">${rashiEmblem(ri,{size:96,focus:true})}</div>
+    <div style="flex:1;min-width:260px">
+      <h3>${r.name} <span class="skt">· <span class="devanagari">${r.bija}</span> · ${r.skt}</span></h3>
+      <div class="tags" style="margin-top:8px">
+        <span class="ec-chip gold">Ruler · ${lord.name}</span>
+        <span class="ec-chip">Element · ${r.elem}</span>
+        <span class="ec-chip">Modality · ${r.mode.replace(" ("," · ").replace(")","")}</span>
+      </div>
+      <p class="dropcap" style="margin:14px 0 0;color:#dfe4f6;line-height:1.72">${r.interp}</p>
+      <div class="kv" style="margin-top:12px;grid-template-columns:140px 1fr">
+        <b>Symbol</b><span>${r.symbol}</span>
+        <b>Polarity</b><span>${r.gender}</span>
+        <b>Body (Kalapurusha)</b><span>${r.body}</span>
+      </div>
+      <div class="tags">${r.traits.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+      <div class="chapref">📖 Rashi nature — BPHS. Element and modality shape expression; the ruler governs delivery.</div>
+    </div>
+  </div>`;
 });
 explorer("bhavaTokens","bhavaDetail",BHAVAS,b=>`<span class="gl" style="background:#2c365f;color:#fff">${b.n}</span>${b.en}`,b=>
   `<h3><span class="gl" style="background:#2c365f;color:#fff">${b.n}</span> ${ORD(b.n)} House <span class="skt">· ${b.skt} Bhava · ${b.en}</span></h3>
+    <div class="tags">${b.cat.split(" · ").map(c=>`<span class="ec-chip gold">${c}</span>`).join("")}</div>
+    <p class="dropcap" style="margin:14px 0 0;color:#dfe4f6;line-height:1.72">${b.interp}</p>
     <div class="tags">${b.kar.map(k=>`<span class="tag">${k}</span>`).join("")}</div>
-    <div class="kv"><b>Category</b><span>${b.cat}</span></div>
-    <div class="chapref">📖 Bhava significations — BPHS. <b>Kendras</b> (1·4·7·10) are pillars; <b>Trikonas</b> (1·5·9) are grace; <b>Dusthanas</b> (6·8·12) are friction; <b>Upachayas</b> (3·6·10·11) grow with effort.</div>`);
+    <div class="chapref">📖 Bhava significations — BPHS. Kendras are structural pillars, Trikonas carry grace, Dusthanas test and transform, Upachayas improve through effort.</div>`);
+explorer("nakshatraTokens","nakshatraDetail",NAK,n=>`<span class="gl" style="background:var(--gold);color:#2a1a0c">✦</span>${n.n}`,n=>{
+  const lord=GBYK[n.l];
+  return `<h3><span class="gl" style="background:var(--gold);color:#2a1a0c">✦</span> ${n.n} <span class="skt">· lord ${lord.name} · deity ${n.d}</span></h3>
+    <div class="tags">
+      <span class="ec-chip gold">Lord · ${lord.gl} ${lord.name}</span>
+      <span class="ec-chip">Deity · ${n.d}</span>
+      <span class="ec-chip">Symbol · ${n.s}</span>
+    </div>
+    <p class="dropcap" style="margin:14px 0 0;color:#dfe4f6;line-height:1.72">${n.interp}</p>
+    <div class="kv" style="margin-top:12px;grid-template-columns:140px 1fr">
+      <b>Gana</b><span>${n.g}</span>
+      <b>Shakti</b><span>${n.sh}</span>
+      <b>Theme</b><span>${n.t}</span>
+    </div>
+    <div class="chapref">📖 Nakshatra layer: lord + deity + symbol refine how a graha in this star actually behaves.</div>`;
+});
 
 /* ===== SYNTHESIZER ===== */
 const JA={};
@@ -2350,25 +2724,49 @@ const JA={};
     const d1=dignityOf(gk,ri),d9=dignityOf(gk,d9i),vg=(ri===d9i),v=combinedVerdict(d1,d9,vg,{house:bn,planet:gk});
     const asp=aspectsFromHouse(gk,bn);
     const lon=ri*30+deg, ni=nakInfo(lon), nl=GBYK[ni.l];
+    const d1Col=d1.score>=1?"var(--exalt)":d1.score<=-1?"var(--debil)":"var(--gold)";
+    const d9Col=d9.score>=1?"var(--exalt)":d9.score<=-1?"var(--debil)":"var(--gold)";
+    const firstSentence=t=>String(t||"").split(/(?<=[.!?])\s+/)[0]||"";
+    const promiseDelivery=d1.score>=1&&d9.score>=1
+      ? "Promise and delivery align: the placement is strong in D-1 and supported in D-9."
+      : d1.score>=1&&d9.score<=-1
+      ? "Promise exceeds delivery: D-1 shows strength, but D-9 asks for refinement before results stabilize."
+      : d1.score<=-1&&d9.score>=1
+      ? "Delivery redeems the promise: early friction softens as D-9 support matures over time."
+      : d1.score<=-1&&d9.score<=-1
+      ? "Both layers are pressured: treat this as a growth curriculum, not a fixed limitation."
+      : "Promise and delivery are mixed: results depend strongly on timing and conscious effort.";
+    const afflictedCase=d1.score<=-1||d9.score<=-1;
+    const overStrong=d1.score===2&&d9.score>=1;
+    const watchText=afflictedCase?g.afflicted:(overStrong?`Power is high here; channel it consciously so ${g.karakas[0].toLowerCase()} does not become excess.`:"");
+
     document.getElementById("sDegVal").textContent=deg.toFixed(1)+"°";
-    document.getElementById("pBadge").textContent=v.g;
-    document.getElementById("pBadge").style.background=v.col;
-    document.getElementById("pTitle").innerHTML=`${g.gl} ${g.name} · ${v.t}`;
-    document.getElementById("pTitle").style.color=v.col;
-    document.getElementById("pText").innerHTML=v.x;
-    const pnk=document.getElementById("pNak");
-    pnk.innerHTML=`<span class="nstar">✦</span><div><b>Nakshatra ${ni.n}</b> · pada ${ni.pada} · star-lord ${nl.gl} ${nl.name} &nbsp;—&nbsp; deity <b>${ni.d}</b>, symbol “<i>${ni.s}</i>” — ${ni.t}.</div><span class="note" style="margin-left:auto;white-space:nowrap;color:var(--gold2)">details ›</span>`;
-    pnk.onclick=()=>openNak(ni.idx);
-    pnk.onkeydown=e=>{if(e.key==="Enter"||e.key===" ") {e.preventDefault();openNak(ni.idx);}};
+    document.getElementById("pActiveEmblem").innerHTML=grahaEmblem(gk,{size:74,focus:true,bija:g.bija});
+    document.getElementById("pPlacement").innerHTML=`${g.name} in ${r.name} · ${ORD(bn)} Bhava`;
+    document.getElementById("pPlacementMeta").textContent=`${deg.toFixed(1)}° in ${r.name} | D-9 ${r9.name}\nNakshatra ${ni.n} p${ni.pada} | lord ${nl.name}`;
+    document.getElementById("pVerdicts").innerHTML=`
+      <div class="ec-verdict"><div class="k">Dignity</div><div class="v" style="color:${d1Col}">${d1.full}</div></div>
+      <div class="ec-verdict"><div class="k">Navamsa D-9</div><div class="v" style="color:${d9Col}">${r9.name}${vg?" · Vargottama":""}</div></div>
+      <div class="ec-verdict"><div class="k">Nakshatra</div><div class="v">${ni.n} · ${nl.name}</div></div>
+      <div class="ec-verdict"><div class="k">Drishti</div><div class="v">${asp.length?`H${asp.join(", H")}`:"None"}</div></div>
+    `;
+    document.getElementById("pReading").innerHTML=`
+      <p class="dropcap">${firstSentence(g.interp)} In this placement, it expresses through ${r.name} and acts in the ${ORD(bn)} house (${b.en.toLowerCase()}).</p>
+      <p>${firstSentence(r.interp)} ${firstSentence(b.interp)}</p>
+      <p>${firstSentence(ni.interp)}</p>
+      <p><b>Promise vs delivery:</b> ${promiseDelivery}</p>
+      ${watchText?`<div class="watchfor"><div class="label">Watch For</div><div style="color:#dfe4f6">${watchText}</div></div>`:""}
+    `;
     document.getElementById("pVargas").innerHTML=
       vrow("D-1 · Rasi",r.name,d1)+vrow("D-9 · Navamsa",r9.name,d9)+
-      (vg?`<div class="note" style="text-align:center;color:var(--gold2);font-weight:700">✦ Vargottama — same sign in both</div>`:"");
+      (vg?`<div class="note" style="text-align:center;color:var(--gold2);font-weight:700">✦ Vargottama — same sign in both</div>`:"")+
+      `<div class="note" style="margin-top:6px">${v.x}</div>`;
     document.getElementById("pSteps").innerHTML=`
-      <div class="step"><div class="sn">1</div><div class="st"><b>Actor:</b> ${g.name} = ${g.karakas.slice(0,3).join(", ").toLowerCase()}.</div></div>
-      <div class="step"><div class="sn">2</div><div class="st"><b>Sign (costume):</b> in ${r.name} (${r.elem.toLowerCase()}, ruled by ${GBYK[r.lord].name}) it acts <b>${r.traits.join(", ")}</b>.</div></div>
-      <div class="step"><div class="sn">★</div><div class="st"><b>Nakshatra (deeper current):</b> ${ni.n} gives a <b>${ni.t.split(",")[0]}</b> undertone; its star-lord ${nl.name} pulls it toward ${nl.karakas[0].toLowerCase()}.</div></div>
-      <div class="step"><div class="sn">3</div><div class="st"><b>House (stage):</b> in the ${ORD(bn)} (${b.skt}) → pours into ${b.kar.slice(0,3).join(", ")}.</div></div>
-      <div class="step"><div class="sn">4</div><div class="st"><b>Navamsa (D-9):</b> sign ${r9.name} → it ${d9.score>=1?"holds its strength":d9.score<=-1?"loses strength":"stays even"} in delivering.</div></div>`;
+      <div class="step"><div class="sn">G</div><div class="st"><b>Graha fragment:</b> ${g.name} (${d1.full}) → ${afflictedCase?"afflicted":"strong"} expression selected.</div></div>
+      <div class="step"><div class="sn">R</div><div class="st"><b>Rashi fragment:</b> ${r.name} (${r.elem}, ${r.mode.replace(" ("," · ").replace(")","")}).</div></div>
+      <div class="step"><div class="sn">B</div><div class="st"><b>Bhava fragment:</b> ${ORD(bn)} house (${b.skt}) — ${b.en.toLowerCase()}.</div></div>
+      <div class="step"><div class="sn">N</div><div class="st"><b>Nakshatra fragment:</b> ${ni.n} p${ni.pada} — lord ${nl.name}, tone ${ni.t.split(",")[0]}.</div></div>
+      <div class="step"><div class="sn">D9</div><div class="st"><b>Delivery line:</b> D-9 ${r9.name}${vg?" (vargottama)":"."}</div></div>`;
     document.getElementById("aspText").innerHTML=`From house ${bn}, <b>${g.name}</b> aspects house${asp.length>1?"s":""} <b>${asp.join(", ")}</b>${(gk==="Ma"||gk==="Ju"||gk==="Sa")?` (incl. special aspects)`:""} — influencing ${asp.map(h=>BHAVAS[h-1].en.toLowerCase()).join(", ")}.`;
     const hc=document.getElementById("aspHouses");hc.innerHTML="";
     for(let h=1;h<=12;h++){const cls=h===bn?"occ":asp.includes(h)?"asp":"";const b=document.createElement("button");b.type="button";b.className="hcell "+cls;b.disabled=true;b.innerHTML=`<span class="hn">${h}</span><span>${BHAVAS[h-1].en.split(" ")[0]}</span>`;hc.appendChild(b);}
@@ -2717,7 +3115,7 @@ function renderAvasthas(c,La){
     if(combust) N.push("Combust — scorched by the Sun; outward results are suppressed even when otherwise strong.");
     const noteHtml=N.length?`<div class="ck-sig" style="margin-top:4px">${N.join(" ")}</div>`:"";
     const digCell=`<div class="av-digrow"><span class="av-dlabel">D1</span>${chip(p.sign,d1)} <span class="av-dlabel">D9</span>${chip(d9s,d9)} <span class="av-dlabel">D10</span>${chip(d10s,d10)}${vargottama?` <span class="av-vgot">★ vargottama</span>`:""}</div><div class="ck-sig">${d1.full.split("·")[0].trim()} in Rāśi</div>`;
-    t+=`<tr><td class="ck-pl">${g.gl} ${g.name}${noteHtml}</td>`+
+    t+=`<tr><td class="ck-pl"><span class="row-emblem">${grahaEmblem(k,{size:18})}<span>${g.name}</span></span>${noteHtml}</td>`+
        `<td>${digCell}</td>`+
        `<td title="${bal.note}"><b>${bal.n}</b> <span class="av-t">${bal.t}</span></td>`+
        `<td title="${jag.note}"><b>${jag.n}</b> <span class="av-t">${jag.t}</span></td>`+
@@ -2734,24 +3132,25 @@ function renderJaimini(c,La){
   let kt=`<table class="ck-table"><thead><tr><th>Kāraka</th><th>Planet</th><th>Sign · deg</th><th>Significator of</th></tr></thead><tbody>`;
   for(const o of ck){ const g=GBYK[o.k];
     kt+=`<tr><td class="ck-ab" title="${o.name}">${o.ab}<div class="ck-name">${o.name}</div></td>`+
-        `<td class="ck-pl">${g.gl} ${g.name}</td><td>${SIGNS[o.sign]} · ${o.deg.toFixed(2)}°</td><td class="ck-sig">${o.sig}</td></tr>`; }
+        `<td class="ck-pl"><span class="row-emblem">${grahaEmblem(o.k,{size:18})}<span>${g.name}</span></span></td><td>${SIGNS[o.sign]} · ${o.deg.toFixed(2)}°</td><td class="ck-sig">${o.sig}</td></tr>`; }
   kt+=`</tbody></table>`;
   // --- Karakamsa = Atmakaraka's navamsa sign ---
   const ak=ck[0], kSign=navamsaSign(ak.sign,ak.deg);
   const inK=["Su","Mo","Ma","Me","Ju","Ve","Sa","Ra","Ke"].filter(k=>{const p=c.planets[k];return p&&navamsaSign(p.sign,p.deg)===kSign;});
   const inKtxt=inK.length
-    ? inK.map(k=>`<li><b>${GBYK[k].gl} ${GBYK[k].name}</b> in Kārakāṁśa → ${KARAKAMSA_GRAHA[k]}</li>`).join("")
+    ? inK.map(k=>`<li><b><span class="row-emblem">${grahaEmblem(k,{size:16})}<span>${GBYK[k].name}</span></span></b> in Kārakāṁśa → ${KARAKAMSA_GRAHA[k]}</li>`).join("")
     : `<li class="note">No planet sits in the Kārakāṁśa — read it through its sign-lord and any planets aspecting it in D-9.</li>`;
   const km=`<div class="km-head">Kārakāṁśa Lagna — <b>${SIGNS[kSign]}</b> <span class="note">(the Ātmakāraka <b>${GBYK[ak.k].name}</b> in Navāṁśa: the seat of the soul's pursuit)</span></div><ul class="km-list">${inKtxt}</ul>`;
   // --- Argala on the Lagna ---
   const ALL9=["Su","Mo","Ma","Me","Ju","Ve","Sa","Ra","Ke"];
   const occ=h=>{const s=(La+h-1)%12;return ALL9.filter(k=>c.planets[k]&&c.planets[k].sign===s);};
+  const occIcons=list=>list.length?list.map(k=>`<span class="row-emblem">${grahaEmblem(k,{size:14})}</span>`).join(""):"—";
   let ar=`<table class="ck-table"><thead><tr><th>Argala (intervention)</th><th>Planets</th><th>Obstruction</th><th>Net</th></tr></thead><tbody>`;
   for(const [f,o] of [[2,12],[4,10],[11,3],[5,9]]){
     const a=occ(f),b=occ(o),eff=a.length>b.length;
     ar+=`<tr><td>H${f} — ${ARGALA_HOUSE_MEAN[f]}</td>`+
-        `<td>${a.map(k=>GBYK[k].gl).join(" ")||"—"}</td>`+
-        `<td>H${o}: ${b.map(k=>GBYK[k].gl).join(" ")||"—"}</td>`+
+        `<td>${occIcons(a)}</td>`+
+        `<td>H${o}: ${occIcons(b)}</td>`+
         `<td class="${eff?'arg-yes':'arg-no'}">${eff?'★ effective':'obstructed'}</td></tr>`;
   }
   ar+=`</tbody></table>`;
@@ -2777,7 +3176,7 @@ function renderVargas(c,La){
   for(const k of PL){
     const p=c.planets[k]; if(!p) continue;
     const g=GBYK[k]; let vim=0;
-    tb+=`<tr><td class="vp-label">${g.gl} ${g.name}</td>`;
+      tb+=`<tr><td class="vp-label"><span class="row-emblem">${grahaEmblem(k,{size:18})}<span>${g.name}</span></span></td>`;
     for(const v of VARGA_DEFS){
       const vs=vargaSign(p.sign,p.deg,v.N), dig=dignityOf(k,vs), vg=v.N!==1&&vs===p.sign;
       vim+=v.w*vargaStrengthFrac(dig.score);
@@ -2852,7 +3251,7 @@ function renderStrengthDash(c,La,allBAV,bavForVerdict){
     if(k==="Ra"||k==="Ke"){
       const htier=[1,5,9].includes(house)?"benefic":[4,7,10].includes(house)?"neutral":[8,12].includes(house)?"malefic":"neutral";
       const htShort=HTYPE[house].split("·")[0].trim().split("(")[0].trim();
-      fnBadgeHtml=`<span class="ps-fn ${htier}">H${house} — ${htShort}</span>`;
+      fnBadgeHtml=`<span class="ps-fn ec-chip ${htier}">H${house} — ${htShort}</span>`;
       // Dispositor: the lord of the sign Ra/Ke occupies
       const dispK=SIGN_LORD[p.sign];
       const dispFn=functionalNature(dispK,La);
@@ -2861,7 +3260,7 @@ function renderStrengthDash(c,La,allBAV,bavForVerdict){
       fnContextLine=`${HTYPE[house]}${upaNote}${retroNote} · Dispositor: ${dispG.name} (${dispTierLabel})`;
     } else {
       const fnHouses=fn.houses.length?` · lords H${fn.houses.join(",")}`:"";
-      fnBadgeHtml=`<span class="ps-fn ${fn.tier}">${fn.tier==="yogakaraka"?"★ Yogakaraka":fn.label}</span>`;
+      fnBadgeHtml=`<span class="ps-fn ec-chip ${fn.tier}">${fn.tier==="yogakaraka"?"★ Yogakaraka":fn.label}</span>`;
       fnContextLine=`${HTYPE[house]}${upaNote}${retroNote}${fnHouses}`;
     }
 
@@ -2869,7 +3268,7 @@ function renderStrengthDash(c,La,allBAV,bavForVerdict){
 
     cards.push(`<button type="button" class="ps-card ps-card-btn" data-planet="${k}" onclick="${synthCall}" title="Open in Synthesizer">
       <div class="ps-top">
-        <span class="gdot" style="background:${g.col};width:26px;height:26px;font-size:13px;flex-shrink:0">${g.gl}</span>
+        <span class="ps-emblem">${grahaEmblem(k,{size:30})}</span>
         <div style="flex:1;min-width:0">
           <div class="ps-name">${g.name}${p.retro?' <span style="font-size:10px;color:var(--accent)">(R)</span>':""}</div>
           <div class="ps-house">H${house} · ${SIGNS[p.sign]} ${p.deg.toFixed(1)}°</div>
@@ -2877,14 +3276,14 @@ function renderStrengthDash(c,La,allBAV,bavForVerdict){
       </div>
       <hr class="ps-divider">
       <div class="ps-badges">
-        <span class="ps-badge ${inh.cls}">${inh.label}</span>
+        <span class="ps-badge ec-chip ${inh.cls}">${inh.label}</span>
         ${fnBadgeHtml}
       </div>
       <div style="font-size:10.5px;color:var(--muted);margin-bottom:7px">${fnContextLine}</div>
       <div class="ps-kv">
         <b>D-9</b><span style="color:${d9.col}">${SIGNS[d9i]} · ${d9.full.split("·")[0].trim()}</span>
         <b>Nakshatra</b><span>${ni.n} pd-${ni.pada}</span>
-        <b>Nak lord</b><span>${nlG.gl} ${nlG.name}</span>
+        <b>Nak lord</b><span><span class="row-emblem">${grahaEmblem(ni.l,{size:16})}<span>${nlG.name}</span></span></span>
       </div>
       ${bavRow}
       ${flags.length?`<div class="ps-flags">${flags.join("")}</div>`:""}
@@ -2913,12 +3312,12 @@ function renderHouseStrip(c,La){
     const isClk=!here.length&&!!lp;   // empty house whose lord is placed elsewhere → clickable
     let inner="";
     if(here.length){
-      inner=here.map(k=>`<span class="gdot" style="background:${GBYK[k].col};width:17px;height:17px;font-size:9px">${GBYK[k].gl}</span>`).join("");
+      inner=here.map(k=>`<span class="hs-emblem">${grahaEmblem(k,{size:17})}</span>`).join("");
     } else if(lp){
       const lh=houseFromSigns(La,lp.sign);
       inner=`<span class="hs-empty">→ H${lh}</span>`;
     } else {
-      inner=`<span class="hs-empty">${GBYK[lordK].gl}</span>`;
+      inner=`<span class="hs-emblem">${grahaEmblem(lordK,{size:17})}</span>`;
     }
     html+=isClk
       ?`<button type="button" class="hs-cell hs-clk" onclick="JA.setHouse(${La},${h},${lp.sign},${lp.deg.toFixed(2)})" title="H${h} empty — open lord ${GBYK[lordK].name} in Synthesizer">
@@ -4507,7 +4906,7 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
     for(const P of PLANET_BAV_ORDER){
       const bav=allBAV[P], g=GBYK[P];
       const natalSign=c.planets[P]?c.planets[P].sign:null;
-      tb+=`<tr><td class="plabel">${g.gl} ${g.name}</td>`;
+      tb+=`<tr><td class="plabel"><span class="row-emblem">${grahaEmblem(P,{size:17})}<span>${g.name}</span></span></td>`;
       for(let h=1;h<=12;h++){
         const s=(La+h-1)%12, v=bav[s];
         const cls=v>=5?"hi5":v===4?"hi4":v===2?"lo2":v<=1?"lo1":"";
@@ -5130,16 +5529,18 @@ function renderSpecialLagnas(c,La,sav){
 
   function vCardHTML(title,hSign,lord,lordVSign,lordDig,lordHn,pls,sav){
     const lg=GBYK[lord];
+    const gInline=k=>`<span class="bb-inline">${grahaEmblem(k,{size:22})}<span>${GBYK[k].name}</span></span>`;
+    const sInline=i=>`<span class="bb-inline">${rashiEmblem(i,{size:22})}<span>${SIGNS[i]}</span></span>`;
     const lordInfo=lordVSign!==undefined
-      ?`${lg.gl} ${lg.name} · ${lordDig?lordDig.full:"—"} in ${SIGNS[lordVSign]}${lordHn?` (H${lordHn})`:""}`
-      :`${lg.gl} ${lg.name}`;
-    const plHTML=pls.length?pls.map(k=>`${GBYK[k].gl} ${GBYK[k].name}`).join(", ")
+      ?`${gInline(lord)} · ${lordDig?lordDig.full:"—"} in ${sInline(lordVSign)}${lordHn?` (H${lordHn})`:""}`
+      :`${gInline(lord)}`;
+    const plHTML=pls.length?pls.map(k=>gInline(k)).join("")
       :`<span style="color:var(--muted)">empty</span>`;
     const savHTML=sav!=null
-      ?`<span class="bb-sav-badge ${sav>=30?"bb-sav-hi":sav>=25?"bb-sav-mid":"bb-sav-lo"}">${sav} SAV</span>`:"";
-    return `<div class="bb-vcard">
+      ?`<span class="ec-chip ${sav>=30?"good":sav>=25?"gold":"bad"}">${sav} SAV</span>`:"";
+    return `<div class="bb-vcard ec-zone-card">
       <div class="bb-vcard-title">${title}</div>
-      <div class="bb-vcard-sign">${SIGNS[hSign]}</div>
+      <div class="bb-vcard-sign">${sInline(hSign)}</div>
       <div class="bb-vcard-kv">
         <b>Lord</b><span>${lordInfo}</span>
         <b>Planets</b><span>${plHTML}</span>
@@ -5339,13 +5740,13 @@ function renderSpecialLagnas(c,La,sav){
       <div class="bb-chain-node">
         <span class="bb-chain-house">H${person.h}</span>
         <span class="bb-chain-label">${person.label}</span>
-        <span class="bb-chain-sign">${SIGNS[(La+person.h-1)%12]}</span>
+        <span class="bb-chain-sign">${rashiEmblem((La+person.h-1)%12,{size:22})}<span>${SIGNS[(La+person.h-1)%12]}</span></span>
       </div>
       <div class="bb-chain-arrow">+${topic.countH}→</div>
       <div class="bb-chain-node bb-chain-result">
         <span class="bb-chain-house">H${resultH}</span>
         <span class="bb-chain-label">${person.label}'s ${topic.label.toLowerCase()}</span>
-        <span class="bb-chain-sign">${SIGNS[resultSign]} · ${BHAVAS[resultH-1].skt}</span>
+        <span class="bb-chain-sign">${rashiEmblem(resultSign,{size:24})}<span>${SIGNS[resultSign]} · ${BHAVAS[resultH-1].skt}</span></span>
       </div>`;
 
     const d1Lord=SIGN_LORD[resultSign];
@@ -5581,9 +5982,9 @@ function renderSpecialLagnas(c,La,sav){
 
       html+=`<div class="ga-planet-card">
         <div class="ga-planet-hd">
-          <span class="ga-planet-glyph" style="color:${gp.col}">${gp.gl}</span>
-          <span class="ga-planet-name" style="color:${gp.col}">${gp.name}</span>
-          <span class="ga-planet-pos">in ${SIGNS[lp.sign]} · H${planetH} · ${dig.full.split("·")[0].trim()}</span>
+          <span class="ga-planet-glyph">${grahaEmblem(pk,{size:30})}</span>
+          <span class="ga-planet-name">${gp.name}</span>
+          <span class="ga-planet-pos">in ${rashiEmblem(lp.sign,{size:20})}<span>${SIGNS[lp.sign]}</span> · H${planetH} · ${dig.full.split("·")[0].trim()}</span>
         </div>
         <div class="ga-archetype">${meta.theme}</div>
         <div class="ga-planet-body">${meta.body}</div>
@@ -5596,24 +5997,23 @@ function renderSpecialLagnas(c,La,sav){
         const aruH=houseFromSigns(La,ga.sign);
         const signLord=SIGN_LORD[ga.sign];
         const savVal=sav[ga.sign];
-        const savCls=savVal>=30?"ar-sav-hi":savVal<25?"ar-sav-lo":"";
 
         // Register in cluster
         if(!clusterMap[ga.sign]) clusterMap[ga.sign]=[];
-        clusterMap[ga.sign].push({pk,label:`${gp.gl} ${gp.name} (${ri===0?"P₁":"P₂"})`});
+        clusterMap[ga.sign].push({pk,label:`${gp.name} (${ri===0?"P₁":"P₂"})`});
 
         const pInSign=Object.entries(c.planets).filter(([k,p])=>p&&p.sign===ga.sign).map(([k])=>k);
 
         html+=`<div class="ga-arudha-row">
           <div class="ga-arudha-hd">
-            <span class="ga-arudha-from">From H${bhavaH} · ${SIGNS[bhavaSign]}</span>
+            <span class="ga-arudha-from">From H${bhavaH} · ${rashiEmblem(bhavaSign,{size:18})}<span>${SIGNS[bhavaSign]}</span></span>
             <span class="ga-arudha-arr">→</span>
-            <span class="ga-arudha-result" style="color:${GBYK[signLord].col}">${SIGNS[ga.sign]}</span>
+            <span class="ga-arudha-result">${rashiEmblem(ga.sign,{size:20})}<span style="color:${GBYK[signLord].col}">${SIGNS[ga.sign]}</span></span>
             <span class="ga-arudha-hn">H${aruH}</span>
-            <span class="ar-badge ${savCls}" style="font-size:11px;padding:2px 8px;margin-left:auto">SAV ${savVal}</span>
+            <span class="ec-chip ${savVal>=30?"good":savVal<25?"bad":"gold"}" style="margin-left:auto">SAV ${savVal}</span>
           </div>
           <div class="ga-arudha-note">${gaHouseNote(pk,aruH)}</div>
-          ${pInSign.length?`<div style="font-size:12px;color:var(--muted);margin-bottom:8px">${pInSign.map(k=>`${GBYK[k].gl} ${GBYK[k].name}`).join(", ")} in ${SIGNS[ga.sign]}</div>`:""}
+          ${pInSign.length?`<div style="font-size:12px;color:var(--muted);margin-bottom:8px">${pInSign.map(k=>`<span class="bb-inline">${grahaEmblem(k,{size:18})}<span>${GBYK[k].name}</span></span>`).join("")}<span style="color:var(--muted)">in ${SIGNS[ga.sign]}</span></div>`:""}
           <button type="button" class="ar-calc-toggle">▸ How this was calculated</button>
           <div class="ar-calc">
             <div class="ar-step"><span class="ar-step-n">1</span><span>${gp.name} rules <b>${SIGNS[bhavaSign]}</b> (H${bhavaH} from Lagna)</span></div>
@@ -5641,9 +6041,9 @@ function renderSpecialLagnas(c,La,sav){
       const hl=SIGN_LORD[si];
       const pct=Math.round(planets.length/maxCount*100);
       html+=`<div class="ga-cluster-row">
-        <span class="ga-cluster-lbl" style="color:${GBYK[hl].col}">${SIGNS[si]} · H${hn}</span>
+        <span class="ga-cluster-lbl" style="color:${GBYK[hl].col}">${rashiEmblem(si,{size:20})}<span>${SIGNS[si]} · H${hn}</span></span>
         <div class="ga-cluster-bar"><div class="ga-cluster-fill" style="width:${pct}%;background:${GBYK[hl].col};opacity:.6"></div></div>
-        <div class="ga-cluster-tags">${planets.map(p=>`<span class="ga-cluster-tag" style="color:${GBYK[p.pk].col}">${p.label}</span>`).join("")}</div>
+        <div class="ga-cluster-tags">${planets.map(p=>`<span class="ga-cluster-tag">${p.label}</span>`).join("")}</div>
       </div>`;
     });
     html+='</div>';
@@ -6671,13 +7071,16 @@ nakshatras and BPHS principles throughout. Avoid generic platitudes; never predi
   }
   let cur=makeQ();
   function draw(){
-    box.innerHTML=`<div class="qq">Q${qi+1}. ${cur.q}</div><div class="opts">${cur.opts.map((o,j)=>`<button type="button" class="opt" data-o="${j}">${o}</button>`).join("")}</div><div class="qmeta"><span>Score: ${score} / ${qi+(answered?1:0)}</span><span id="qfb"></span></div>`;
+    const attempts=qi+(answered?1:0);
+    box.innerHTML=`<div class="quiz-head"><div class="quiz-step">Question ${qi+1} of 10</div><div class="quiz-score">Score <b>${score}</b> / ${attempts}</div></div><div class="qq">Q${qi+1}. ${cur.q}</div><div class="opts">${cur.opts.map((o,j)=>`<button type="button" class="opt" data-o="${j}">${o}</button>`).join("")}</div><div class="qmeta"><span id="qstatus" class="quiz-status">Select the best answer.</span><span id="qfb"></span></div>`;
     box.querySelectorAll(".opt").forEach(el=>el.onclick=()=>{
       if(answered)return;answered=true;const chosen=cur.opts[+el.dataset.o];
-      box.querySelectorAll(".opt").forEach(o=>{const v=cur.opts[+o.dataset.o];if(v===cur.a)o.classList.add("right");else if(v===chosen)o.classList.add("wrong");});
-      if(chosen===cur.a)score++;
-      document.getElementById("qfb").innerHTML=`<button class="btn" id="nextq">${qi>=9?"Restart":"Next →"}</button>`;
-      const wy=document.createElement("p");wy.className="note";wy.style.marginTop="10px";wy.innerHTML="💡 "+cur.why;box.appendChild(wy);
+      box.querySelectorAll(".opt").forEach(o=>{const v=cur.opts[+o.dataset.o];o.disabled=true;if(v===cur.a)o.classList.add("right");else if(v===chosen)o.classList.add("wrong");});
+      const status=document.getElementById("qstatus");
+      if(chosen===cur.a){score++;status.textContent="Correct — classical match.";status.classList.add("is-right");}
+      else{status.textContent="Not quite — review the key signal.";status.classList.add("is-wrong");}
+      document.getElementById("qfb").innerHTML=`<button class="ec-btn-primary quiz-next" id="nextq">${qi>=9?"Restart":"Next →"}</button>`;
+      const wy=document.createElement("p");wy.className="quiz-why";wy.innerHTML="💡 "+cur.why;box.appendChild(wy);
       document.getElementById("nextq").onclick=()=>{if(qi>=9){qi=0;score=0;}else qi++;answered=false;cur=makeQ();draw();};
     });
   }
@@ -6685,31 +7088,49 @@ nakshatras and BPHS principles throughout. Avoid generic platitudes; never predi
 })();
 
 /* ===== LIGHT / DARK THEME ===== */
+function setThemeColor(light){
+  const meta=document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.setAttribute("content",light?"#f5f1e8":"#181310");
+}
 function toggleTheme(){
   const light=document.documentElement.classList.toggle("light");
   localStorage.setItem("ja_theme",light?"light":"dark");
   document.getElementById("themeToggle").textContent=light?"☉":"☾";
+  setThemeColor(light);
 }
 (function(){
-  if(localStorage.getItem("ja_theme")==="light"){
+  const light=localStorage.getItem("ja_theme")==="light";
+  if(light){
     document.documentElement.classList.add("light");
     const btn=document.getElementById("themeToggle");
     if(btn) btn.textContent="☉";
   }
+  setThemeColor(light);
 })();
 
 /* ===== Site chrome: mobile nav, scrollspy, section reveal, chart view ===== */
 (function(){
   const navToggle=document.getElementById("navToggle");
   const siteNav=document.getElementById("siteNav");
+  const navZones=siteNav?[...siteNav.querySelectorAll(".nav-zone")]:[];
+  function setActiveZone(activeLink){
+    navZones.forEach(z=>z.classList.toggle("is-active",!!activeLink&&z.contains(activeLink)));
+  }
   if(navToggle&&siteNav){
     navToggle.addEventListener("click",()=>{
       const open=siteNav.classList.toggle("open");
       navToggle.setAttribute("aria-expanded",open?"true":"false");
     });
+    navZones.forEach(zone=>{
+      zone.addEventListener("toggle",()=>{
+        if(!zone.open) return;
+        navZones.forEach(other=>{if(other!==zone) other.removeAttribute("open");});
+      });
+    });
     siteNav.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{
       siteNav.classList.remove("open");
       navToggle.setAttribute("aria-expanded","false");
+      setActiveZone(a);
     }));
   }
 
@@ -6729,10 +7150,22 @@ function toggleTheme(){
       entries.forEach(e=>{
         if(!e.isIntersecting) return;
         const id=e.target.id;
-        navLinks.forEach(a=>a.classList.toggle("nav-active",a.getAttribute("href")==="#"+id));
+        let active=null;
+        navLinks.forEach(a=>{
+          const on=a.getAttribute("href")==="#"+id;
+          a.classList.toggle("nav-active",on);
+          if(on) active=a;
+        });
+        setActiveZone(active);
       });
     },{rootMargin:"-42% 0px -42% 0px",threshold:0});
     sections.forEach(s=>{if(s.id) spy.observe(s);});
+  }
+  const initialNav=navLinks.find(a=>a.getAttribute("href")===location.hash)||navLinks[0];
+  if(initialNav){
+    setActiveZone(initialNav);
+    const z=initialNav.closest(".nav-zone");
+    z&&z.setAttribute("open","");
   }
 
   const btnGrid=document.getElementById("btnGridView");
@@ -6809,9 +7242,10 @@ function toggleTheme(){
   const cmdInput=document.getElementById("cmdInput");
   const cmdList=document.getElementById("cmdList");
   let cmdItems=[],cmdView=[],cmdSel=0;
-  const SECTIONS=[["why","The idea"],["grahas","Grahas"],["rashis","Rashis"],["bhavas","Bhavas"],
-    ["synth","Synthesizer"],["charts","My Charts"],["bbavam","Bhavat Bhavam"],["lifepredictor","Life Predictor"],
-    ["outlook","Life Outlook"],["compare","Compare charts"],["quiz","Practice quiz"]];
+  const SECTIONS=[["why","The idea"],["grahas","Grahas"],["rashis","Rashis"],["bhavas","Bhavas"],["nakshatras","Nakshatras"],
+    ["synth","Synthesizer"],["bbavam","Bhavat Bhavam"],["arudhas","Graha Arudhas"],["compare","Compare charts"],
+    ["charts","My Charts"],["promptbuilder","Prompt Builder"],["outlook","Life Outlook"],["lifepredictor","Life Predictor"],
+    ["quiz","Practice quiz"]];
   function openTokenDetail(tokensId,sectionId,i){
     const btns=document.querySelectorAll("#"+tokensId+" .tok");
     if(btns[i]) btns[i].click();
@@ -6824,6 +7258,7 @@ function toggleTheme(){
     GRAHAS.forEach((g,i)=>items.push({label:`${g.name} · ${g.skt}`,cat:"Graha",ic:g.gl,run:()=>openTokenDetail("grahaTokens","grahas",i)}));
     RASHIS.forEach((r,i)=>items.push({label:`${r.name} · ${r.skt}`,cat:"Rashi",ic:r.name[0],run:()=>openTokenDetail("rashiTokens","rashis",i)}));
     BHAVAS.forEach((b,i)=>items.push({label:`${b.n} · ${b.en}`,cat:"Bhava",ic:b.n,run:()=>openTokenDetail("bhavaTokens","bhavas",i)}));
+    NAK.forEach((n,i)=>items.push({label:`${n.n} · Nakshatra`,cat:"Nakshatra",ic:"✦",run:()=>openTokenDetail("nakshatraTokens","nakshatras",i)}));
     (JA.getCharts?JA.getCharts():[]).forEach((c,i)=>items.push({label:c.name,cat:"Chart",ic:"📊",run:()=>JA.activateChart(i)}));
     items.push({label:"Toggle light / dark theme",cat:"Action",ic:"☾",run:()=>toggleTheme()});
     items.push({label:"Toggle colorblind-safe colors",cat:"Action",ic:"◐",run:()=>JA.toggleCb()});
@@ -7015,11 +7450,13 @@ function toggleTheme(){
     const mo=c.planets.Mo,moNak=mo?nakInfo(mo.sign*30+mo.deg):null;
     const su=c.planets.Su;
     const cd=curDasha(c),t=dignTally(c);
-    const cdTxt=cd?`${GBYK[cd.md.lord].name}${cd.ad?" / "+GBYK[cd.ad.lord].name:""}`:"—";
+    const signChip=i=>`<span class="cmp-sign">${rashiEmblem(i,{size:20})}<span>${SIGNS[i]}</span></span>`;
+    const dashaChip=k=>`<span class="cmp-dasha">${grahaEmblem(k,{size:20})}<span>${GBYK[k].name}</span></span>`;
+    const cdTxt=cd?`${dashaChip(cd.md.lord)}${cd.ad?` / ${dashaChip(cd.ad.lord)}`:""}`:"—";
     return `<h4>${c.name}</h4>
-      <div class="cmp-row"><b>Lagna</b><span>${SIGNS[La]} · lord ${GBYK[ll].name}${llP?` (H${llH}, ${llDig.full.split("·")[0].trim()})`:""}</span></div>
-      <div class="cmp-row"><b>Moon</b><span>${mo?`${SIGNS[mo.sign]} · ${moNak.n}`:"—"}</span></div>
-      <div class="cmp-row"><b>Sun</b><span>${su?SIGNS[su.sign]:"—"}</span></div>
+      <div class="cmp-row"><b>Lagna</b><span>${signChip(La)} · lord ${GBYK[ll].name}${llP?` (H${llH}, ${llDig.full.split("·")[0].trim()})`:""}</span></div>
+      <div class="cmp-row"><b>Moon</b><span>${mo?`${signChip(mo.sign)} · ${moNak.n}`:"—"}</span></div>
+      <div class="cmp-row"><b>Sun</b><span>${su?signChip(su.sign):"—"}</span></div>
       <div class="cmp-row"><b>Current dasha</b><span>${cdTxt}</span></div>
       <div class="cmp-row"><b>Exalted planets</b><span style="color:var(--exalt)">${t.ex}</span></div>
       <div class="cmp-row"><b>Debilitated planets</b><span style="color:var(--debil)">${t.db}</span></div>`;
@@ -7045,7 +7482,7 @@ function toggleTheme(){
     }
     const cda=curDasha(a),cdb=curDasha(b);
     if(cda&&cdb&&cda.md.lord===cdb.md.lord) tags.push(`Both running ${GBYK[cda.md.lord].name} Mahadasha now`);
-    return `<div class="cmp-syn"><b>Quick synthesis</b><div style="margin-top:8px">${tags.map(t=>`<span class="cs-tag">${t}</span>`).join("")}</div>
+    return `<div class="cmp-syn"><b>Quick synthesis</b><div style="margin-top:8px">${tags.map(t=>`<span class="cs-tag ec-chip gold">${t}</span>`).join("")}</div>
       <p class="note" style="margin:10px 0 0">Heuristic overview from natal placements — not a substitute for a full synastry reading.</p></div>`;
   }
   function renderCompare(){
@@ -7055,7 +7492,7 @@ function toggleTheme(){
       cmpEmpty.style.display="block";cmpResult.style.display="none";return;
     }
     cmpEmpty.style.display="none";cmpResult.style.display="block";
-    cmpResult.innerHTML=`<div class="cmp-grid"><div class="cmp-col">${colHtml(charts[ia])}</div><div class="cmp-col">${colHtml(charts[ib])}</div></div>${synthHtml(charts[ia],charts[ib])}`;
+    cmpResult.innerHTML=`<div class="cmp-grid"><div class="cmp-col ec-zone-card">${colHtml(charts[ia])}</div><div class="cmp-col ec-zone-card">${colHtml(charts[ib])}</div></div>${synthHtml(charts[ia],charts[ib])}`;
   }
   function fillCmpSelects(){
     const charts=JA.getCharts?JA.getCharts():[];
@@ -7343,6 +7780,36 @@ function toggleTheme(){
 
   refreshCharts();
 })();
+
+/* == SELFTEST == */
+function runSelfTest(){
+  const A=[]; const ok=(n,c)=>A.push({test:n,pass:!!c});
+  // Navamsa (D-9) — exact known values from NAV_START=[Aries,Capricorn,Libra,Cancer]
+  ok("navamsa Aries 0° = Aries(0)",      navamsaSign(0,0)===0);
+  ok("navamsa Aries 6.7° = Gemini(2)",   navamsaSign(0,6.7)===2);
+  ok("navamsa Aries 29.99° = Sag(8)",    navamsaSign(0,29.99)===8);
+  ok("navamsa Taurus 0° = Capricorn(9)", navamsaSign(1,0)===9);
+  ok("navamsa Gemini 0° = Libra(6)",     navamsaSign(2,0)===6);
+  ok("navamsa Cancer 0° = Cancer(3)",    navamsaSign(3,0)===3);
+  // Data invariants — guard against corruption during refactor
+  ok("9 grahas",   GRAHAS.length===9);
+  ok("12 rashis",  RASHIS.length===12);
+  ok("12 bhavas",  BHAVAS.length===12);
+  ok("27 nakshatras", NAK.length===27);
+  ok("Sun exalts Aries / falls Libra / owns Leo", GBYK.Su.exalt===0 && GBYK.Su.debil===6 && GBYK.Su.own.includes(4));
+  ok("Jupiter exalts Cancer / falls Capricorn",   GBYK.Ju.exalt===3 && GBYK.Ju.debil===9);
+  ok("dignityOf Sun-in-Aries truthy", !!dignityOf("Su",0));
+  const failed=A.filter(x=>!x.pass);
+  if(console.table) console.table(A);
+  return {total:A.length, failed:failed.length, fails:failed.map(f=>f.test)};
+}
+if(location.hash==="#selftest"){
+  window.addEventListener("load",()=>{
+    const r=runSelfTest();
+    document.title=(r.failed? "❌ " : "✅ ")+"selftest "+(r.total-r.failed)+"/"+r.total;
+    if(r.failed) console.error("SELFTEST FAILURES:", r.fails);
+  });
+}
 </script>
 </body>
 </html>
