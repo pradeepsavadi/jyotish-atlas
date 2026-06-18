@@ -789,9 +789,11 @@
 
   /* ===== LIGHT THEME ===== */
   html.light{
-    --bg:#f4f6fb; --bg2:#edf0f8; --panel:#ffffff; --panel2:#f0f3fa; --line:#cdd5ee;
-    --ink:#1a1d35; --muted:#5562a0; --gold:#9a7010; --gold2:#7a5500; --accent:#2850c8;
-    --exalt:#1a7540; --debil:#bb2020; --own:#9a7010; --friend:#1060b0; --enemy:#bb5020; --neutral:#5562a0;
+    --bg:#f5f1e8; --bg2:#efe9db; --panel:#fffdf7; --panel2:#f3ecdc;
+    --line:#e0d4bb; --ink:#2b2620; --muted:#7a6c55;
+    --gold:#b8860b; --gold2:#9a6b12; --terracotta:#b5552f; --accent:#b5552f;
+    --exalt:#3e7d57; --debil:#bb3b28;
+    --own:#b8860b; --friend:#2f6f86; --enemy:#bb3b28; --neutral:#7a6c55;
   }
   html.light body{background:var(--bg);color:var(--ink)}
   html.light header.top{background:rgba(244,246,251,.92)}
@@ -6689,17 +6691,24 @@ nakshatras and BPHS principles throughout. Avoid generic platitudes; never predi
 })();
 
 /* ===== LIGHT / DARK THEME ===== */
+function setThemeColor(light){
+  const meta=document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.setAttribute("content",light?"#f5f1e8":"#181310");
+}
 function toggleTheme(){
   const light=document.documentElement.classList.toggle("light");
   localStorage.setItem("ja_theme",light?"light":"dark");
   document.getElementById("themeToggle").textContent=light?"☉":"☾";
+  setThemeColor(light);
 }
 (function(){
-  if(localStorage.getItem("ja_theme")==="light"){
+  const light=localStorage.getItem("ja_theme")==="light";
+  if(light){
     document.documentElement.classList.add("light");
     const btn=document.getElementById("themeToggle");
     if(btn) btn.textContent="☉";
   }
+  setThemeColor(light);
 })();
 
 /* ===== Site chrome: mobile nav, scrollspy, section reveal, chart view ===== */
