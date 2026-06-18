@@ -51,6 +51,23 @@
   .emblem.focus .aura{animation:embpulse 3.4s ease-in-out infinite}
   @keyframes embpulse{0%,100%{opacity:.28;transform:scale(1)}50%{opacity:.5;transform:scale(1.05)}}
   @media (prefers-reduced-motion:reduce){.emblem.focus .aura{animation:none;opacity:.4}}
+  /* == COMPONENTS == */
+  /* Settled class names: ec-btn-primary, ec-btn-ghost, ec-chip, ec-verdict, ec-zone-card (existing .chip already in file). */
+  .ec-btn-primary{font-family:var(--font-sans);font-weight:600;font-size:13px;color:#2a1a0c;
+    background:linear-gradient(135deg,var(--gold),var(--terracotta));border:0;border-radius:9px;
+    padding:11px 20px;cursor:pointer}
+  .ec-btn-ghost{font-family:var(--font-sans);font-size:13px;color:var(--gold);background:none;
+    border:1px solid var(--line);border-radius:9px;padding:11px 20px;cursor:pointer}
+  .ec-chip{font-family:var(--font-sans);font-size:11px;padding:5px 11px;border-radius:20px;border:1px solid var(--line);color:var(--muted);background:var(--panel)}
+  .ec-chip.good{color:var(--exalt);border-color:color-mix(in srgb,var(--exalt) 40%,transparent);background:color-mix(in srgb,var(--exalt) 12%,transparent)}
+  .ec-chip.bad{color:var(--debil);border-color:color-mix(in srgb,var(--debil) 40%,transparent);background:color-mix(in srgb,var(--debil) 12%,transparent)}
+  .ec-chip.gold{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 40%,transparent);background:color-mix(in srgb,var(--gold) 12%,transparent)}
+  .ec-verdict{border:1px solid var(--line);background:var(--panel);border-radius:9px;padding:9px 13px;min-width:96px}
+  .ec-verdict .k{font-family:var(--font-sans);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .ec-verdict .v{font-family:var(--font-display);font-size:14px;font-weight:600;margin-top:2px}
+  .ec-zone-card{border:1px solid var(--line);border-radius:11px;padding:16px;background:var(--panel)}
+  .ec-zone-card h4{font-family:var(--font-display);font-size:19px;font-weight:600;color:var(--gold);margin:0}
+  .ec-zone-card p{font-family:var(--font-sans);font-size:11.5px;line-height:1.6;color:var(--muted);margin:6px 0 0}
   *{box-sizing:border-box}
   :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   a:focus:not(:focus-visible),button:focus:not(:focus-visible){outline:none}
