@@ -148,11 +148,11 @@
   /* Divisional charts (Vargas) table */
   .varga-wrap{overflow-x:auto}
   .varga-table{width:100%;border-collapse:collapse;font-size:12px}
-  .varga-table th,.varga-table td{padding:6px 5px;text-align:center;border-bottom:1px solid var(--line)}
-  .varga-table thead th{color:var(--ink);font-weight:600;vertical-align:bottom}
+  .varga-table th,.varga-table td{padding:7px 6px;text-align:center;border-bottom:1px solid var(--line)}
+  .varga-table thead th{color:var(--muted);font-weight:700;vertical-align:bottom;background:var(--panel2)}
   .varga-table .vh-tag{font-size:11px;font-weight:600}
   .varga-table .vh-name{font-size:9px;color:var(--muted);font-weight:400}
-  .varga-table .vp-label{text-align:left;white-space:nowrap;font-weight:600;padding-left:6px}
+  .varga-table .vp-label{text-align:left;white-space:nowrap;font-weight:700;padding-left:6px;color:var(--ink)}
   .varga-table .vcell{color:var(--dc,var(--ink));font-variant-numeric:tabular-nums;position:relative;font-weight:600}
   .varga-table .vgot{outline:1px solid var(--gold);outline-offset:-3px;border-radius:5px}
   .vg-dot{color:var(--gold2);font-size:7px;position:absolute;top:1px;right:2px}
@@ -160,20 +160,22 @@
   .vim-bar{width:48px;height:4px;border-radius:3px;background:var(--panel2);overflow:hidden}
   .vim-bar i{display:block;height:100%}
   .vim-hi{background:var(--exalt)}.vim-mid{background:var(--gold)}.vim-lo{background:var(--debil)}
+  .varga-table tbody tr:nth-child(odd){background:color-mix(in srgb,var(--panel2) 58%,transparent)}
   .varga-table tbody tr:hover{background:var(--panel2)}
   @media(max-width:760px){.varga-table{min-width:680px}}
   /* Jaimini panel */
   .jm-sub{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--gold2);font-weight:600;margin-bottom:8px}
   .ck-table{width:100%;border-collapse:collapse;font-size:12.5px}
-  .ck-table th,.ck-table td{padding:7px 8px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
-  .ck-table thead th{color:var(--muted);font-weight:600;font-size:11px}
+  .ck-table th,.ck-table td{padding:8px 9px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  .ck-table thead th{color:var(--muted);font-weight:700;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;background:var(--panel2)}
   .ck-ab{font-weight:700;color:var(--gold2);white-space:nowrap}
   .ck-ab .ck-name{font-size:9.5px;font-weight:400;color:var(--muted);letter-spacing:.02em}
-  .ck-pl{white-space:nowrap;font-weight:600}
+  .ck-pl{white-space:nowrap;font-weight:700;color:var(--ink)}
   .ck-sig{color:var(--muted);line-height:1.45}
   .arg-yes{color:var(--exalt);font-weight:600;white-space:nowrap}
   .arg-no{color:var(--muted);white-space:nowrap}
-  .km-head{font-size:13px;margin-bottom:8px}
+  .km-head{font-size:13px;margin-bottom:8px;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:10px 12px}
+  .ck-table tbody tr:nth-child(odd){background:color-mix(in srgb,var(--panel2) 58%,transparent)}
   .km-list{margin:0;padding-left:18px;font-size:12.5px;line-height:1.6}
   .km-list li{margin-bottom:3px}
   @media(max-width:760px){.ck-table{min-width:520px}}
@@ -311,25 +313,30 @@
 
   /* ---- my charts ---- */
   .chartbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
-  .ctab{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 15px;cursor:pointer;font-size:13px;display:flex;gap:8px;align-items:center;
+  .ctab{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:8px 15px;cursor:pointer;font-size:13px;display:flex;gap:8px;align-items:center;
     transition:background var(--dur) var(--ease),border-color var(--dur) var(--ease),color var(--dur) var(--ease),box-shadow var(--dur) var(--ease),transform var(--dur) var(--ease)}
-  .ctab.active{background:var(--gold);color:#0b0e1a;border-color:var(--gold);font-weight:600}
+  .ctab.active{background:linear-gradient(135deg,var(--gold),var(--terracotta));color:#2a1a0c;border-color:transparent;font-weight:700}
   .ctab .x{opacity:.5;font-weight:700}.ctab .x:hover{opacity:1}
-  .ctab.add{border-style:dashed;color:var(--gold2)}
+  .ctab.add{border-style:dashed;color:var(--gold2);background:var(--panel)}
   .charttable{width:100%;border-collapse:collapse;font-size:13px}
   .charttable th{text-align:left;color:var(--muted);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;padding:7px 8px;border-bottom:1px solid var(--line)}
-  .charttable td{padding:9px 8px;border-bottom:1px solid rgba(42,51,96,.45)}
+  .charttable td{padding:9px 8px;border-bottom:1px solid var(--line)}
   .charttable tr.clk{cursor:pointer}
   .charttable tr.clk:hover td{background:var(--panel2)}
   .dchip{display:inline-block;font-size:10.5px;font-weight:700;color:#0b0e1a;padding:2px 9px;border-radius:999px}
   .gname{display:inline-flex;align-items:center;gap:7px;font-weight:600}
   .gdot{width:18px;height:18px;border-radius:50%;display:inline-grid;place-items:center;font-size:11px;color:#0b0e1a;font-weight:800}
+  .row-emblem{display:inline-flex;align-items:center;gap:6px}
+  .row-emblem .emblem{width:18px;height:18px;flex-shrink:0}
 
   /* ---- modal ---- */
-  .modal{position:fixed;inset:0;background:rgba(4,6,12,.76);display:none;align-items:center;justify-content:center;z-index:60;padding:18px}
+  .modal{position:fixed;inset:0;background:rgba(24,19,16,.76);display:none;align-items:center;justify-content:center;z-index:60;padding:18px}
   .modal.show{display:flex}
-  .modal .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;max-width:660px;width:100%;padding:24px}
+  .modal .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;max-width:660px;width:100%;padding:24px;box-shadow:var(--shadow-2)}
+  #addModalTitle.display{font-size:clamp(26px,4vw,34px);line-height:1.08;margin:0 0 6px}
   .modal h3{margin:0 0 4px}
+  .upload-trigger{border:none;border-radius:10px;padding:10px 14px;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--terracotta));color:#2a1a0c;box-shadow:var(--shadow-1);transition:transform var(--dur) var(--ease),filter var(--dur) var(--ease)}
+  .upload-trigger:hover{transform:translateY(-1px);filter:brightness(1.04)}
   .modal textarea{width:100%;height:210px;background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px;font-family:Menlo,Consolas,monospace;font-size:12px;resize:vertical}
   .modal input[type=text]{width:100%;background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px}
   .row-actions{display:flex;gap:10px;align-items:center;margin-top:14px}
@@ -362,22 +369,23 @@
   .bav-table thead th.hh{color:var(--gold2);font-size:12px}
   .bav-table td{padding:6px 4px;text-align:center;font-size:14px;font-weight:700;border:1px solid var(--line);min-width:38px}
   .bav-table td.plabel{font-size:12px;font-weight:700;text-align:right;padding:4px 8px;
-    white-space:nowrap;background:var(--panel);color:var(--fg);min-width:80px}
+    white-space:nowrap;background:var(--panel);color:var(--ink);min-width:80px}
+  .bav-table td.plabel .row-emblem{justify-content:flex-end}
   .bav-table tr.sav-row td{font-weight:800;font-size:15px;border-top:2px solid var(--gold)}
   .bav-table tr.sav-row td.plabel{color:var(--gold2)}
-  .bav-table td.hi5{background:#1d3a20;color:var(--exalt)}
-  .bav-table td.hi4{background:#1e3220;color:#9ee0b0}
-  .bav-table td.lo2{background:#2d1a1a;color:var(--debil)}
-  .bav-table td.lo1{background:#2a1818;color:#de8070}
-  .bav-table td.sav-hi{background:#1d3a20;color:var(--exalt)}
-  .bav-table td.sav-mid{background:var(--panel2);color:var(--fg)}
-  .bav-table td.sav-lo{background:#2d1a1a;color:var(--debil)}
+  .bav-table td.hi5{background:rgba(62,125,87,.24);color:var(--exalt)}
+  .bav-table td.hi4{background:rgba(62,125,87,.16);color:var(--exalt)}
+  .bav-table td.lo2{background:rgba(187,59,40,.15);color:var(--debil)}
+  .bav-table td.lo1{background:rgba(187,59,40,.24);color:var(--debil)}
+  .bav-table td.sav-hi{background:rgba(62,125,87,.24);color:var(--exalt)}
+  .bav-table td.sav-mid{background:var(--panel2);color:var(--ink)}
+  .bav-table td.sav-lo{background:rgba(187,59,40,.18);color:var(--debil)}
   .bav-table td.natal{outline:2px solid var(--gold);outline-offset:-2px;position:relative}
   .bav-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:6px}
   .bav-legend span{display:flex;align-items:center;gap:5px}
   .bav-legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
   .bav-insight{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;
-    margin-top:12px;font-size:13px;color:#dfe4f6}
+    margin-top:12px;font-size:13px;color:var(--ink)}
   .bav-insight b{color:var(--gold2)}
   .bav-insight-total{font-size:13px;color:var(--muted);margin-bottom:12px}
   .bav-insight-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -388,13 +396,13 @@
   .bav-insight-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
   .bav-insight-item:last-child{margin-bottom:0}
   .bav-score-badge{flex:0 0 auto;min-width:44px;padding:3px 6px;border-radius:8px;font-size:13px;font-weight:800;text-align:center;line-height:1.4}
-  .bav-score-badge.hi{background:#1d3a20;color:var(--exalt)}
-  .bav-score-badge.lo{background:#2d1a1a;color:var(--debil)}
+  .bav-score-badge.hi{background:rgba(62,125,87,.2);color:var(--exalt)}
+  .bav-score-badge.lo{background:rgba(187,59,40,.2);color:var(--debil)}
   .bav-insight-body{flex:1}
   .bav-insight-hlabel{font-weight:700;font-size:12.5px;margin-bottom:2px}
   .bav-insight-hdesc{font-size:12px;color:var(--muted);line-height:1.45}
   /* Chart Story */
-  .chart-story{margin-top:14px;background:linear-gradient(160deg,#0f1530,#0b0e1a);border:1px solid var(--line);border-radius:16px;padding:20px 22px}
+  .chart-story{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 22px}
   .chart-story-header{display:flex;align-items:center;gap:10px;margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:12px}
   .chart-story-header h4{margin:0;font-size:16px;font-weight:800;color:var(--gold2)}
   .chart-story-header .sub{font-size:12px;color:var(--muted)}
@@ -403,12 +411,12 @@
   .story-num{flex:0 0 auto;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;background:var(--panel2);border:1px solid var(--line);color:var(--gold2)}
   .story-content{}
   .story-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
-  .story-label.identity{color:#7aa2ff}
+  .story-label.identity{color:var(--friend)}
   .story-label.current{color:var(--exalt)}
   .story-label.friction{color:var(--debil)}
   .story-label.ruler{color:var(--gold2)}
-  .story-label.patterns{color:#a78bfa}
-  .story-text{font-size:13.5px;color:#dfe4f6;line-height:1.65}
+  .story-label.patterns{color:var(--terracotta)}
+  .story-text{font-size:13.5px;color:var(--ink);line-height:1.65}
   .story-text b{color:var(--ink)}
   .story-text i{color:var(--gold2);font-style:normal}
   footer{padding:40px 0 70px;color:var(--muted);font-size:12.5px}
@@ -613,6 +621,8 @@
   .hs-hn{font-size:16px;font-weight:800;color:var(--gold2);line-height:1}
   .hs-sign{font-size:10px;color:var(--muted);margin:2px 0 5px;letter-spacing:.02em}
   .hs-occ{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;min-height:20px;align-items:center}
+  .hs-emblem{display:inline-flex;align-items:center;justify-content:center}
+  .hs-emblem .emblem{width:17px;height:17px}
   .hs-empty{font-size:10px;color:var(--muted)}
 
   /* ===== Planet Strength Dashboard ===== */
@@ -623,6 +633,8 @@
   .ps-card{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;
     transition:border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease),transform var(--dur) var(--ease)}
   .ps-card:hover{border-color:var(--gold)}
+  .ps-emblem{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;flex-shrink:0}
+  .ps-emblem .emblem{width:30px;height:30px}
   .ps-top{display:flex;align-items:center;gap:9px;margin-bottom:8px}
   .ps-name{font-size:14px;font-weight:800;flex:1;line-height:1.2}
   .ps-house{font-size:11px;color:var(--muted)}
@@ -630,31 +642,31 @@
   .ps-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:7px;align-items:center}
   .ps-badge{font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;text-transform:uppercase;white-space:nowrap}
   /* Inherent strength — dignity-based */
-  .ps-badge.exalted{background:#1d3a20;color:var(--exalt)}
-  .ps-badge.mool{background:#103030;color:#4fd0c0}
-  .ps-badge.own{background:#2a2e10;color:#d4c840}
-  .ps-badge.friend{background:#131e38;color:var(--accent)}
+  .ps-badge.exalted{background:rgba(62,125,87,.2);color:var(--exalt)}
+  .ps-badge.mool{background:rgba(94,131,75,.2);color:#9bc57a}
+  .ps-badge.own{background:rgba(184,134,11,.18);color:var(--gold2)}
+  .ps-badge.friend{background:rgba(127,176,196,.2);color:var(--friend)}
   .ps-badge.neutral{background:var(--panel);border:1px solid var(--line);color:var(--muted)}
-  .ps-badge.enemy{background:#2a1e0e;color:#c09050}
-  .ps-badge.debil{background:#2d1a1a;color:var(--debil)}
+  .ps-badge.enemy{background:rgba(182,103,72,.2);color:var(--terracotta)}
+  .ps-badge.debil{background:rgba(187,59,40,.2);color:var(--debil)}
   /* Functional nature — lagna-based */
   .ps-fn{font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;white-space:nowrap}
-  .ps-fn.yogakaraka{background:linear-gradient(135deg,#c49a10,#e8c547);color:#0b0e1a}
-  .ps-fn.benefic{background:#1d3a20;color:var(--exalt)}
-  .ps-fn.mixed{background:#2a2e10;color:#d4c840}
+  .ps-fn.yogakaraka{background:linear-gradient(135deg,var(--gold),var(--terracotta));color:#2a1a0c}
+  .ps-fn.benefic{background:rgba(62,125,87,.2);color:var(--exalt)}
+  .ps-fn.mixed{background:rgba(184,134,11,.16);color:var(--gold2)}
   .ps-fn.neutral{background:var(--panel);border:1px solid var(--line);color:var(--muted)}
-  .ps-fn.malefic{background:#2d1a1a;color:var(--debil)}
-  .ps-fn.shadow{background:#1a1040;color:#a080f0;border:1px solid rgba(120,80,200,.4)}
+  .ps-fn.malefic{background:rgba(187,59,40,.2);color:var(--debil)}
+  .ps-fn.shadow{background:rgba(160,132,76,.2);color:#9b834c;border:1px solid rgba(160,132,76,.35)}
   .ps-kv{display:grid;grid-template-columns:68px 1fr;gap:3px 8px;font-size:12px;margin-bottom:6px}
   .ps-kv b{color:var(--muted);font-weight:600}
-  .ps-kv span{color:#dfe4f6}
+  .ps-kv span{color:var(--ink)}
   .ps-hlabel{font-size:10px;color:var(--muted);margin-bottom:2px;font-style:italic}
   .ps-flags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
   .ps-flag{font-size:10px;font-weight:700;padding:1px 7px;border-radius:999px}
-  .ps-flag.combust{background:#2d1a1a;color:var(--debil);border:1px solid rgba(239,106,90,.3)}
-  .ps-flag.retro{background:#131e38;color:var(--accent);border:1px solid rgba(122,162,255,.3)}
-  .ps-flag.vg{background:#1d3a20;color:var(--exalt);border:1px solid rgba(79,208,127,.3)}
-  .ps-flag.mool{background:#103030;color:#4fd0c0;border:1px solid rgba(79,208,192,.3)}
+  .ps-flag.combust{background:rgba(187,59,40,.18);color:var(--debil);border:1px solid rgba(187,59,40,.35)}
+  .ps-flag.retro{background:rgba(127,176,196,.16);color:var(--friend);border:1px solid rgba(127,176,196,.35)}
+  .ps-flag.vg{background:rgba(62,125,87,.18);color:var(--exalt);border:1px solid rgba(62,125,87,.38)}
+  .ps-flag.mool{background:rgba(184,134,11,.14);color:var(--gold2);border:1px solid rgba(184,134,11,.34)}
   .ps-bav-bar{display:flex;gap:2px;margin-top:6px;align-items:center}
   .ps-bav-dot{width:9px;height:9px;border-radius:2px;background:var(--line)}
   .ps-bav-dot.on{background:var(--gold2)}
@@ -668,21 +680,21 @@
   .dt-label{font-size:10.5px;color:var(--muted);margin-bottom:4px;letter-spacing:.04em}
   .dt-overview{position:relative;height:12px;border-radius:4px;overflow:hidden;background:var(--panel2);border:1px solid var(--line);margin-bottom:12px}
   .dt-ov-seg{position:absolute;top:0;height:100%;border-right:1px solid rgba(0,0,0,.25)}
-  .dt-ov-needle{position:absolute;top:0;bottom:0;width:2px;background:#fff;opacity:.9;z-index:2;border-radius:1px}
+  .dt-ov-needle{position:absolute;top:0;bottom:0;width:2px;background:var(--gold2);opacity:.92;z-index:2;border-radius:1px}
   .dt-zoom-wrap{position:relative;margin-bottom:0}
   .dt-maha-row{position:relative;height:30px;margin-bottom:3px}
   .dt-antar-row{position:relative;height:20px}
   .dt-seg{position:absolute;top:0;height:100%;border-radius:3px;overflow:hidden;display:flex;align-items:center;padding:0 5px;font-size:9.5px;font-weight:700;color:rgba(0,0,0,.8);cursor:default;border-right:2px solid rgba(0,0,0,.18);box-sizing:border-box;transition:.12s opacity}
   .dt-seg:hover{opacity:.82;z-index:4}
   .dt-seg-lbl{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;pointer-events:none}
-  .dt-now-line{position:absolute;top:0;width:2px;background:#fff;z-index:3;pointer-events:none;border-radius:1px}
-  .dt-now-line::before{content:"NOW";position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:8.5px;font-weight:800;color:#fff;white-space:nowrap;letter-spacing:.04em}
+  .dt-now-line{position:absolute;top:0;width:2px;background:var(--gold2);z-index:3;pointer-events:none;border-radius:1px}
+  .dt-now-line::before{content:"NOW";position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:8.5px;font-weight:800;color:var(--gold2);white-space:nowrap;letter-spacing:.04em}
   .dt-axis{position:relative;height:20px;margin-top:5px;margin-bottom:10px}
   .dt-tick{position:absolute;font-size:10px;color:var(--muted);transform:translateX(-50%);white-space:nowrap;top:0}
   .dt-tick::before{content:"";position:absolute;top:-7px;left:50%;width:1px;height:5px;background:var(--line)}
   .dt-cur-card{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.6}
   .dt-cur-maha{font-weight:800;font-size:15px;color:var(--gold2);margin-bottom:3px}
-  .dt-cur-antar{color:#dfe4f6;margin-bottom:4px}
+  .dt-cur-antar{color:var(--ink);margin-bottom:4px}
   .dt-cur-next{font-size:11.5px;color:var(--muted)}
   .dt-no-data{padding:22px;text-align:center;color:var(--muted);font-size:13px}
 
@@ -884,35 +896,35 @@
   html.light .gcard,html.light .detail,html.light .quiz{background:linear-gradient(180deg,#fff,var(--bg2))}
   html.light .nakband{background:linear-gradient(120deg,#f0f4ff,#e8ecf8)}
   html.light .hero-verdict{background:linear-gradient(120deg,var(--panel2),var(--bg2))}
-  html.light .chart-story{background:linear-gradient(160deg,#f0f4ff,#f8faff)}
-  html.light .mode.active,html.light .ctab.active{color:#fff}
-  html.light .ctab.active{background:var(--gold);border-color:var(--gold);color:#fff}
-  html.light .dt-now-badge{color:#fff}
-  html.light .bav-table td.hi5{background:#d0f0dc;color:#0a5a22}
-  html.light .bav-table td.hi4{background:#ddf0e4;color:#1a6a32}
-  html.light .bav-table td.lo2{background:#fce8e8;color:#992020}
-  html.light .bav-table td.lo1{background:#fad8d8;color:#881818}
-  html.light .bav-table td.sav-hi{background:#d0f0dc;color:#0a5a22}
-  html.light .bav-table td.sav-lo{background:#fce8e8;color:#992020}
-  html.light .bav-score-badge.hi{background:#d0f0dc;color:#0a5a22}
-  html.light .bav-score-badge.lo{background:#fce8e8;color:#992020}
-  html.light .ps-badge.exalted{background:#d0f0dc;color:#0a5a22}
-  html.light .ps-badge.mool{background:#ccf0ee;color:#0a4848}
-  html.light .ps-badge.own{background:#f0eeb8;color:#786010}
-  html.light .ps-badge.friend{background:#d4e8ff;color:#0848a0}
+  html.light .chart-story{background:var(--panel)}
+  html.light .mode.active,html.light .ctab.active{color:#2a1a0c}
+  html.light .ctab.active{background:linear-gradient(135deg,var(--gold),var(--terracotta));border-color:transparent;color:#2a1a0c}
+  html.light .dt-now-badge{color:#2a1a0c}
+  html.light .bav-table td.hi5{background:rgba(62,125,87,.18);color:#235e3e}
+  html.light .bav-table td.hi4{background:rgba(62,125,87,.12);color:#2f6a49}
+  html.light .bav-table td.lo2{background:rgba(187,59,40,.14);color:#9e3324}
+  html.light .bav-table td.lo1{background:rgba(187,59,40,.22);color:#8c271a}
+  html.light .bav-table td.sav-hi{background:rgba(62,125,87,.18);color:#235e3e}
+  html.light .bav-table td.sav-lo{background:rgba(187,59,40,.16);color:#9e3324}
+  html.light .bav-score-badge.hi{background:rgba(62,125,87,.18);color:#235e3e}
+  html.light .bav-score-badge.lo{background:rgba(187,59,40,.18);color:#9e3324}
+  html.light .ps-badge.exalted{background:rgba(62,125,87,.16);color:#235e3e}
+  html.light .ps-badge.mool{background:rgba(94,131,75,.18);color:#4f6f2c}
+  html.light .ps-badge.own{background:rgba(184,134,11,.18);color:#7a5d18}
+  html.light .ps-badge.friend{background:rgba(127,176,196,.18);color:#2f6f86}
   html.light .ps-badge.neutral{background:var(--panel2);color:var(--muted);border:1px solid var(--line)}
-  html.light .ps-badge.enemy{background:#f8e4cc;color:#884018}
-  html.light .ps-badge.debil{background:#fce8e8;color:#992020}
-  html.light .ps-fn.yogakaraka{background:linear-gradient(135deg,#e4bc48,#eccf60);color:#3a2800}
-  html.light .ps-fn.benefic{background:#d0f0dc;color:#0a5a22}
-  html.light .ps-fn.mixed{background:#f0eeb8;color:#786010}
+  html.light .ps-badge.enemy{background:rgba(182,103,72,.18);color:#8a4c2f}
+  html.light .ps-badge.debil{background:rgba(187,59,40,.18);color:#9e3324}
+  html.light .ps-fn.yogakaraka{background:linear-gradient(135deg,var(--gold),var(--terracotta));color:#3a2800}
+  html.light .ps-fn.benefic{background:rgba(62,125,87,.16);color:#235e3e}
+  html.light .ps-fn.mixed{background:rgba(184,134,11,.16);color:#7a5d18}
   html.light .ps-fn.neutral{background:var(--panel2);color:var(--muted);border:1px solid var(--line)}
-  html.light .ps-fn.malefic{background:#fce8e8;color:#992020}
-  html.light .ps-fn.shadow{background:#ede0ff;color:#5810a0}
-  html.light .ps-flag.combust{background:#fce8e8;color:#992020;border-color:rgba(200,60,60,.3)}
-  html.light .ps-flag.retro{background:#d4e8ff;color:#0848a0;border-color:rgba(40,80,200,.3)}
-  html.light .ps-flag.vg{background:#d0f0dc;color:#0a5a22;border-color:rgba(26,117,64,.3)}
-  html.light .ps-flag.mool{background:#ccf0ee;color:#0a4848;border-color:rgba(10,72,72,.3)}
+  html.light .ps-fn.malefic{background:rgba(187,59,40,.18);color:#9e3324}
+  html.light .ps-fn.shadow{background:rgba(160,132,76,.18);color:#7d6838}
+  html.light .ps-flag.combust{background:rgba(187,59,40,.16);color:#9e3324;border-color:rgba(187,59,40,.3)}
+  html.light .ps-flag.retro{background:rgba(127,176,196,.16);color:#2f6f86;border-color:rgba(127,176,196,.3)}
+  html.light .ps-flag.vg{background:rgba(62,125,87,.14);color:#235e3e;border-color:rgba(62,125,87,.3)}
+  html.light .ps-flag.mool{background:rgba(184,134,11,.14);color:#7a5d18;border-color:rgba(184,134,11,.3)}
   html.light .tr-badge.good{background:#d0f0dc;color:#0a5a22}
   html.light .tr-badge.bad{background:#fce8e8;color:#992020}
   html.light .tr-badge.vedha{background:#fff0c8;color:#7a5000}
@@ -1007,13 +1019,13 @@ nav a:hover{background:rgba(122,162,255,0.08) !important;color:var(--ink);text-s
 
 /* Glassmorphic sidebar */
 .charts-sidebar{
-  background:rgba(11,15,34,0.72) !important;
-  backdrop-filter:blur(16px) !important;
-  -webkit-backdrop-filter:blur(16px) !important;
-  border:1px solid rgba(80,100,200,0.18) !important;
-  box-shadow:0 8px 32px rgba(0,0,0,0.35) !important;
+  background:var(--panel) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  border:1px solid var(--line) !important;
+  box-shadow:var(--shadow-1) !important;
 }
-.ctab.active{box-shadow:0 0 14px rgba(231,185,78,0.3),0 2px 8px rgba(0,0,0,0.3) !important}
+.ctab.active{box-shadow:0 8px 18px rgba(0,0,0,0.22),0 0 0 1px rgba(255,255,255,.08) inset !important}
 
 /* Enhanced panels */
 .panel{
@@ -1031,59 +1043,52 @@ nav a:hover{background:rgba(122,162,255,0.08) !important;color:var(--ink);text-s
 
 /* Planet cards — premium */
 .ps-card{
-  background:rgba(18,24,52,0.78) !important;
-  border-color:rgba(55,75,165,0.28) !important;
+  background:var(--panel2) !important;
+  border-color:var(--line) !important;
   transition:border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease),transform var(--dur) var(--ease) !important;
   position:relative;overflow:hidden;
 }
 .ps-card::before{
   content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(122,162,255,0.18),transparent);
+  background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--gold) 36%,transparent),transparent);
   pointer-events:none;
 }
 .ps-card:hover{
   transform:translateY(-2px);
-  border-color:rgba(122,162,255,0.45) !important;
-  box-shadow:0 8px 28px rgba(0,0,0,0.4),0 0 18px rgba(80,100,200,0.1) !important;
+  border-color:color-mix(in srgb,var(--gold) 64%,var(--line)) !important;
+  box-shadow:0 10px 26px rgba(0,0,0,0.28),0 0 0 1px color-mix(in srgb,var(--gold) 20%,transparent) inset !important;
 }
-.ps-card[data-planet="Su"]:hover{border-color:rgba(255,176,40,0.5)!important;box-shadow:0 8px 28px rgba(0,0,0,0.4),0 0 18px rgba(255,176,40,0.07)!important}
-.ps-card[data-planet="Mo"]:hover{border-color:rgba(180,210,255,0.5)!important;box-shadow:0 8px 28px rgba(0,0,0,0.4),0 0 18px rgba(180,210,255,0.07)!important}
-.ps-card[data-planet="Ma"]:hover{border-color:rgba(239,106,90,0.5)!important;box-shadow:0 8px 28px rgba(0,0,0,0.4),0 0 18px rgba(239,106,90,0.07)!important}
-.ps-card[data-planet="Ju"]:hover{border-color:rgba(231,185,78,0.5)!important;box-shadow:0 8px 28px rgba(0,0,0,0.4),0 0 18px rgba(231,185,78,0.07)!important}
-.ps-card[data-planet="Ve"]:hover{border-color:rgba(255,180,210,0.5)!important;box-shadow:0 8px 28px rgba(0,0,0,0.4),0 0 18px rgba(255,180,210,0.07)!important}
-.ps-card[data-planet="Sa"]:hover{border-color:rgba(128,96,200,0.5)!important;box-shadow:0 8px 28px rgba(0,0,0,0.4),0 0 18px rgba(128,96,200,0.07)!important}
-.ps-card[data-planet="Me"]:hover{border-color:rgba(79,208,192,0.5)!important;box-shadow:0 8px 28px rgba(0,0,0,0.4),0 0 18px rgba(79,208,192,0.07)!important}
-.ps-card[data-planet="Ra"]:hover{border-color:rgba(100,70,180,0.5)!important;box-shadow:0 8px 28px rgba(0,0,0,0.4),0 0 18px rgba(80,50,160,0.07)!important}
+.ps-card[data-planet="Su"]:hover,.ps-card[data-planet="Mo"]:hover,.ps-card[data-planet="Ma"]:hover,.ps-card[data-planet="Ju"]:hover,.ps-card[data-planet="Ve"]:hover,.ps-card[data-planet="Sa"]:hover,.ps-card[data-planet="Me"]:hover,.ps-card[data-planet="Ra"]:hover{border-color:color-mix(in srgb,var(--gold) 64%,var(--line))!important;box-shadow:0 10px 26px rgba(0,0,0,0.28),0 0 0 1px color-mix(in srgb,var(--gold) 20%,transparent) inset!important}
 
 /* Planet glyphs — glowing */
 .gdot{box-shadow:0 0 6px 1px currentColor;filter:brightness(1.1);transition:.15s transform}
 .gdot:hover{transform:scale(1.18)}
 
 /* House strip */
-.hs-cell{background:rgba(18,24,52,0.65)!important;border-color:rgba(50,70,155,0.22)!important;transition:.15s all}
-.hs-cell.hs-clk:hover{border-color:rgba(231,185,78,0.5)!important;background:rgba(26,32,65,0.75)!important;box-shadow:0 0 12px rgba(231,185,78,0.08)}
+.hs-cell{background:var(--panel2)!important;border-color:var(--line)!important;transition:.15s all}
+.hs-cell.hs-clk:hover{border-color:color-mix(in srgb,var(--gold) 62%,var(--line))!important;background:var(--panel)!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--gold) 22%,transparent) inset}
 
 /* Dasha timeline */
-.dt-wrap{background:rgba(11,16,36,0.75)!important;backdrop-filter:blur(10px)!important;border-color:rgba(60,80,180,0.16)!important;box-shadow:0 4px 24px rgba(0,0,0,0.28)!important}
-.dt-cur-card{background:rgba(18,24,52,0.75)!important;border-color:rgba(55,75,165,0.25)!important}
+.dt-wrap{background:var(--panel)!important;backdrop-filter:none!important;border-color:var(--line)!important;box-shadow:var(--shadow-1)!important}
+.dt-cur-card{background:var(--panel2)!important;border-color:var(--line)!important}
 
 /* Dasha engine panel */
 .dp-wrap{background:rgba(16,21,48,0.72)!important;backdrop-filter:blur(10px)!important}
 
 /* Modal glassmorphic */
-.modal .card{backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);background:rgba(16,21,50,0.95)!important;border:1px solid rgba(80,100,200,0.2)!important;box-shadow:0 24px 80px rgba(0,0,0,0.6),0 0 40px rgba(80,100,200,0.05)!important}
+.modal .card{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--panel)!important;border:1px solid var(--line)!important;box-shadow:var(--shadow-2)!important}
 
 /* Nakshatra band */
 .nakband{background:linear-gradient(120deg,rgba(22,27,62,0.82),rgba(18,22,52,0.82))!important;border-color:rgba(70,90,185,0.22)!important;backdrop-filter:blur(8px)}
 
 /* BAV insight */
-.bav-insight{background:rgba(11,16,36,0.75)!important;border-color:rgba(55,75,165,0.22)!important}
+.bav-insight{background:var(--panel)!important;border-color:var(--line)!important}
 
 /* Hero verdict */
 .hero-verdict{border-color:rgba(60,80,180,0.22)!important;box-shadow:0 4px 20px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.03)!important}
 
 /* Chart story */
-.chart-story{background:linear-gradient(160deg,rgba(14,20,48,0.85),rgba(9,12,26,0.85))!important;border-color:rgba(60,80,180,0.16)!important;backdrop-filter:blur(8px)}
+.chart-story{background:var(--panel)!important;border-color:var(--line)!important;backdrop-filter:none}
 
 /* Yogakaraka badge pulse */
 .ps-fn.yogakaraka{box-shadow:0 0 8px rgba(231,185,78,0.4);animation:yk-pulse 2.8s ease-in-out infinite}
@@ -1095,23 +1100,23 @@ section{border-bottom-color:rgba(60,80,180,0.14)!important}
 /* ===== CHART VIEW TOGGLE ===== */
 .chart-view-toggle{display:flex;gap:8px;margin-bottom:12px;align-items:center;flex-wrap:wrap}
 .cvt-btn{
-  background:rgba(16,21,48,0.78);border:1px solid rgba(55,75,165,0.32);color:var(--muted);
+  background:var(--panel2);border:1px solid var(--line);color:var(--muted);
   border-radius:10px;padding:8px 16px;font-size:12.5px;font-weight:600;cursor:pointer;
-  transition:.15s all;backdrop-filter:blur(8px);letter-spacing:.02em;
+  transition:.15s all;backdrop-filter:none;letter-spacing:.02em;
 }
-.cvt-btn.active{background:rgba(38,58,120,0.55);border-color:rgba(122,162,255,0.52);color:var(--accent);box-shadow:0 0 16px rgba(122,162,255,0.14),inset 0 0 10px rgba(122,162,255,0.05)}
-.cvt-btn:hover:not(.active){border-color:rgba(122,162,255,0.3);color:var(--ink);background:rgba(22,28,58,0.8)}
+.cvt-btn.active{background:linear-gradient(135deg,var(--gold),var(--terracotta));border-color:transparent;color:#2a1a0c;box-shadow:0 8px 18px rgba(0,0,0,0.22)}
+.cvt-btn:hover:not(.active){border-color:color-mix(in srgb,var(--gold) 54%,var(--line));color:var(--ink);background:var(--panel)}
 
 /* ===== BHAVA MANDALA ===== */
 #bhavaMandala{
-  border:1px solid rgba(70,90,200,0.18);border-radius:16px;overflow:hidden;
-  background:radial-gradient(ellipse at 50% 35%,#0f1640 0%,#080b1c 70%);
-  box-shadow:0 8px 40px rgba(0,0,0,0.5),inset 0 1px 0 rgba(122,162,255,0.06);
+  border:1px solid var(--line);border-radius:16px;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 35%,color-mix(in srgb,var(--gold) 14%,var(--panel2)) 0%,var(--panel) 74%);
+  box-shadow:var(--shadow-1),inset 0 1px 0 rgba(255,255,255,.04);
   position:relative;
 }
 #bhavaMandala::before{
   content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(122,162,255,0.008) 2px,rgba(122,162,255,0.008) 3px);
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,color-mix(in srgb,var(--gold) 10%,transparent) 2px,color-mix(in srgb,var(--gold) 10%,transparent) 3px);
   animation:scan-drift 12s linear infinite;
 }
 @keyframes scan-drift{from{background-position:0 0}to{background-position:0 60px}}
@@ -1145,20 +1150,20 @@ html.light .bm-hcell{background:rgba(240,244,255,0.7);border-color:rgba(80,100,2
 /* Light theme overrides */
 html.light .panel{background:rgba(255,255,255,0.88)!important;backdrop-filter:blur(12px)!important;border-color:rgba(80,100,200,0.12)!important;box-shadow:0 4px 24px rgba(0,0,0,0.07),inset 0 1px 0 rgba(255,255,255,0.8)!important}
 html.light .panel h4{background:linear-gradient(90deg,#7a5500 40%,rgba(120,80,0,0.55));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-html.light .ps-card{background:rgba(248,250,255,0.9)!important;border-color:rgba(80,100,200,0.14)!important}
-html.light .hs-cell{background:rgba(240,244,255,0.82)!important;border-color:rgba(80,100,200,0.14)!important}
-html.light .charts-sidebar{background:rgba(248,250,255,0.88)!important;backdrop-filter:blur(14px)!important;border-color:rgba(80,100,200,0.12)!important}
+html.light .ps-card{background:var(--panel2)!important;border-color:var(--line)!important}
+html.light .hs-cell{background:var(--panel2)!important;border-color:var(--line)!important}
+html.light .charts-sidebar{background:var(--panel)!important;backdrop-filter:none!important;border-color:var(--line)!important}
 html.light header.top{background:rgba(244,246,251,0.92)!important;border-bottom-color:rgba(80,100,200,0.14)!important;box-shadow:0 1px 20px rgba(0,0,0,0.08)!important}
 html.light .brand{background:linear-gradient(110deg,#1a1d35 20%,#9a7010 70%,#2850c8);-webkit-background-clip:text;background-clip:text;color:transparent;filter:none}
-html.light .cvt-btn{background:rgba(240,244,255,0.82);border-color:rgba(80,100,200,0.18);color:var(--muted)}
-html.light .cvt-btn.active{background:rgba(200,214,255,0.8);border-color:rgba(50,80,200,0.4);color:#2040a0;box-shadow:none}
-html.light #bhavaMandala{background:radial-gradient(ellipse at 50% 35%,#e8edff 0%,#f0f3ff 70%);border-color:rgba(80,100,200,0.18)}
+html.light .cvt-btn{background:var(--panel2);border-color:var(--line);color:var(--muted)}
+html.light .cvt-btn.active{background:linear-gradient(135deg,var(--gold),var(--terracotta));border-color:transparent;color:#2a1a0c;box-shadow:none}
+html.light #bhavaMandala{background:radial-gradient(ellipse at 50% 35%,color-mix(in srgb,var(--gold) 16%,var(--panel2)) 0%,var(--panel) 70%);border-color:var(--line)}
 html.light #cosmos-bg{display:none}
 html.light .ps-fn.yogakaraka{animation:none}
-html.light .dt-wrap{background:rgba(255,255,255,0.88)!important;backdrop-filter:blur(10px)!important;border-color:rgba(80,100,200,0.12)!important}
+html.light .dt-wrap{background:var(--panel)!important;backdrop-filter:none!important;border-color:var(--line)!important}
 html.light .nakband{background:linear-gradient(120deg,#f0f4ff,#e8ecf8)!important;backdrop-filter:none}
 html.light .bav-insight{background:var(--panel2)!important;border-color:var(--line)!important}
-html.light .modal .card{backdrop-filter:blur(20px);background:rgba(255,255,255,0.97)!important;border-color:rgba(80,100,200,0.14)!important;box-shadow:0 20px 60px rgba(0,0,0,0.15)!important}
+html.light .modal .card{backdrop-filter:none;background:var(--panel)!important;border-color:var(--line)!important;box-shadow:var(--shadow-2)!important}
 
 /* Calm overrides — flatter, quieter surfaces */
 #cosmos-bg{opacity:.4}
@@ -1469,7 +1474,7 @@ html.light .brand{color:var(--ink)!important}
   <!-- MY CHARTS -->
   <section id="charts" class="section-reveal">
     <div class="eyebrow">Apply it to a real chart</div>
-    <h2>My Charts</h2>
+    <h2 class="display">My Charts</h2>
     <p class="sub">Paste any natal chart (the planetary table from JHora / Parashara's Light — exactly like your <code>.txt</code> files) and the whole chart gets the D-1 → D-9 + lord treatment. Click any row to open it in the Synthesizer. Charts are saved in your browser.</p>
     <div class="charts-layout">
       <div class="charts-sidebar">
@@ -1477,7 +1482,7 @@ html.light .brand{color:var(--ink)!important}
         <div class="chartbar" id="chartTabs"></div>
       </div>
       <div class="charts-main">
-        <div id="chartEmpty" class="panel" style="text-align:center;color:var(--muted);padding:34px;display:none">
+        <div id="chartEmpty" class="panel ec-zone-card" style="text-align:center;color:var(--muted);padding:34px;display:none">
           No chart yet. <a href="#" id="addFirst"><b>＋ Add your chart</b></a> &nbsp;·&nbsp; <a href="#" id="demoFirst">load a demo</a>
         </div>
         <div id="chartView" style="display:none">
@@ -1487,20 +1492,20 @@ html.light .brand{color:var(--ink)!important}
         <span style="font-size:11px;color:var(--muted);margin-left:4px">— 3D zodiac wheel</span>
       </div>
       <div id="bhavaMandala" style="display:none;margin-bottom:14px"></div>
-      <div id="houseStripPanel" class="panel" style="margin-bottom:14px">
+      <div id="houseStripPanel" class="panel ec-zone-card" style="margin-bottom:14px">
         <h4 style="margin:0 0 10px">Houses · sign, occupants &amp; lord</h4>
         <div class="hs-grid" id="houseStripGrid"></div>
       </div>
-      <div class="ps-wrap panel" id="strengthDash" style="display:none">
+      <div class="ps-wrap panel ec-zone-card" id="strengthDash" style="display:none">
         <h4 style="margin:0 0 14px">Planets · Dignity · Functional Nature · Nakshatra</h4>
         <div class="ps-grid" id="psGrid"></div>
       </div>
-      <div class="varga-section panel" id="vargaPanel" style="display:none;margin-top:14px">
+      <div class="varga-section panel ec-zone-card" id="vargaPanel" style="display:none;margin-top:14px">
         <h4 style="margin:0 0 4px">Divisional Charts (Varga) · Shodasavarga</h4>
         <p class="note" style="margin:0 0 12px">Each <b>D-N</b> magnifies one domain of life (hover a column header). A planet strong across many vargas truly <i>delivers</i>; strong in D-1 but weak in the divisions is a promise that fades. <b>◆ gold</b> = <i>vargottama</i> — same sign in D-1 and that varga, a major strength. <b>Viṁśopaka Bala</b> (Ṣaḍvarga · /20) weights D-1·6, D-2·2, D-3·4, D-9·5, D-12·2, D-30·1 by dignity in each.</p>
         <div class="varga-wrap"><table class="varga-table" id="vargaTable"></table></div>
       </div>
-      <div class="jaimini-section panel" id="jaiminiPanel" style="display:none;margin-top:14px">
+      <div class="jaimini-section panel ec-zone-card" id="jaiminiPanel" style="display:none;margin-top:14px">
         <h4 style="margin:0 0 4px">Jaimini · Chara Kārakas, Kārakāṁśa &amp; Argala</h4>
         <p class="note" style="margin:0 0 12px">The <b>Chara Kārakas</b> are <i>movable</i> significators: the planet at the highest degree in its sign becomes the <b>Ātmakāraka</b> (soul significator), and the rest fall in order of descending degree.</p>
         <div class="jm-sub">Chara Kārakas</div>
@@ -1510,21 +1515,21 @@ html.light .brand{color:var(--ink)!important}
         <div class="jm-sub" style="margin-top:16px">Argala on the Lagna <span class="note">— who intervenes in your selfhood (effective when the intervening house outnumbers its obstruction)</span></div>
         <div class="varga-wrap" id="argBody"></div>
       </div>
-      <div class="avastha-section panel" id="avasthaPanel" style="display:none;margin-top:14px">
+      <div class="avastha-section panel ec-zone-card" id="avasthaPanel" style="display:none;margin-top:14px">
         <h4 style="margin:0 0 4px">Planetary Avasthas · states of a planet</h4>
         <p class="note" style="margin:0 0 12px">A planet can be well-placed yet unable to deliver. <b>Bālādi</b> reads its life-stage by degree (peaks at <i>Yuvā</i>), <b>Jāgradādi</b> its wakefulness, <b>Dīptādi</b> its condition. <b>Effective strength</b> leads with <b>dignity across D-1, D-9 &amp; D-10</b> plus <b>vargottama</b> — the primary strength — and only <i>modulates</i> by avastha, so an exalted, own-sign or vargottama planet stays strong even at a weak degree. The notes flag where promise (D-1) and delivery (D-9 / D-10) diverge.</p>
         <div class="varga-wrap" id="avBody"></div>
       </div>
-      <div class="bav-section panel" style="margin-top:14px">
+      <div class="bav-section panel ec-zone-card" style="margin-top:14px">
         <h4 style="margin:0 0 4px">Bhinna Ashtakavarga (BAV) — benefic points per house</h4>
         <p class="note" style="margin:0 0 12px">Each cell shows how many benefic points (0–8) that planet contributes to that house. <b>∑ SAV</b> is the house total across all 7 planets (≥30 strong, 25–29 average, &lt;25 weak). Gold outline = planet's natal house.</p>
         <div class="bav-table-wrap"><table class="bav-table" id="bavTable"></table></div>
         <div class="bav-legend">
-          <span><i style="background:#1d3a20;border:1px solid var(--exalt)"></i>5–8 strong</span>
-          <span><i style="background:#1e3220;border:1px solid #6fcf87"></i>4 solid</span>
+          <span><i style="background:rgba(62,125,87,.24);border:1px solid var(--exalt)"></i>5–8 strong</span>
+          <span><i style="background:rgba(62,125,87,.16);border:1px solid var(--exalt)"></i>4 solid</span>
           <span><i style="background:var(--panel2);border:1px solid var(--line)"></i>3 average</span>
-          <span><i style="background:#2d1a1a;border:1px solid var(--debil)"></i>2 weak</span>
-          <span><i style="background:#2a1818;border:1px solid #c0513c"></i>0–1 very weak</span>
+          <span><i style="background:rgba(187,59,40,.15);border:1px solid var(--debil)"></i>2 weak</span>
+          <span><i style="background:rgba(187,59,40,.24);border:1px solid var(--debil)"></i>0–1 very weak</span>
           <span style="border:1px solid var(--gold);border-radius:4px;padding:0 5px;color:var(--gold2)">outlined = natal house</span>
         </div>
         <div class="bav-insight" id="bavInsight"></div>
@@ -1534,7 +1539,7 @@ html.light .brand{color:var(--ink)!important}
       <div class="tr-wrap" id="transitPanel" style="display:none;margin-top:14px"></div>
       <div id="yogaPanel" style="display:none;margin-top:14px"></div>
       <div id="dashaPanel" style="display:none;margin-top:14px"></div>
-      <div class="sl-section panel" id="specialLagnas" style="display:none;margin-top:14px">
+      <div class="sl-section panel ec-zone-card" id="specialLagnas" style="display:none;margin-top:14px">
         <h4>Special Lagnas · Image · Wealth · Marriage</h4>
         <div class="sl-grid">
           <div class="sl-card" id="alCard"></div>
@@ -1542,7 +1547,7 @@ html.light .brand{color:var(--ink)!important}
           <div class="sl-card" id="ulCard"></div>
         </div>
       </div>
-      <div class="chart-story" id="chartStory" style="display:none">
+      <div class="chart-story ec-zone-card" id="chartStory" style="display:none">
         <div class="chart-story-header">
           <h4>✦ Chart Story</h4>
           <span class="sub">Synthesised from dignity · nakshatra · house position · BAV · D-9</span>
@@ -1740,19 +1745,19 @@ html.light .brand{color:var(--ink)!important}
 <!-- ADD-CHART MODAL -->
 <div class="modal" id="addModal" role="dialog" aria-modal="true" aria-labelledby="addModalTitle" aria-hidden="true">
   <div class="card">
-    <h3 id="addModalTitle">Add a chart</h3>
+    <h3 id="addModalTitle" class="display">Add a chart</h3>
     <p class="note" style="margin:0 0 12px">Paste the planetary longitude table from your chart software — the lines listing <b>Lagna, Sun … Ketu</b> with sign &amp; degree. The parser reads the rest.</p>
     <input type="text" id="chartName" placeholder="Name (e.g. Mine, or a relative's)"/>
     <div style="display:flex;gap:12px;align-items:center;margin:12px 0">
-      <label class="btn" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px">📁 Upload a .txt file<input type="file" id="chartFile" accept=".txt,text/plain" style="display:none"></label>
+      <label class="btn ec-btn-primary upload-trigger" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px">📁 Upload a .txt file<input type="file" id="chartFile" accept=".txt,text/plain" style="display:none"></label>
       <span class="note">…or paste the text below ↓</span>
     </div>
     <textarea id="chartText" placeholder="Lagna     14 Vi 41' 55.19&quot; Hast  2  Vi  Ta&#10;Sun - BK  14 Le 14' 38.67&quot; PPha  1  Le  Le&#10;Moon - GK  5 Ar 26' 42.40&quot; Aswi  2  Ar  Ta&#10;..."></textarea>
     <div class="row-actions">
       <a href="#" id="fillDemo" class="note">paste a demo chart</a>
       <span style="flex:1"></span>
-      <button class="ghost" id="addCancel">Cancel</button>
-      <button class="btn" id="addSave">Parse &amp; save</button>
+      <button class="ghost ec-btn-ghost" id="addCancel">Cancel</button>
+      <button class="btn ec-btn-primary" id="addSave">Parse &amp; save</button>
     </div>
     <p class="note" id="parseMsg" style="margin-top:10px;min-height:16px"></p>
   </div>
@@ -3049,7 +3054,7 @@ function renderAvasthas(c,La){
     if(combust) N.push("Combust — scorched by the Sun; outward results are suppressed even when otherwise strong.");
     const noteHtml=N.length?`<div class="ck-sig" style="margin-top:4px">${N.join(" ")}</div>`:"";
     const digCell=`<div class="av-digrow"><span class="av-dlabel">D1</span>${chip(p.sign,d1)} <span class="av-dlabel">D9</span>${chip(d9s,d9)} <span class="av-dlabel">D10</span>${chip(d10s,d10)}${vargottama?` <span class="av-vgot">★ vargottama</span>`:""}</div><div class="ck-sig">${d1.full.split("·")[0].trim()} in Rāśi</div>`;
-    t+=`<tr><td class="ck-pl">${g.gl} ${g.name}${noteHtml}</td>`+
+    t+=`<tr><td class="ck-pl"><span class="row-emblem">${grahaEmblem(k,{size:18})}<span>${g.name}</span></span>${noteHtml}</td>`+
        `<td>${digCell}</td>`+
        `<td title="${bal.note}"><b>${bal.n}</b> <span class="av-t">${bal.t}</span></td>`+
        `<td title="${jag.note}"><b>${jag.n}</b> <span class="av-t">${jag.t}</span></td>`+
@@ -3066,24 +3071,25 @@ function renderJaimini(c,La){
   let kt=`<table class="ck-table"><thead><tr><th>Kāraka</th><th>Planet</th><th>Sign · deg</th><th>Significator of</th></tr></thead><tbody>`;
   for(const o of ck){ const g=GBYK[o.k];
     kt+=`<tr><td class="ck-ab" title="${o.name}">${o.ab}<div class="ck-name">${o.name}</div></td>`+
-        `<td class="ck-pl">${g.gl} ${g.name}</td><td>${SIGNS[o.sign]} · ${o.deg.toFixed(2)}°</td><td class="ck-sig">${o.sig}</td></tr>`; }
+        `<td class="ck-pl"><span class="row-emblem">${grahaEmblem(o.k,{size:18})}<span>${g.name}</span></span></td><td>${SIGNS[o.sign]} · ${o.deg.toFixed(2)}°</td><td class="ck-sig">${o.sig}</td></tr>`; }
   kt+=`</tbody></table>`;
   // --- Karakamsa = Atmakaraka's navamsa sign ---
   const ak=ck[0], kSign=navamsaSign(ak.sign,ak.deg);
   const inK=["Su","Mo","Ma","Me","Ju","Ve","Sa","Ra","Ke"].filter(k=>{const p=c.planets[k];return p&&navamsaSign(p.sign,p.deg)===kSign;});
   const inKtxt=inK.length
-    ? inK.map(k=>`<li><b>${GBYK[k].gl} ${GBYK[k].name}</b> in Kārakāṁśa → ${KARAKAMSA_GRAHA[k]}</li>`).join("")
+    ? inK.map(k=>`<li><b><span class="row-emblem">${grahaEmblem(k,{size:16})}<span>${GBYK[k].name}</span></span></b> in Kārakāṁśa → ${KARAKAMSA_GRAHA[k]}</li>`).join("")
     : `<li class="note">No planet sits in the Kārakāṁśa — read it through its sign-lord and any planets aspecting it in D-9.</li>`;
   const km=`<div class="km-head">Kārakāṁśa Lagna — <b>${SIGNS[kSign]}</b> <span class="note">(the Ātmakāraka <b>${GBYK[ak.k].name}</b> in Navāṁśa: the seat of the soul's pursuit)</span></div><ul class="km-list">${inKtxt}</ul>`;
   // --- Argala on the Lagna ---
   const ALL9=["Su","Mo","Ma","Me","Ju","Ve","Sa","Ra","Ke"];
   const occ=h=>{const s=(La+h-1)%12;return ALL9.filter(k=>c.planets[k]&&c.planets[k].sign===s);};
+  const occIcons=list=>list.length?list.map(k=>`<span class="row-emblem">${grahaEmblem(k,{size:14})}</span>`).join(""):"—";
   let ar=`<table class="ck-table"><thead><tr><th>Argala (intervention)</th><th>Planets</th><th>Obstruction</th><th>Net</th></tr></thead><tbody>`;
   for(const [f,o] of [[2,12],[4,10],[11,3],[5,9]]){
     const a=occ(f),b=occ(o),eff=a.length>b.length;
     ar+=`<tr><td>H${f} — ${ARGALA_HOUSE_MEAN[f]}</td>`+
-        `<td>${a.map(k=>GBYK[k].gl).join(" ")||"—"}</td>`+
-        `<td>H${o}: ${b.map(k=>GBYK[k].gl).join(" ")||"—"}</td>`+
+        `<td>${occIcons(a)}</td>`+
+        `<td>H${o}: ${occIcons(b)}</td>`+
         `<td class="${eff?'arg-yes':'arg-no'}">${eff?'★ effective':'obstructed'}</td></tr>`;
   }
   ar+=`</tbody></table>`;
@@ -3109,7 +3115,7 @@ function renderVargas(c,La){
   for(const k of PL){
     const p=c.planets[k]; if(!p) continue;
     const g=GBYK[k]; let vim=0;
-    tb+=`<tr><td class="vp-label">${g.gl} ${g.name}</td>`;
+      tb+=`<tr><td class="vp-label"><span class="row-emblem">${grahaEmblem(k,{size:18})}<span>${g.name}</span></span></td>`;
     for(const v of VARGA_DEFS){
       const vs=vargaSign(p.sign,p.deg,v.N), dig=dignityOf(k,vs), vg=v.N!==1&&vs===p.sign;
       vim+=v.w*vargaStrengthFrac(dig.score);
@@ -3184,7 +3190,7 @@ function renderStrengthDash(c,La,allBAV,bavForVerdict){
     if(k==="Ra"||k==="Ke"){
       const htier=[1,5,9].includes(house)?"benefic":[4,7,10].includes(house)?"neutral":[8,12].includes(house)?"malefic":"neutral";
       const htShort=HTYPE[house].split("·")[0].trim().split("(")[0].trim();
-      fnBadgeHtml=`<span class="ps-fn ${htier}">H${house} — ${htShort}</span>`;
+      fnBadgeHtml=`<span class="ps-fn ec-chip ${htier}">H${house} — ${htShort}</span>`;
       // Dispositor: the lord of the sign Ra/Ke occupies
       const dispK=SIGN_LORD[p.sign];
       const dispFn=functionalNature(dispK,La);
@@ -3193,7 +3199,7 @@ function renderStrengthDash(c,La,allBAV,bavForVerdict){
       fnContextLine=`${HTYPE[house]}${upaNote}${retroNote} · Dispositor: ${dispG.name} (${dispTierLabel})`;
     } else {
       const fnHouses=fn.houses.length?` · lords H${fn.houses.join(",")}`:"";
-      fnBadgeHtml=`<span class="ps-fn ${fn.tier}">${fn.tier==="yogakaraka"?"★ Yogakaraka":fn.label}</span>`;
+      fnBadgeHtml=`<span class="ps-fn ec-chip ${fn.tier}">${fn.tier==="yogakaraka"?"★ Yogakaraka":fn.label}</span>`;
       fnContextLine=`${HTYPE[house]}${upaNote}${retroNote}${fnHouses}`;
     }
 
@@ -3201,7 +3207,7 @@ function renderStrengthDash(c,La,allBAV,bavForVerdict){
 
     cards.push(`<button type="button" class="ps-card ps-card-btn" data-planet="${k}" onclick="${synthCall}" title="Open in Synthesizer">
       <div class="ps-top">
-        <span class="gdot" style="background:${g.col};width:26px;height:26px;font-size:13px;flex-shrink:0">${g.gl}</span>
+        <span class="ps-emblem">${grahaEmblem(k,{size:30})}</span>
         <div style="flex:1;min-width:0">
           <div class="ps-name">${g.name}${p.retro?' <span style="font-size:10px;color:var(--accent)">(R)</span>':""}</div>
           <div class="ps-house">H${house} · ${SIGNS[p.sign]} ${p.deg.toFixed(1)}°</div>
@@ -3209,14 +3215,14 @@ function renderStrengthDash(c,La,allBAV,bavForVerdict){
       </div>
       <hr class="ps-divider">
       <div class="ps-badges">
-        <span class="ps-badge ${inh.cls}">${inh.label}</span>
+        <span class="ps-badge ec-chip ${inh.cls}">${inh.label}</span>
         ${fnBadgeHtml}
       </div>
       <div style="font-size:10.5px;color:var(--muted);margin-bottom:7px">${fnContextLine}</div>
       <div class="ps-kv">
         <b>D-9</b><span style="color:${d9.col}">${SIGNS[d9i]} · ${d9.full.split("·")[0].trim()}</span>
         <b>Nakshatra</b><span>${ni.n} pd-${ni.pada}</span>
-        <b>Nak lord</b><span>${nlG.gl} ${nlG.name}</span>
+        <b>Nak lord</b><span><span class="row-emblem">${grahaEmblem(ni.l,{size:16})}<span>${nlG.name}</span></span></span>
       </div>
       ${bavRow}
       ${flags.length?`<div class="ps-flags">${flags.join("")}</div>`:""}
@@ -3245,12 +3251,12 @@ function renderHouseStrip(c,La){
     const isClk=!here.length&&!!lp;   // empty house whose lord is placed elsewhere → clickable
     let inner="";
     if(here.length){
-      inner=here.map(k=>`<span class="gdot" style="background:${GBYK[k].col};width:17px;height:17px;font-size:9px">${GBYK[k].gl}</span>`).join("");
+      inner=here.map(k=>`<span class="hs-emblem">${grahaEmblem(k,{size:17})}</span>`).join("");
     } else if(lp){
       const lh=houseFromSigns(La,lp.sign);
       inner=`<span class="hs-empty">→ H${lh}</span>`;
     } else {
-      inner=`<span class="hs-empty">${GBYK[lordK].gl}</span>`;
+      inner=`<span class="hs-emblem">${grahaEmblem(lordK,{size:17})}</span>`;
     }
     html+=isClk
       ?`<button type="button" class="hs-cell hs-clk" onclick="JA.setHouse(${La},${h},${lp.sign},${lp.deg.toFixed(2)})" title="H${h} empty — open lord ${GBYK[lordK].name} in Synthesizer">
@@ -4839,7 +4845,7 @@ Ketu    14 Sc 00' 00" Anu  3 Sc`;
     for(const P of PLANET_BAV_ORDER){
       const bav=allBAV[P], g=GBYK[P];
       const natalSign=c.planets[P]?c.planets[P].sign:null;
-      tb+=`<tr><td class="plabel">${g.gl} ${g.name}</td>`;
+      tb+=`<tr><td class="plabel"><span class="row-emblem">${grahaEmblem(P,{size:17})}<span>${g.name}</span></span></td>`;
       for(let h=1;h<=12;h++){
         const s=(La+h-1)%12, v=bav[s];
         const cls=v>=5?"hi5":v===4?"hi4":v===2?"lo2":v<=1?"lo1":"";
