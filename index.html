@@ -71,7 +71,7 @@
   .ec-zone-card p{font-family:var(--font-sans);font-size:11.5px;line-height:1.6;color:var(--muted);margin:6px 0 0}
   .ec-zone-card:hover{transform:translateY(-1px);box-shadow:var(--shadow-2);border-color:color-mix(in srgb,var(--gold) 36%,var(--line))}
   *{box-sizing:border-box}
-  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  :focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
   a:focus:not(:focus-visible),button:focus:not(:focus-visible){outline:none}
   .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
   .skip-link:focus-visible{position:fixed;left:16px;top:16px;width:auto;height:auto;overflow:visible;z-index:100;
@@ -913,7 +913,7 @@
   html.light{
     --bg:#f5f1e8; --bg2:#efe9db; --panel:#fffdf7; --panel2:#f3ecdc;
     --line:#e0d4bb; --ink:#2b2620; --muted:#7a6c55;
-    --gold:#b8860b; --gold2:#9a6b12; --terracotta:#b5552f; --accent:#b5552f;
+    --gold:#8f6200; --gold2:#744d06; --terracotta:#b5552f; --accent:#b5552f;
     --exalt:#3e7d57; --debil:#bb3b28;
     --own:#b8860b; --friend:#2f6f86; --enemy:#bb3b28; --neutral:#7a6c55;
   }
@@ -1314,11 +1314,23 @@ html.light .brand{color:var(--ink)!important}
   /* Print */
   @media print{
     #cosmos-bg,header.top,#readProgress,#backToTop,#toastWrap,#cmdPalette,nav.site-nav,
-    .chart-view-toggle,.chartbar,footer,#why,#grahas,#rashis,#bhavas,#synth,#bbavam,
-    #outlook,#lifepredictor,#compare,#quiz,.charts-sidebar{display:none!important}
-    body{background:#fff!important;color:#000!important}
-    *{box-shadow:none!important;animation:none!important}
-    .panel,.cmp-col,.detail{break-inside:avoid;border-color:#ccc!important}
+    .chart-view-toggle,.chartbar,.charts-sidebar,#addModal,#nakModal,footer{display:none!important}
+    #hero,#why,#promptbuilder,#bbavam,#arudhas,#outlook,#lifepredictor,#compare,#quiz{display:none!important}
+    body{background:#fff!important;color:#111!important;padding-left:0!important}
+    .wrap{max-width:none!important;padding:0 12mm!important}
+    section{padding:14px 0 10px!important;border-bottom:1px solid #d8d8d8!important;break-inside:avoid}
+    *{box-shadow:none!important;animation:none!important;text-shadow:none!important;filter:none!important}
+    .panel,.ec-zone-card,.cmp-col,.detail,.quiz,.chart-story,.ol-ai-wrap,.lp-wrap,.pb-recipe,.watchfor{
+      break-inside:avoid;background:#fff!important;color:#111!important;border:1px solid #cfcfcf!important;backdrop-filter:none!important
+    }
+    .sub,.note,.chapref,.kv b,.story-label,.qmeta,.legend2,.bav-legend{color:#444!important}
+    a{color:#111!important;text-decoration:none!important}
+    .emblem .aura{display:none!important}
+    .emblem .ring-base{stroke:#a8a8a8!important}
+    .emblem .ring-gold,.emblem .stroke-gold{stroke:#7c5a1a!important}
+    .emblem .gold,.emblem .terra{fill:#7c5a1a!important}
+    .tok,.opt,.ctab,.ec-chip,.tag,.ps-badge,.ps-fn,.ps-flag,.ol-pill,.ol-ybadge{background:#fff!important;color:#111!important;border-color:#bcbcbc!important}
+    .charttable th,.charttable td,.varga-table th,.varga-table td,.ck-table th,.ck-table td,.bav-table th,.bav-table td,.av-table th,.av-table td{border-color:#cfcfcf!important}
   }
 
 @media (prefers-reduced-motion:reduce){
