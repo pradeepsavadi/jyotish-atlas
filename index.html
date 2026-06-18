@@ -86,18 +86,35 @@
   header.top .brand small{display:block;font-size:var(--text-xs);color:var(--muted);font-weight:400}
   .nav-toggle{display:none;margin-left:auto;background:var(--panel2);border:1px solid var(--line);color:var(--ink);
     border-radius:8px;padding:6px 12px;font-size:var(--text-sm);font-weight:600;cursor:pointer}
-  nav.site-nav{display:flex;flex-wrap:wrap;gap:2px;flex:1}
-  nav.site-nav a{position:relative;font-size:var(--text-sm);color:var(--muted);padding:6px 10px;border-radius:8px;transition:color var(--dur) var(--ease),background var(--dur) var(--ease)}
-  nav.site-nav a::after{content:"";position:absolute;left:10px;right:10px;bottom:3px;height:1.5px;background:var(--gold);
+  nav.site-nav{display:flex;flex-wrap:wrap;gap:6px;flex:1;align-items:flex-start}
+  .nav-zone{position:relative;min-width:150px}
+  .nav-zone>summary{list-style:none;cursor:pointer;user-select:none;position:relative;
+    font-family:var(--font-sans);font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);
+    padding:7px 10px 9px;border-radius:8px;transition:color var(--dur) var(--ease),background var(--dur) var(--ease)}
+  .nav-zone>summary::-webkit-details-marker{display:none}
+  .nav-zone>summary::after{content:"";position:absolute;left:10px;right:10px;bottom:4px;height:1.5px;background:var(--gold);
     transform:scaleX(0);transform-origin:left;transition:transform var(--dur) var(--ease);border-radius:2px}
-  nav.site-nav a:hover{color:var(--ink)}
-  nav.site-nav a:hover::after,nav.site-nav a.nav-active::after{transform:scaleX(1)}
-  nav.site-nav a.nav-active{color:var(--ink)}
-  .nav-group{display:none}
+  .nav-zone:hover>summary,.nav-zone>summary:focus-visible{color:var(--ink);background:var(--panel2)}
+  .nav-zone[open]>summary,.nav-zone.is-active>summary{color:var(--ink)}
+  .nav-zone[open]>summary::after,.nav-zone.is-active>summary::after{transform:scaleX(1)}
+  .nav-zone-menu{display:none;flex-direction:column;gap:2px;background:var(--panel);border:1px solid var(--line);
+    border-radius:10px;box-shadow:var(--shadow-2);padding:8px;min-width:190px;position:absolute;left:0;top:100%;z-index:45}
+  .nav-zone[open] .nav-zone-menu{display:flex}
+  .nav-zone-menu a{position:relative;font-size:var(--text-sm);color:var(--muted);padding:7px 10px;border-radius:8px;
+    transition:color var(--dur) var(--ease),background var(--dur) var(--ease)}
+  .nav-zone-menu a::after{content:"";position:absolute;left:10px;right:10px;bottom:4px;height:1.5px;background:var(--gold);
+    transform:scaleX(0);transform-origin:left;transition:transform var(--dur) var(--ease);border-radius:2px}
+  .nav-zone-menu a:hover{color:var(--ink);background:var(--panel2)}
+  .nav-zone-menu a:hover::after,.nav-zone-menu a.nav-active::after{transform:scaleX(1)}
+  .nav-zone-menu a.nav-active{color:var(--ink)}
   @media(max-width:640px){
     .nav-toggle{display:block}
     nav.site-nav{display:none;width:100%;flex-direction:column;padding:8px 0 4px;border-top:1px solid var(--line);margin-top:4px}
     nav.site-nav.open{display:flex}
+    .nav-zone{width:100%;min-width:0;padding:0 2px 8px;border-bottom:1px solid var(--line)}
+    .nav-zone:last-child{border-bottom:none;padding-bottom:2px}
+    .nav-zone-menu{position:static;min-width:0;box-shadow:none;background:none;border:none;padding:2px 0 0 10px}
+    .nav-zone-menu a{padding:7px 10px}
     header.top .brand{margin-right:0;flex:1}
   }
   .theme-toggle{margin-left:auto;background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:5px 11px;cursor:pointer;font-size:15px;line-height:1;flex-shrink:0}
@@ -113,13 +130,15 @@
     header.top .brand{margin:0 0 18px;padding:0 10px}
     .nav-toggle{display:none !important}
     nav.site-nav{flex:1 1 auto;flex-direction:column;flex-wrap:nowrap;gap:1px;width:100%}
-    nav.site-nav a{font-size:14px;padding:8px 12px;border-radius:9px;color:var(--muted)}
-    nav.site-nav a::after{display:none}
-    nav.site-nav a:hover{background:var(--panel2);color:var(--ink)}
-    nav.site-nav a.nav-active{background:var(--panel2);color:var(--ink);box-shadow:inset 2px 0 0 var(--gold)}
-    .nav-group{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
-      color:var(--muted);opacity:.55;padding:15px 12px 5px;font-weight:600}
-    .nav-group:first-child{padding-top:2px}
+    .nav-zone{width:100%;min-width:0}
+    .nav-zone>summary{padding:8px 12px 10px}
+    .nav-zone>summary::after{display:block}
+    .nav-zone.is-active>summary{background:var(--panel2)}
+    .nav-zone-menu{position:static;min-width:0;box-shadow:none;background:none;border:none;padding:2px 0 10px}
+    .nav-zone-menu a{font-size:14px;padding:8px 12px;border-radius:9px;color:var(--muted)}
+    .nav-zone-menu a::after{display:none}
+    .nav-zone-menu a:hover{background:var(--panel2);color:var(--ink)}
+    .nav-zone-menu a.nav-active{background:var(--panel2);color:var(--ink);box-shadow:inset 2px 0 0 var(--gold)}
     .header-actions{margin:16px 0 0;width:100%;justify-content:flex-start;flex-wrap:wrap;gap:8px;
       border-top:1px solid var(--line);padding-top:14px}
     .header-actions .theme-toggle{margin-left:auto}
@@ -1254,23 +1273,40 @@ html.light .brand{color:var(--ink)!important}
   <div class="brand">✦ Jyotish Atlas<small>Parashara's grammar, made interactive</small></div>
   <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="siteNav">Menu</button>
   <nav id="siteNav" class="site-nav">
-    <div class="nav-group">Learn the grammar</div>
-    <a href="#why">The idea</a>
-    <a href="#grahas">Grahas</a>
-    <a href="#rashis">Rashis</a>
-    <a href="#bhavas">Bhavas</a>
-    <a href="#synth">Synthesizer</a>
-    <div class="nav-group">Your chart</div>
-    <a href="#charts">My Charts</a>
-    <a href="#promptbuilder">Prompt Builder</a>
-    <a href="#bbavam">Bhavat Bhavam</a>
-    <a href="#arudhas">Graha Arudhas</a>
-    <div class="nav-group">Predict &amp; time</div>
-    <a href="#outlook">Life Outlook</a>
-    <a href="#lifepredictor">Life Predictor</a>
-    <div class="nav-group">More</div>
-    <a href="#compare">Compare</a>
-    <a href="#quiz">Practice</a>
+    <details class="nav-zone is-active" data-zone="learn" open>
+      <summary class="nav-zone-trigger">Learn</summary>
+      <div class="nav-zone-menu">
+        <a href="#why">The idea</a>
+        <a href="#grahas">Grahas</a>
+        <a href="#rashis">Rashis</a>
+        <a href="#bhavas">Bhavas</a>
+        <a href="#nakshatras">Nakshatras</a>
+      </div>
+    </details>
+    <details class="nav-zone" data-zone="synthesize">
+      <summary class="nav-zone-trigger">Synthesize</summary>
+      <div class="nav-zone-menu">
+        <a href="#synth">Synthesizer</a>
+        <a href="#bbavam">Bhavat Bhavam</a>
+        <a href="#arudhas">Graha Arudhas</a>
+        <a href="#compare">Compare</a>
+      </div>
+    </details>
+    <details class="nav-zone" data-zone="charts">
+      <summary class="nav-zone-trigger">My Charts</summary>
+      <div class="nav-zone-menu">
+        <a href="#charts">My Charts</a>
+        <a href="#promptbuilder">Prompt Builder</a>
+        <a href="#outlook">Life Outlook</a>
+        <a href="#lifepredictor">Life Predictor</a>
+      </div>
+    </details>
+    <details class="nav-zone" data-zone="practice">
+      <summary class="nav-zone-trigger">Practice</summary>
+      <div class="nav-zone-menu">
+        <a href="#quiz">Practice quiz</a>
+      </div>
+    </details>
   </nav>
   <div class="header-actions">
     <button type="button" id="activeChartPill" class="chart-pill" title="Active chart — click to manage" hidden><span class="cp-dot"></span><span class="cp-name"></span></button>
@@ -6796,14 +6832,25 @@ function toggleTheme(){
 (function(){
   const navToggle=document.getElementById("navToggle");
   const siteNav=document.getElementById("siteNav");
+  const navZones=siteNav?[...siteNav.querySelectorAll(".nav-zone")]:[];
+  function setActiveZone(activeLink){
+    navZones.forEach(z=>z.classList.toggle("is-active",!!activeLink&&z.contains(activeLink)));
+  }
   if(navToggle&&siteNav){
     navToggle.addEventListener("click",()=>{
       const open=siteNav.classList.toggle("open");
       navToggle.setAttribute("aria-expanded",open?"true":"false");
     });
+    navZones.forEach(zone=>{
+      zone.addEventListener("toggle",()=>{
+        if(!zone.open) return;
+        navZones.forEach(other=>{if(other!==zone) other.removeAttribute("open");});
+      });
+    });
     siteNav.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{
       siteNav.classList.remove("open");
       navToggle.setAttribute("aria-expanded","false");
+      setActiveZone(a);
     }));
   }
 
@@ -6823,10 +6870,22 @@ function toggleTheme(){
       entries.forEach(e=>{
         if(!e.isIntersecting) return;
         const id=e.target.id;
-        navLinks.forEach(a=>a.classList.toggle("nav-active",a.getAttribute("href")==="#"+id));
+        let active=null;
+        navLinks.forEach(a=>{
+          const on=a.getAttribute("href")==="#"+id;
+          a.classList.toggle("nav-active",on);
+          if(on) active=a;
+        });
+        setActiveZone(active);
       });
     },{rootMargin:"-42% 0px -42% 0px",threshold:0});
     sections.forEach(s=>{if(s.id) spy.observe(s);});
+  }
+  const initialNav=navLinks.find(a=>a.getAttribute("href")===location.hash)||navLinks[0];
+  if(initialNav){
+    setActiveZone(initialNav);
+    const z=initialNav.closest(".nav-zone");
+    z&&z.setAttribute("open","");
   }
 
   const btnGrid=document.getElementById("btnGridView");
@@ -6904,8 +6963,9 @@ function toggleTheme(){
   const cmdList=document.getElementById("cmdList");
   let cmdItems=[],cmdView=[],cmdSel=0;
   const SECTIONS=[["why","The idea"],["grahas","Grahas"],["rashis","Rashis"],["bhavas","Bhavas"],
-    ["synth","Synthesizer"],["charts","My Charts"],["bbavam","Bhavat Bhavam"],["lifepredictor","Life Predictor"],
-    ["outlook","Life Outlook"],["compare","Compare charts"],["quiz","Practice quiz"]];
+    ["synth","Synthesizer"],["bbavam","Bhavat Bhavam"],["arudhas","Graha Arudhas"],["compare","Compare charts"],
+    ["charts","My Charts"],["promptbuilder","Prompt Builder"],["outlook","Life Outlook"],["lifepredictor","Life Predictor"],
+    ["quiz","Practice quiz"]];
   function openTokenDetail(tokensId,sectionId,i){
     const btns=document.querySelectorAll("#"+tokensId+" .tok");
     if(btns[i]) btns[i].click();
