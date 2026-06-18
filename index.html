@@ -223,6 +223,22 @@
   .hero-lede{font-family:var(--font-sans);font-size:17px;line-height:1.55;color:var(--muted);max-width:42ch;margin:18px 0 26px}
   .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
   .hero-emblem{flex:0 0 auto}
+  /* == ORRERY == */
+  .orrery{position:relative;width:360px;height:360px;max-width:100%}
+  .orrery-stars{position:absolute;inset:0;pointer-events:none}
+  .orrery-wrap{position:absolute;inset:0;will-change:transform}
+  .orrery-core{position:absolute;left:50%;top:48.9%;width:54px;height:54px;transform:translate(-50%,-50%);border-radius:50%;
+    background:radial-gradient(circle at 42% 38%, #fff1cf, var(--gold) 55%, #c0641f);
+    box-shadow:0 0 30px 6px color-mix(in srgb,var(--gold) 55%,transparent),0 0 70px 20px color-mix(in srgb,var(--gold) 22%,transparent);
+    animation:orreryCorePulse 4.2s ease-in-out infinite;z-index:60}
+  @keyframes orreryCorePulse{0%,100%{box-shadow:0 0 26px 5px color-mix(in srgb,var(--gold) 50%,transparent),0 0 60px 16px color-mix(in srgb,var(--gold) 18%,transparent)}50%{box-shadow:0 0 38px 9px color-mix(in srgb,var(--gold) 62%,transparent),0 0 86px 26px color-mix(in srgb,var(--gold) 26%,transparent)}}
+  .orrery-tick{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--gold);opacity:.3;transform:translate(-50%,-50%)}
+  .orrery-node{position:absolute;left:0;top:0;width:56px;height:56px;will-change:transform,opacity}
+  .orrery-node .emblem{filter:drop-shadow(0 0 7px color-mix(in srgb,var(--pcol,var(--gold)) 55%,transparent))}
+  .orrery-asc{position:absolute;width:0;height:0;transform:translate(-50%,-50%);
+    border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:12px solid var(--gold);
+    filter:drop-shadow(0 0 5px color-mix(in srgb,var(--gold) 60%,transparent));z-index:120}
+  @media (prefers-reduced-motion:reduce){.orrery-core{animation:none}}
   .hero-zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:0 0 12px}
   .hero-zone-link{text-decoration:none;display:block}
   .hero-zone-link .ec-zone-card{height:100%}
@@ -2284,7 +2300,70 @@ function rashiEmblem(i,opts={}){
     +`<text x="50" y="64" text-anchor="middle" fill="${tint}" font-family="var(--font-display)" font-size="40">${RASHI_GLYPH[i]}</text>`
     +`</svg>`;
 }
-document.getElementById("heroEmblem")?.insertAdjacentHTML("beforeend", grahaEmblem("Su",{size:190,focus:true,bija:"सू"}));
+/* == NAVAGRAHA ORRERY (hero) — CSS3D + Canvas, zero-dep, offline; reads JA.getActiveChart() read-only == */
+function initOrrery(){
+  const host=document.getElementById("heroEmblem");
+  if(!host || host.dataset.orrery) return;
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const fallback=()=>{host.innerHTML=grahaEmblem("Su",{size:190,focus:true,bija:"सू"});};
+  if(window.innerWidth<760){ fallback(); return; }
+  try{
+    host.dataset.orrery="1";
+    const SIZE=360, CX=180, CY=176, RX=150, RY=69, HALF=28, EMB=56;
+    const KEYS=["Su","Mo","Ma","Me","Ju","Ve","Sa","Ra","Ke"];
+    const SPEED=[3.0,4.2,2.5,4.8,1.9,3.5,1.5,1.1,1.1];
+    host.innerHTML='<div class="orrery" aria-hidden="true">'
+      +'<canvas class="orrery-stars"></canvas>'
+      +'<div class="orrery-wrap"><div class="orrery-core"></div>'
+      +'<div class="orrery-ticks"></div><div class="orrery-asc" hidden></div>'
+      +'<div class="orrery-nodes"></div></div></div>';
+    const root=host.firstChild, wrap=root.querySelector(".orrery-wrap");
+    const nodesEl=root.querySelector(".orrery-nodes"), ticksEl=root.querySelector(".orrery-ticks");
+    const ascEl=root.querySelector(".orrery-asc"), canvas=root.querySelector(".orrery-stars"), ctx=canvas.getContext("2d");
+    for(let i=0;i<12;i++){const th=i*30*Math.PI/180,x=CX+(RX+8)*Math.cos(th),y=CY+(RY+4)*Math.sin(th);
+      const t=document.createElement("div");t.className="orrery-tick";t.style.left=x+"px";t.style.top=y+"px";ticksEl.appendChild(t);}
+    const nodes=KEYS.map((k,i)=>{const el=document.createElement("div");el.className="orrery-node";
+      el.style.setProperty("--pcol",(GBYK[k]&&GBYK[k].col)||"var(--gold)");
+      el.innerHTML=grahaEmblem(k,{size:EMB});el.title=(GBYK[k]?GBYK[k].name:k);nodesEl.appendChild(el);
+      return {k,el,idle:i*40,cur:i*40,target:i*40,speed:SPEED[i]};});
+    const STARS=Array.from({length:80},()=>({x:Math.random()*SIZE,y:Math.random()*SIZE,r:Math.random()*1.3+0.3,p:Math.random()*6.28,tw:0.5+Math.random()*1.5}));
+    const dpr=Math.min(2,window.devicePixelRatio||1);
+    canvas.width=SIZE*dpr;canvas.height=SIZE*dpr;canvas.style.width=SIZE+"px";canvas.style.height=SIZE+"px";ctx.scale(dpr,dpr);
+    const drawStars=(t,ox,oy)=>{ctx.clearRect(0,0,SIZE,SIZE);for(const s of STARS){const a=reduce?0.6:(0.35+0.4*(0.5+0.5*Math.sin(t*s.tw+s.p)));
+      ctx.globalAlpha=a;ctx.fillStyle="#f3ead9";ctx.beginPath();ctx.arc(s.x+ox*6,s.y+oy*6,s.r,0,6.2832);ctx.fill();}ctx.globalAlpha=1;};
+    const angdelta=(a,b)=>((b-a+540)%360)-180;
+    let lastChart=undefined;
+    function place(n){const th=n.cur*Math.PI/180,x=CX+RX*Math.cos(th),y=CY+RY*Math.sin(th),d=Math.sin(th),sc=0.74+0.26*((d+1)/2);
+      n.el.style.transform="translate("+(x-HALF)+"px,"+(y-HALF)+"px) scale("+sc.toFixed(3)+")";
+      n.el.style.opacity=(0.5+0.5*((d+1)/2)).toFixed(3);n.el.style.zIndex=Math.round(100+d*100);}
+    function syncTargets(){const c=(window.JA&&JA.getActiveChart)?JA.getActiveChart():null;
+      if(c&&c.planets){for(const n of nodes){const p=c.planets[n.k];if(p)n.target=(p.sign*30+(p.deg||0))%360;}
+        if(c.La){const L=(c.La.sign*30+(c.La.deg||0))%360,th=L*Math.PI/180;ascEl.hidden=false;
+          ascEl.style.left=(CX+(RX+2)*Math.cos(th))+"px";ascEl.style.top=(CY+(RY+1)*Math.sin(th))+"px";}
+        root.classList.add("has-chart");}
+      else{ascEl.hidden=true;root.classList.remove("has-chart");}
+      lastChart=c;}
+    syncTargets();
+    if(window.JA){const prev=JA.onChartsChange;JA.onChartsChange=function(){try{prev&&prev();}finally{syncTargets();if(reduce){for(const n of nodes){n.cur=n.target;place(n);}}}};}
+    let pX=0,pY=0,tX=0,tY=0;
+    if(!reduce){root.addEventListener("pointermove",e=>{const r=root.getBoundingClientRect();tX=((e.clientX-r.left)/r.width-0.5)*2;tY=((e.clientY-r.top)/r.height-0.5)*2;});
+      root.addEventListener("pointerleave",()=>{tX=0;tY=0;});}
+    let raf=0,last=0,active=true,pollC=0;
+    function render(t){const dt=last?Math.min(0.05,(t-last)/1000):0.016;last=t;
+      pX+=(tX-pX)*Math.min(1,dt*6);pY+=(tY-pY)*Math.min(1,dt*6);
+      wrap.style.transform="translate("+(pX*8).toFixed(2)+"px,"+(pY*5).toFixed(2)+"px)";
+      const hasChart=root.classList.contains("has-chart");
+      for(const n of nodes){if(!hasChart){n.idle=(n.idle+n.speed*dt)%360;n.target=n.idle;}n.cur+=angdelta(n.cur,n.target)*Math.min(1,dt*3);place(n);}
+      drawStars(t/1000,pX,pY);
+      if((++pollC%20)===0){const c=(window.JA&&JA.getActiveChart)?JA.getActiveChart():null;if(c!==lastChart)syncTargets();}}
+    function loop(t){render(t);if(active)raf=requestAnimationFrame(loop);}
+    if(reduce){for(const n of nodes){n.cur=n.target;place(n);}drawStars(0,0,0);}
+    else{raf=requestAnimationFrame(loop);
+      if("IntersectionObserver" in window){new IntersectionObserver(es=>{const vis=es[0].isIntersecting;
+        if(vis&&!active){active=true;last=0;raf=requestAnimationFrame(loop);}else if(!vis&&active){active=false;cancelAnimationFrame(raf);}},{threshold:0.05}).observe(root);}}
+  }catch(e){ if(console&&console.warn)console.warn("orrery init failed; using emblem",e); host.removeAttribute("data-orrery"); fallback(); }
+}
+window.addEventListener("load",initOrrery);
 function nakInfo(lon){const span=40/3;lon=((lon%360)+360)%360;const idx=Math.floor(lon/span);const pada=Math.floor((lon-idx*span)/(span/4))+1;return Object.assign({idx,pada},NAK[idx]);}
 const VIMY={Ke:7,Ve:20,Su:6,Mo:10,Ma:7,Ra:18,Ju:16,Sa:19,Me:17};
 const DASHA_SEQ_K=["Ke","Ve","Su","Mo","Ma","Ra","Ju","Sa","Me"];
