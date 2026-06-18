@@ -192,17 +192,21 @@
   .av-vgot{font-size:9px;color:var(--gold2);border:1px solid var(--gold);border-radius:4px;padding:0 4px;font-weight:600}
   .av-table{min-width:720px}
   /* Prompt Builder recipe chips */
-  .pb-recipe{display:flex;flex-direction:column;gap:8px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .pb-recipe{display:flex;flex-direction:column;gap:8px;background:linear-gradient(180deg,color-mix(in srgb,var(--gold) 10%,var(--panel2)),var(--panel2));border:1px solid color-mix(in srgb,var(--gold) 22%,var(--line));border-radius:12px;padding:14px 16px}
   .pb-recipe-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-  .pb-rlabel{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:600;min-width:64px}
-  .pb-chip{font-size:11.5px;padding:2px 9px;border-radius:20px;border:1px solid var(--line);background:var(--panel)}
+  .pb-rlabel{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--gold2);font-weight:700;min-width:64px}
+  .pb-chip{font-size:11.5px;padding:2px 9px;border-radius:20px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
   .pb-chip.pb-v{border-color:var(--gold);color:var(--gold2)}
-  .pb-chip.pb-s{border-color:#6a8cff;color:#9db4ff}
+  .pb-chip.pb-s{border-color:color-mix(in srgb,var(--friend) 44%,var(--line));color:var(--friend)}
   .pb-question-wrap{margin-bottom:14px}
-  .pb-question-wrap label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+  .pb-question-wrap label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:6px;font-weight:700}
   .pb-question{width:100%;box-sizing:border-box;background:var(--panel2);border:1px solid var(--line);border-radius:9px;color:var(--ink);padding:10px 12px;font-size:13.5px;font-family:inherit;line-height:1.5;resize:vertical;outline:none}
-  .pb-question:focus{border-color:var(--gold)}
+  .pb-question-wrap .note{font-size:11px;font-weight:500;text-transform:none;letter-spacing:0}
+  .pb-question:focus,.pb-question:focus-visible{border-color:var(--gold)}
   .pb-detected{font-size:10px;color:var(--gold2);font-weight:400;text-transform:none;letter-spacing:0}
+  #promptbuilder .panel.ec-zone-card,#outlook .panel.ec-zone-card,#lifepredictor .panel.ec-zone-card{
+    background:linear-gradient(180deg,var(--panel),color-mix(in srgb,var(--panel2) 58%,var(--panel)));
+  }
   section{padding:var(--section-y) 0 16px;border-bottom:1px solid rgba(42,51,96,.5)}
   section.section-reveal{opacity:0;transform:translateY(10px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
   section.section-reveal.visible{opacity:1;transform:none}
@@ -575,41 +579,48 @@
   .ga-cluster-interp{font-size:13px;line-height:1.65;color:var(--ink);padding:11px 14px;background:var(--panel2);border-radius:8px;border-left:3px solid var(--gold2)}
   /* === life outlook === */
   .ol-controls{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+  .ol-controls .bb-sel,.ol-controls input.bb-sel,#promptbuilder .bb-sel{
+    min-width:190px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;color:var(--ink)
+  }
+  .ol-controls .bb-sel:focus-visible,.ol-controls input.bb-sel:focus-visible,#promptbuilder .bb-sel:focus-visible{border-color:var(--gold)}
   .ol-houses{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:6px}
   .ol-htag{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:4px 11px;font-size:12.5px;font-weight:700;color:var(--gold2)}
   .ol-htag span{font-weight:400;color:var(--muted);margin-left:4px;font-size:12px}
   .ol-vk-note{font-size:12px;color:var(--muted);margin-bottom:14px}
-  .ol-best-banner{background:linear-gradient(90deg,#1e3324,#182a1e);border:1px solid #3a7a4a;border-radius:10px;padding:11px 16px;margin-bottom:16px;font-size:13.5px;color:#c8f0d0}
+  .ol-best-banner{background:linear-gradient(135deg,color-mix(in srgb,var(--exalt) 24%,var(--panel2)),color-mix(in srgb,var(--gold) 16%,var(--panel2)));border:1px solid color-mix(in srgb,var(--exalt) 46%,var(--line));border-radius:10px;padding:11px 16px;margin-bottom:16px;font-size:13.5px;color:var(--ink)}
   .ol-years{display:flex;flex-direction:column;gap:10px}
-  .ol-year-card{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:15px 18px}
-  .ol-year-card.ol-good{border-color:#2d5e38;background:linear-gradient(135deg,#1a2e1f 0%,var(--panel2) 60%)}
-  .ol-year-card.ol-weak{border-color:#5a2a22;background:linear-gradient(135deg,#2a1918 0%,var(--panel2) 60%)}
+  .ol-year-card{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:15px 18px;transition:transform var(--dur) var(--ease),border-color var(--dur) var(--ease),box-shadow var(--dur) var(--ease)}
+  .ol-year-card:hover{transform:translateY(-1px);box-shadow:var(--shadow-1)}
+  .ol-year-card.ol-good{border-color:color-mix(in srgb,var(--exalt) 45%,var(--line));background:linear-gradient(135deg,color-mix(in srgb,var(--exalt) 14%,var(--panel2)) 0%,var(--panel2) 60%)}
+  .ol-year-card.ol-weak{border-color:color-mix(in srgb,var(--debil) 48%,var(--line));background:linear-gradient(135deg,color-mix(in srgb,var(--debil) 14%,var(--panel2)) 0%,var(--panel2) 60%)}
   .ol-yhead{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
   .ol-yn{font-size:22px;font-weight:800;color:var(--gold2);min-width:54px}
   .ol-ybadge{font-size:11.5px;font-weight:700;padding:3px 11px;border-radius:999px;background:var(--panel);border:1px solid var(--line)}
-  .ol-year-card.ol-good .ol-ybadge{background:#1d3a20;color:var(--exalt);border-color:transparent}
-  .ol-year-card.ol-weak .ol-ybadge{background:#2d1a1a;color:var(--debil);border-color:transparent}
+  .ol-year-card.ol-good .ol-ybadge{background:color-mix(in srgb,var(--exalt) 18%,transparent);color:var(--exalt);border-color:color-mix(in srgb,var(--exalt) 32%,transparent)}
+  .ol-year-card.ol-weak .ol-ybadge{background:color-mix(in srgb,var(--debil) 16%,transparent);color:var(--debil);border-color:color-mix(in srgb,var(--debil) 30%,transparent)}
   .ol-yt{font-size:12px;color:var(--muted);margin-left:auto}
-  .ol-sati{font-size:11px;padding:2px 8px;border-radius:999px;background:#2d1a1a;color:var(--debil);font-weight:600;white-space:nowrap}
-  .ol-msg{font-size:13px;color:#dfe4f6;line-height:1.62;margin-bottom:6px}
-  .ol-msg b{color:var(--fg)}
+  .ol-sati{font-size:11px;padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--debil) 16%,transparent);color:var(--debil);font-weight:600;white-space:nowrap;border:1px solid color-mix(in srgb,var(--debil) 32%,transparent)}
+  .ol-msg{font-size:13px;color:var(--ink);line-height:1.62;margin-bottom:6px}
+  .ol-msg b{color:var(--gold2)}
   .ol-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-  .ol-pill{font-size:11.5px;padding:3px 10px;border-radius:999px;font-weight:600}
-  .ol-pill-pos{background:#1d3a20;color:var(--exalt)}
-  .ol-pill-neg{background:#2d1a1a;color:var(--debil)}
+  .ol-pill{font-size:11.5px;padding:3px 10px;border-radius:999px;font-weight:600;border:1px solid var(--line)}
+  .ol-pill-pos{background:color-mix(in srgb,var(--exalt) 18%,transparent);color:var(--exalt);border-color:color-mix(in srgb,var(--exalt) 32%,transparent)}
+  .ol-pill-neg{background:color-mix(in srgb,var(--debil) 15%,transparent);color:var(--debil);border-color:color-mix(in srgb,var(--debil) 30%,transparent)}
   .ol-pill-neu{background:var(--panel);color:var(--muted);border:1px solid var(--line)}
-  .ol-foot{margin-top:16px;padding:13px 16px;font-size:13px;color:var(--muted);background:var(--panel);border-radius:10px;border:1px solid var(--line)}
+  .ol-foot{margin-top:16px;padding:13px 16px;font-size:13px;color:var(--muted);background:var(--panel);border-radius:10px;border:1px solid var(--line);line-height:1.6}
   @media(max-width:600px){.ol-controls{flex-direction:column}.ol-yt{margin-left:0}}
-  .ol-ai-wrap{margin-top:22px;padding:18px 20px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+  .ol-ai-wrap{margin-top:22px;padding:18px 20px;background:linear-gradient(180deg,var(--panel2),color-mix(in srgb,var(--panel) 70%,var(--bg2)));border:1px solid color-mix(in srgb,var(--gold) 20%,var(--line));border-radius:14px}
   .ol-ai-hdr{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
-  .ol-ai-hdr b{font-size:14px}
+  .ol-ai-hdr b{font-size:17px;color:var(--gold2);font-family:var(--font-display);font-weight:600}
   .ol-ai-hdr span{font-size:12px;color:var(--muted)}
-  .ol-prompt-ta{width:100%;box-sizing:border-box;height:190px;background:#0d1117;color:#c9d1d9;border:1px solid var(--line);border-radius:9px;padding:11px 13px;font-size:11.5px;font-family:monospace;line-height:1.55;resize:vertical;outline:none}
+  .ol-prompt-ta{width:100%;box-sizing:border-box;height:190px;background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:11px 13px;font-size:11.5px;font-family:Menlo,Consolas,monospace;line-height:1.55;resize:vertical;outline:none}
+  .ol-prompt-ta:focus-visible{border-color:var(--gold)}
   .ol-ai-btns{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;align-items:center}
-  .ol-ai-btn{padding:9px 22px;border-radius:10px;border:none;cursor:pointer;font-size:13px;font-weight:700;letter-spacing:.02em;transition:.15s opacity,.15s transform}
-  .ol-ai-btn:hover{opacity:.88;transform:translateY(-1px)}
-  .ol-ai-btn-cl{background:linear-gradient(135deg,#d97b4f,#b84028);color:#fff}
-  .ol-ai-btn-gm{background:linear-gradient(135deg,#4a90e2,#1a7f50);color:#fff}
+  .ol-ai-btn{padding:9px 22px;border-radius:10px;border:1px solid transparent;cursor:pointer;font-size:13px;font-weight:700;letter-spacing:.02em;transition:transform var(--dur) var(--ease),filter var(--dur) var(--ease),border-color var(--dur) var(--ease),background var(--dur) var(--ease),color var(--dur) var(--ease)}
+  .ol-ai-btn:hover{transform:translateY(-1px);filter:brightness(1.03)}
+  .ol-ai-btn-cl{background:linear-gradient(135deg,var(--gold),var(--terracotta));color:#2a1a0c}
+  .ol-ai-btn-gm{background:var(--panel);border-color:var(--line);color:var(--gold2)}
+  .ol-ai-btn:focus-visible{border-color:var(--gold2)}
   .ol-ai-note{font-size:11.5px;color:var(--muted);margin-left:4px}
 
   /* ===== House Strip ===== */
@@ -699,7 +710,7 @@
   .dt-no-data{padding:22px;text-align:center;color:var(--muted);font-size:13px}
 
   /* ===== Life Predictor (VedAstro-style timeline) ===== */
-  .lp-wrap{padding:18px 20px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+  .lp-wrap{padding:18px 20px;background:linear-gradient(180deg,var(--panel),color-mix(in srgb,var(--panel2) 58%,var(--panel)));border:1px solid var(--line);border-radius:14px}
   .lp-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
   .lp-hdr h4{margin:0;font-size:14px;font-weight:700;color:var(--gold2)}
   .lp-hdr-note{font-size:11.5px;color:var(--muted);max-width:520px;line-height:1.45}
@@ -709,7 +720,7 @@
   .lp-row.lp-smart{height:32px}
   .lp-btn{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;
     transition:background var(--dur) var(--ease),border-color var(--dur) var(--ease)}
-  .lp-btn:hover{border-color:var(--gold)}
+  .lp-btn:hover{border-color:var(--gold);background:var(--panel)}
   .lp-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-bottom:12px}
   .lp-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:4px}
   .lp-scroll{overflow-x:auto;overflow-y:hidden;padding-bottom:8px;-webkit-overflow-scrolling:touch}
@@ -724,8 +735,8 @@
   .lp-seg.lp-active{box-shadow:0 0 0 2px var(--gold) inset;z-index:3}
   .lp-seg-lbl{position:absolute;inset:0;display:flex;align-items:center;padding:0 4px;font-size:9px;font-weight:700;color:rgba(255,255,255,.92);
     overflow:hidden;white-space:nowrap;text-overflow:ellipsis;pointer-events:none;text-shadow:0 1px 2px rgba(0,0,0,.45)}
-  .lp-now{position:absolute;top:0;bottom:0;width:2px;background:#fff;z-index:5;pointer-events:none;border-radius:1px}
-  .lp-now::before{content:"NOW";position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:800;color:#fff;white-space:nowrap}
+  .lp-now{position:absolute;top:0;bottom:0;width:2px;background:var(--gold2);z-index:5;pointer-events:none;border-radius:1px}
+  .lp-now::before{content:"NOW";position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:800;color:var(--gold2);white-space:nowrap}
   .lp-axis{position:relative;height:18px;margin-top:6px}
   .lp-tick{position:absolute;font-size:10px;color:var(--muted);transform:translateX(-50%);white-space:nowrap;top:0}
   .lp-tick::before{content:"";position:absolute;top:-6px;left:50%;width:1px;height:4px;background:var(--line)}
@@ -733,13 +744,13 @@
   .lp-detail.show{display:block}
   .lp-detail-hdr{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}
   .lp-vbadge{flex:0 0 auto;padding:10px 14px;border-radius:12px;min-width:110px;text-align:center;font-weight:800;font-size:13px;line-height:1.25}
-  .lp-vbadge.vd-exceptional,.lp-vbadge.vd-strong{background:#1d3a20;color:var(--exalt)}
-  .lp-vbadge.vd-favorable{background:#1e3220;color:#6fcf87}
-  .lp-vbadge.vd-mixed{background:#2a2e40;color:var(--accent)}
-  .lp-vbadge.vd-challenging,.lp-vbadge.vd-difficult{background:#2d1a1a;color:var(--debil)}
+  .lp-vbadge.vd-exceptional,.lp-vbadge.vd-strong{background:color-mix(in srgb,var(--exalt) 22%,transparent);color:var(--exalt);border:1px solid color-mix(in srgb,var(--exalt) 38%,transparent)}
+  .lp-vbadge.vd-favorable{background:color-mix(in srgb,var(--exalt) 14%,transparent);color:var(--exalt);border:1px solid color-mix(in srgb,var(--exalt) 30%,transparent)}
+  .lp-vbadge.vd-mixed{background:var(--panel);color:var(--muted);border:1px solid var(--line)}
+  .lp-vbadge.vd-challenging,.lp-vbadge.vd-difficult{background:color-mix(in srgb,var(--debil) 18%,transparent);color:var(--debil);border:1px solid color-mix(in srgb,var(--debil) 34%,transparent)}
   .lp-detail-title{font-size:16px;font-weight:800;margin:0 0 2px}
   .lp-detail-sub{font-size:12px;color:var(--muted);margin-bottom:6px}
-  .lp-detail-note{font-size:13px;color:#dfe4f6;line-height:1.55}
+  .lp-detail-note{font-size:13px;color:var(--ink);line-height:1.55}
   .lp-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
   .lp-tag{font-size:11px;padding:3px 9px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--muted)}
   .lp-empty{padding:24px;text-align:center;color:var(--muted);font-size:13px;line-height:1.55}
@@ -939,9 +950,9 @@
   html.light .yg-grade.B{background:#d0f0dc;color:#0a5a22}
   html.light .yg-grade.C{background:#fce8e8;color:#992020}
   html.light .yg-desc{color:var(--ink)}
-  html.light .ol-best-banner{background:linear-gradient(90deg,#d4eedd,#cbead5);border-color:#4a8a5a;color:#1a4028}
-  html.light .ol-year-card.ol-good{background:linear-gradient(135deg,#e4f2ea,var(--panel2));border-color:#4a8a5a}
-  html.light .ol-year-card.ol-weak{background:linear-gradient(135deg,#fce8e8,var(--panel2));border-color:#bb3030}
+  html.light .ol-best-banner{background:linear-gradient(135deg,color-mix(in srgb,var(--exalt) 20%,var(--panel2)),color-mix(in srgb,var(--gold) 14%,var(--panel2)));border-color:color-mix(in srgb,var(--exalt) 34%,var(--line));color:var(--ink)}
+  html.light .ol-year-card.ol-good{background:linear-gradient(135deg,color-mix(in srgb,var(--exalt) 16%,var(--panel2)),var(--panel2));border-color:color-mix(in srgb,var(--exalt) 38%,var(--line))}
+  html.light .ol-year-card.ol-weak{background:linear-gradient(135deg,color-mix(in srgb,var(--debil) 14%,var(--panel2)),var(--panel2));border-color:color-mix(in srgb,var(--debil) 42%,var(--line))}
   html.light .bb-cond.pos{background:rgba(208,240,220,.6);border-color:rgba(26,117,64,.25)}
   html.light .bb-cond.neg{background:rgba(252,232,232,.6);border-color:rgba(187,32,32,.2)}
   html.light .bb-verdict-bar.v-strong{background:rgba(208,240,220,.5);border-color:rgba(26,117,64,.3)}
@@ -1580,9 +1591,9 @@ html.light .brand{color:var(--ink)!important}
 
   <section id="promptbuilder" class="section-reveal">
     <div class="eyebrow">The refined reading engine</div>
-    <h2>Prompt Builder</h2>
+    <h2 class="display">Prompt Builder</h2>
     <p class="sub">Pick a question. The builder assembles the <b>complete classical analytical stack</b> for it — the right houses, kārakas, divisional charts (D-1 → D-60), special lagnas, Jaimini kāraka, ashtakavarga, planetary avasthas and daśā timing — into one deeply layered prompt for Claude or Gemini.</p>
-    <div class="panel" style="padding:22px">
+    <div class="panel ec-zone-card" style="padding:22px">
       <div class="pb-question-wrap">
         <label for="pbQuestion">Ask anything personal <span class="note" style="font-weight:400;text-transform:none;letter-spacing:0">— optional; the prompt will centre on your exact question</span></label>
         <textarea id="pbQuestion" class="pb-question" rows="2" placeholder="e.g.  When will I get married?  ·  Should I change my job this year?  ·  Will my health improve?  ·  Is now a good time to buy property?"></textarea>
@@ -1668,9 +1679,9 @@ html.light .brand{color:var(--ink)!important}
 
   <section id="lifepredictor" class="section-reveal">
     <div class="eyebrow">Full-life timeline</div>
-    <h2>Life Predictor</h2>
+    <h2 class="display">Life Predictor</h2>
     <p class="sub">A scrollable life map — each Antardasha colored by the same 4-layer Dasha Prediction Engine (natal dignity, functional role, Gochara, yogas). <b style="color:var(--exalt)">Green</b> favors delivery; <b style="color:var(--debil)">red</b> signals friction. Click any segment for details.</p>
-    <div class="panel" style="padding:22px">
+    <div class="panel ec-zone-card" style="padding:22px">
       <div class="ol-controls">
         <div class="bb-sel-grp">
           <label>Chart</label>
@@ -1688,9 +1699,9 @@ html.light .brand{color:var(--ink)!important}
 
   <section id="outlook" class="section-reveal">
     <div class="eyebrow">Life outlook · 2025 – 2029</div>
-    <h2>When is the right time?</h2>
+    <h2 class="display">When is the right time?</h2>
     <p class="sub">Jupiter and Saturn move slowly — roughly one sign per year and 2.5 years respectively. Where they land against your natal houses, crossed with SAV, reveals your strongest windows for each goal.</p>
-    <div class="panel" style="padding:22px">
+    <div class="panel ec-zone-card" style="padding:22px">
       <div class="ol-controls">
         <div class="bb-sel-grp">
           <label>Chart</label>
