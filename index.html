@@ -208,6 +208,16 @@
     letter-spacing:-.015em;color:var(--ink);max-width:900px;text-wrap:balance}
   h1.hero .accent{color:var(--gold2);font-style:italic;font-weight:500}
   .lede{font-size:clamp(17px,2.1vw,20px);color:var(--muted);max-width:720px;line-height:1.6}
+  .hero-warm{display:flex;gap:40px;align-items:center;flex-wrap:wrap;padding:48px 0 40px;
+    background:radial-gradient(110% 80% at 80% -10%, color-mix(in srgb,var(--gold) 12%,transparent), transparent 55%)}
+  .hero-copy{flex:1;min-width:280px}
+  .hero-h{font-size:clamp(38px,6vw,56px);margin:10px 0 0}
+  .hero-lede{font-family:var(--font-sans);font-size:17px;line-height:1.55;color:var(--muted);max-width:42ch;margin:18px 0 26px}
+  .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+  .hero-emblem{flex:0 0 auto}
+  .hero-zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:0 0 12px}
+  .hero-zone-link{text-decoration:none;display:block}
+  .hero-zone-link .ec-zone-card{height:100%}
   .eyebrow{display:inline-flex;align-items:center;gap:9px;color:var(--gold);font-size:var(--text-xs);letter-spacing:2.5px;text-transform:uppercase;font-weight:700}
   .eyebrow::before{content:"";width:22px;height:1.5px;background:var(--gold);opacity:.8;border-radius:2px}
   h2{font-family:var(--font-display);font-size:clamp(26px,3.4vw,36px);line-height:1.1;letter-spacing:-.012em;font-weight:600;margin:10px 0 6px}
@@ -1319,8 +1329,24 @@ html.light .brand{color:var(--ink)!important}
 
 <div class="wrap" id="main">
 
-  <h1 class="hero">Astrology isn't a list to memorize. <span class="accent">It's a grammar you can learn.</span></h1>
-  <p class="lede">The <i>Brihat Parashara Hora Shastra</i> looks like 100 chapters of riddles. Underneath, it's a tiny set of building blocks that <b>recombine</b> — like letters into words. Learn the blocks, learn how they combine, and the sky starts to read like a sentence.</p>
+  <section id="hero" class="hero-warm">
+    <div class="hero-copy">
+      <div class="eyebrow">A living primer · <span class="devanagari">पराशर</span></div>
+      <h1 class="display hero-h">The <span class="em">grammar</span><br>of the heavens</h1>
+      <p class="hero-lede">Nine Grahas, twelve Rashis, twelve Bhavas — not a list to memorize, but a language to read. Learn the alphabet, then synthesize any chart.</p>
+      <div class="hero-cta">
+        <a class="ec-btn-primary" href="#grahas">Begin with the Grahas →</a>
+        <a class="ec-btn-ghost" href="#charts">Upload my chart</a>
+      </div>
+    </div>
+    <div class="hero-emblem" id="heroEmblem"></div>
+  </section>
+  <div class="hero-zones">
+    <a class="hero-zone-link" href="#why"><div class="ec-zone-card"><h4>Learn</h4><p>Build the Jyotish alphabet: Grahas, Rashis, Bhavas, and their core grammar.</p></div></a>
+    <a class="hero-zone-link" href="#synth"><div class="ec-zone-card"><h4>Synthesize</h4><p>Combine dignity, nakshatra, drishti, and bhava logic into one coherent reading.</p></div></a>
+    <a class="hero-zone-link" href="#charts"><div class="ec-zone-card"><h4>My Charts</h4><p>Load real charts, inspect Vargas and dasha timelines, and generate focused prompts.</p></div></a>
+    <a class="hero-zone-link" href="#quiz"><div class="ec-zone-card"><h4>Practice</h4><p>Reinforce the principles with quick recall rounds and application-style questions.</p></div></a>
+  </div>
 
   <section id="why" class="section-reveal">
     <div class="eyebrow">The core idea</div>
@@ -2099,6 +2125,7 @@ function rashiEmblem(i,opts={}){
     +`<text x="50" y="64" text-anchor="middle" fill="${tint}" font-family="var(--font-display)" font-size="40">${RASHI_GLYPH[i]}</text>`
     +`</svg>`;
 }
+document.getElementById("heroEmblem")?.insertAdjacentHTML("beforeend", grahaEmblem("Su",{size:190,focus:true,bija:"सू"}));
 function nakInfo(lon){const span=40/3;lon=((lon%360)+360)%360;const idx=Math.floor(lon/span);const pada=Math.floor((lon-idx*span)/(span/4))+1;return Object.assign({idx,pada},NAK[idx]);}
 const VIMY={Ke:7,Ve:20,Su:6,Mo:10,Ma:7,Ra:18,Ju:16,Sa:19,Me:17};
 const DASHA_SEQ_K=["Ke","Ve","Su","Mo","Ma","Ra","Ju","Sa","Me"];
