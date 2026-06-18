@@ -179,15 +179,19 @@ existing synthesizer wiring (do not rebuild the synthesis engine; feed it richer
 
 ## 6. Information architecture & navigation
 
-Replace the ~12 flat nav links with **four intuitive zones** + the existing command palette
+Replace the 13 flat nav links with **four intuitive zones** + the existing command palette
 (`⌘K`) as the power-user jump. Sticky top nav, brand mark on left, `⌘K` affordance on right.
 
-| Zone | Sections |
+> **Note (2026-06-17, post-rebase):** `main` advanced 22 commits since brainstorming. The
+> current `index.html` adds sections `#promptbuilder` and `#arudhas`, plus divisional charts,
+> a Jaimini layer, and avasthas inside existing sections. These are folded into the zones below.
+
+| Zone | Sections (anchor) |
 |---|---|
-| **Learn** | The Idea · Grahas · Rashis · Bhavas · **Nakshatras (new reference)** |
-| **Synthesize** | Synthesizer · Bhavat Bhavam · Compare |
-| **My Charts** | Upload · BAV · Dasha · Life Outlook · Life Predictor |
-| **Practice** | Quiz |
+| **Learn** | The Idea (`#why`) · Grahas (`#grahas`) · Rashis (`#rashis`) · Bhavas (`#bhavas`) · **Nakshatras (new `#nakshatras`)** |
+| **Synthesize** | Synthesizer (`#synth`) · Bhavat Bhavam (`#bbavam`) · Graha Arudhas (`#arudhas`) · Compare (`#compare`) |
+| **My Charts** | My Charts/Upload (`#charts`, incl. BAV, Dasha, divisional, Jaimini, avastha) · Prompt Builder (`#promptbuilder`) · Life Outlook (`#outlook`) · Life Predictor (`#lifepredictor`) |
+| **Practice** | Quiz (`#quiz`) |
 
 - **Homepage hero** (§ mockup `home-hero.html`): manuscript headline with Devanagari,
   illuminated Surya emblem + aura, intro line, dual CTAs ("Begin with the Grahas",
@@ -224,9 +228,10 @@ components → sections → app logic) so it stays navigable despite being one f
 - **Phase 2 — Learn:** Homepage hero + 4-zone nav; restyle The Idea, Grahas, Rashis, Bhavas;
   add Nakshatras reference; author Graha/Rashi/Bhava/Nakshatra interpretation.
 - **Phase 3 — Synthesize:** Restyle Synthesizer with layered verdict chips + woven authored
-  reading (+ "Watch for"); restyle Bhavat Bhavam and Compare.
-- **Phase 4 — My Charts:** Restyle Upload, BAV, Dasha, Life Outlook, Life Predictor to the
-  system (visual only; computation untouched).
+  reading (+ "Watch for"); restyle Bhavat Bhavam, Graha Arudhas, and Compare.
+- **Phase 4 — My Charts:** Restyle Upload/My Charts (incl. BAV, Dasha, divisional charts,
+  Jaimini, avasthas), Prompt Builder, Life Outlook, Life Predictor to the system (visual
+  only; computation untouched).
 - **Phase 5 — Practice & polish:** Restyle Quiz; motion/aura pass; light-theme parity;
   accessibility + `prefers-reduced-motion` + print audit; cross-check validated math intact.
 
