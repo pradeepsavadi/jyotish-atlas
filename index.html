@@ -417,44 +417,46 @@
   .bb-selectors{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin-bottom:22px}
   .bb-sel-grp{display:flex;flex-direction:column;gap:5px}
   .bb-sel-grp label{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
-  .bb-sel{background:var(--panel2);border:1px solid var(--line);color:var(--fg);border-radius:8px;padding:7px 11px;font-size:13.5px;min-width:190px}
-  .bb-chain{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:18px;padding:14px 20px;background:var(--panel2);border-radius:12px;border:1px solid var(--line)}
+  .bb-sel{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:7px 11px;font-size:13.5px;min-width:190px}
+  .bb-chain{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:18px;padding:14px 20px;background:var(--panel);border-radius:12px;border:1px solid var(--line)}
   .bb-chain-node{display:flex;flex-direction:column;align-items:center;gap:2px}
   .bb-chain-house{font-size:24px;font-weight:800;color:var(--gold2)}
   .bb-chain-label{font-size:11px;color:var(--muted);text-align:center;max-width:140px}
-  .bb-chain-sign{font-size:12px;color:var(--fg);font-weight:600}
+  .bb-chain-sign{font-size:12px;color:var(--ink);font-weight:600;display:inline-flex;align-items:center;gap:6px}
   .bb-chain-arrow{font-size:18px;color:var(--line);padding:0 14px;font-weight:700;white-space:nowrap;padding-bottom:14px}
   .bb-chain-result .bb-chain-house{color:var(--exalt);font-size:30px}
   .bb-chain-result .bb-chain-sign{color:var(--exalt);font-size:13px}
   .bb-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
-  .bb-vcard{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .bb-vcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
   .bb-vcard-title{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-  .bb-vcard-sign{font-size:22px;font-weight:800;color:var(--gold2);margin-bottom:8px}
+  .bb-vcard-sign{font-size:22px;font-weight:800;color:var(--gold2);margin-bottom:8px;display:inline-flex;align-items:center;gap:8px}
   .bb-vcard-kv{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:13px}
   .bb-vcard-kv b{color:var(--muted);font-weight:600;white-space:nowrap}
   .bb-sav-badge{display:inline-block;padding:2px 9px;border-radius:999px;font-weight:700;font-size:12px}
   .bb-sav-hi{background:#1d3a20;color:var(--exalt)}
   .bb-sav-mid{border:1px solid var(--line);color:var(--fg)}
   .bb-sav-lo{background:#2d1a1a;color:var(--debil)}
-  .bb-reading{background:linear-gradient(160deg,#0f1530,#0b0e1a);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:13.5px;line-height:1.75;color:#dfe4f6}
+  .bb-reading{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:13.5px;line-height:1.75;color:var(--ink)}
   .bb-section-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 8px}
   .bb-section-lbl:first-child{margin-top:0}
   .bb-conds{display:flex;flex-direction:column;gap:7px}
   .bb-cond{display:flex;gap:10px;padding:10px 12px;border-radius:8px;font-size:13px;line-height:1.5}
-  .bb-cond.pos{background:rgba(29,58,32,.5);border:1px solid rgba(76,175,80,.2)}
-  .bb-cond.neg{background:rgba(45,26,26,.5);border:1px solid rgba(211,47,47,.2)}
+  .bb-cond.pos{background:rgba(47,125,87,.16);border:1px solid rgba(47,125,87,.32)}
+  .bb-cond.neg{background:rgba(187,59,40,.14);border:1px solid rgba(187,59,40,.3)}
   .bb-cond.neu{background:var(--panel2);border:1px solid var(--line)}
   .bb-cond-icon{font-size:14px;flex-shrink:0;line-height:1.5}
   .bb-cond-title{font-weight:700;color:var(--ink);margin-bottom:2px;font-size:13px}
   .bb-cond-desc{color:var(--muted);font-size:12.5px}
   .bb-verdict-bar{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-radius:10px;margin-top:4px}
-  .bb-verdict-bar.v-strong{background:rgba(29,58,32,.5);border:1px solid rgba(76,175,80,.3)}
-  .bb-verdict-bar.v-mid{background:rgba(15,21,48,.9);border:1px solid var(--line)}
-  .bb-verdict-bar.v-weak{background:rgba(45,26,26,.5);border:1px solid rgba(211,47,47,.3)}
+  .bb-verdict-bar.v-strong{background:rgba(47,125,87,.16);border:1px solid rgba(47,125,87,.35)}
+  .bb-verdict-bar.v-mid{background:var(--panel2);border:1px solid var(--line)}
+  .bb-verdict-bar.v-weak{background:rgba(187,59,40,.14);border:1px solid rgba(187,59,40,.35)}
   .bb-verdict-badge{font-size:12px;font-weight:800;padding:3px 11px;border-radius:999px;white-space:nowrap;display:inline-block;margin-bottom:6px}
   .v-strong .bb-verdict-badge{background:var(--exalt);color:#0b1a0d}
   .v-mid .bb-verdict-badge{background:var(--gold);color:#0b0e1a}
   .v-weak .bb-verdict-badge{background:var(--debil);color:#fff8f8}
+  .bb-inline{display:inline-flex;align-items:center;gap:6px;margin-right:8px;vertical-align:middle}
+  .bb-inline .emblem{width:20px;height:20px}
   @media(max-width:600px){.bb-cards{grid-template-columns:1fr}}
   /* === special lagnas === */
   .sl-section h4{margin:0 0 14px}
@@ -524,44 +526,45 @@
   .ar-detail-name small{font-size:11.5px;font-weight:400;color:var(--muted);display:block;margin-top:1px}
   .ar-detail-sign{font-size:22px;font-weight:800;margin-left:auto}
   .ar-theme{font-size:12.5px;color:var(--gold2);margin-bottom:10px;font-style:italic}
-  .ar-body{font-size:13.5px;line-height:1.7;margin-bottom:14px;color:#dfe4f6}
+  .ar-body{font-size:13.5px;line-height:1.7;margin-bottom:14px;color:var(--ink)}
   .ar-badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
   .ar-badge{font-size:12px;padding:4px 11px;border-radius:999px;font-weight:600;background:var(--panel);border:1px solid var(--line)}
   .ar-pls{font-size:13px;padding:10px 14px;background:var(--panel);border-radius:8px;border-left:3px solid var(--gold2);margin-bottom:12px;line-height:1.6}
   .ar-note{margin-top:10px;padding:11px 14px;background:var(--panel);border-radius:8px;border:1px solid var(--line);font-size:12.5px;line-height:1.6;color:var(--muted)}
   .ar-calc-toggle{font-size:12px;color:var(--gold2);cursor:pointer;margin:10px 0 0;display:inline-block;background:none;border:none;padding:0}
-  .ar-calc{display:none;padding:11px 14px;background:var(--panel);border-radius:8px;font-size:12px;line-height:1.9;border:1px solid var(--line);color:#dfe4f6;margin-top:6px}
+  .ar-calc{display:none;padding:11px 14px;background:var(--panel);border-radius:8px;font-size:12px;line-height:1.9;border:1px solid var(--line);color:var(--ink);margin-top:6px}
   .ar-calc.open{display:block}
   .ar-step{display:flex;align-items:flex-start;gap:8px;margin-bottom:4px}
   .ar-step-n{flex:0 0 20px;height:20px;border-radius:6px;background:var(--panel2);border:1px solid var(--line);display:grid;place-items:center;font-size:10px;font-weight:700;color:var(--gold2);flex-shrink:0}
   /* === Graha Arudha planet cards === */
   .ga-grid{display:flex;flex-direction:column;gap:14px}
-  .ga-planet-card{background:var(--panel2);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  .ga-planet-hd{display:flex;align-items:center;gap:12px;padding:14px 18px;background:rgba(0,0,0,.15);border-bottom:1px solid var(--line);flex-wrap:wrap}
-  .ga-planet-glyph{font-size:22px;line-height:1;flex-shrink:0}
-  .ga-planet-name{font-size:15px;font-weight:700}
-  .ga-planet-pos{font-size:12px;color:var(--muted);margin-left:auto;text-align:right}
-  .ga-planet-body{padding:12px 18px 4px;font-size:12.5px;line-height:1.65;color:#dfe4f6}
+  .ga-planet-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .ga-planet-hd{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--panel2);border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .ga-planet-glyph{line-height:1;flex-shrink:0;display:inline-flex;align-items:center}
+  .ga-planet-glyph .emblem{width:28px;height:28px}
+  .ga-planet-name{font-size:15px;font-weight:700;color:var(--gold2)}
+  .ga-planet-pos{font-size:12px;color:var(--muted);margin-left:auto;text-align:right;display:inline-flex;gap:6px;align-items:center}
+  .ga-planet-body{padding:12px 18px 4px;font-size:12.5px;line-height:1.65;color:var(--ink)}
   .ga-archetype{padding:0 18px 10px;font-size:11.5px;color:var(--gold2);font-style:italic}
   .ga-arudhas-wrap{padding:4px 18px 16px;display:flex;flex-direction:column;gap:10px}
   .ga-arudha-row{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 14px}
   .ga-arudha-hd{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
-  .ga-arudha-from{font-size:11.5px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:2px 9px;font-weight:600}
+  .ga-arudha-from{font-size:11.5px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:2px 9px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
   .ga-arudha-arr{color:var(--gold2);font-size:12px}
-  .ga-arudha-result{font-size:13.5px;font-weight:800;color:var(--gold2)}
+  .ga-arudha-result{font-size:13.5px;font-weight:800;color:var(--gold2);display:inline-flex;align-items:center;gap:6px}
   .ga-arudha-hn{font-size:11.5px;color:var(--muted)}
-  .ga-arudha-note{font-size:12.5px;line-height:1.6;color:#dfe4f6;margin-bottom:8px}
+  .ga-arudha-note{font-size:12.5px;line-height:1.6;color:var(--ink);margin-bottom:8px}
   /* === Cluster analysis === */
   .ga-cluster{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:8px}
   .ga-cluster h4{margin:0 0 12px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gold)}
   .ga-cluster-rows{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
   .ga-cluster-row{display:flex;align-items:center;gap:10px}
-  .ga-cluster-lbl{font-size:12.5px;font-weight:700;min-width:110px}
+  .ga-cluster-lbl{font-size:12.5px;font-weight:700;min-width:110px;display:inline-flex;align-items:center;gap:6px}
   .ga-cluster-bar{flex:1;height:7px;background:var(--panel);border-radius:4px;overflow:hidden}
   .ga-cluster-fill{height:100%;border-radius:4px;background:var(--gold2);opacity:.7}
   .ga-cluster-tags{display:flex;flex-wrap:wrap;gap:4px}
   .ga-cluster-tag{font-size:10.5px;padding:2px 7px;border-radius:999px;font-weight:600;background:var(--panel);border:1px solid var(--line)}
-  .ga-cluster-interp{font-size:13px;line-height:1.65;color:#dfe4f6;padding:11px 14px;background:var(--panel);border-radius:8px;border-left:3px solid var(--gold2)}
+  .ga-cluster-interp{font-size:13px;line-height:1.65;color:var(--ink);padding:11px 14px;background:var(--panel2);border-radius:8px;border-left:3px solid var(--gold2)}
   /* === life outlook === */
   .ol-controls{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px}
   .ol-houses{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:6px}
@@ -1258,14 +1261,16 @@ html.light .brand{color:var(--ink)!important}
   .cmp-controls{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px}
   .cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   @media(max-width:680px){.cmp-grid{grid-template-columns:1fr}}
-  .cmp-col{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .cmp-col{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
   .cmp-col h4{margin:0 0 10px;font-size:var(--text-md);color:var(--gold2)}
-  .cmp-row{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid rgba(42,51,96,.4);font-size:var(--text-sm)}
+  .cmp-row{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:var(--text-sm)}
   .cmp-row:last-child{border-bottom:none}
   .cmp-row b{color:var(--muted);font-weight:600}
-  .cmp-row span{text-align:right;color:#dfe4f6}
+  .cmp-row span{text-align:right;color:var(--ink)}
   .cmp-syn{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:var(--text-sm);line-height:1.6}
   .cmp-syn .cs-tag{display:inline-block;font-size:11px;padding:2px 9px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);margin:2px 4px 2px 0}
+  .cmp-sign,.cmp-dasha{display:inline-flex;align-items:center;gap:6px;vertical-align:middle}
+  .cmp-sign .emblem,.cmp-dasha .emblem{width:20px;height:20px}
 
   /* Colorblind-safe palette */
   html.cb{--exalt:#3a86ff;--debil:#fb8500;--friend:#4cc9f0;--enemy:#ffb703}
@@ -1602,9 +1607,9 @@ html.light .brand{color:var(--ink)!important}
 
   <section id="bbavam" class="section-reveal">
     <div class="eyebrow">Advanced technique · bhavat bhavam</div>
-    <h2>Relationship decoder</h2>
+    <h2 class="display">Relationship decoder</h2>
     <p class="sub">Every person in your life maps to a specific house. Any topic about that person maps to another house counted forward from there — <i>bhavat bhavam</i>, "from house to house." Select who you're asking about and what you want to know — the app shows exactly where to look in D-1 and the relevant divisional chart.</p>
-    <div class="panel" style="padding:22px">
+    <div class="panel ec-zone-card" style="padding:22px">
       <div class="bb-selectors">
         <div class="bb-sel-grp">
           <label>Chart</label>
@@ -1642,9 +1647,9 @@ html.light .brand{color:var(--ink)!important}
 
   <section id="arudhas" class="section-reveal">
     <div class="eyebrow">Jaimini · Planetary Reflections</div>
-    <h2>Graha Arudhas</h2>
+    <h2 class="display">Graha Arudhas</h2>
     <p class="sub">Each planet has a <i>Graha Arudha</i> — the material, external reflection of that planet's archetype. Since most planets rule two signs, they each cast two Arudhas. The rule (BPHS Ch.32): count how many signs the planet's owned sign is from the planet itself, then count that same number forward from the planet. Where this reflection lands is where that planetary energy — solar authority, lunar emotion, Martian drive — manifests as a visible, tangible force in your world. The final cluster analysis shows which houses receive the most reflections, revealing the dominant material arenas of your life.</p>
-    <div class="panel" style="padding:22px">
+    <div class="panel ec-zone-card" style="padding:22px">
       <div class="ar-controls">
         <div class="bb-sel-grp">
           <label>Chart</label>
@@ -1702,9 +1707,9 @@ html.light .brand{color:var(--ink)!important}
 
   <section id="compare" class="section-reveal">
     <div class="eyebrow">Two charts, side by side</div>
-    <h2>Compare charts</h2>
+    <h2 class="display">Compare charts</h2>
     <p class="sub">Pick two saved charts to compare Lagna, Moon, current dasha and the dignity of every planet at a glance — useful for relationship synastry or weighing two nativities.</p>
-    <div class="panel" style="padding:22px">
+    <div class="panel ec-zone-card" style="padding:22px">
       <div class="cmp-controls">
         <div class="bb-sel-grp">
           <label for="cmpA">Chart A</label>
@@ -5457,16 +5462,18 @@ function renderSpecialLagnas(c,La,sav){
 
   function vCardHTML(title,hSign,lord,lordVSign,lordDig,lordHn,pls,sav){
     const lg=GBYK[lord];
+    const gInline=k=>`<span class="bb-inline">${grahaEmblem(k,{size:22})}<span>${GBYK[k].name}</span></span>`;
+    const sInline=i=>`<span class="bb-inline">${rashiEmblem(i,{size:22})}<span>${SIGNS[i]}</span></span>`;
     const lordInfo=lordVSign!==undefined
-      ?`${lg.gl} ${lg.name} · ${lordDig?lordDig.full:"—"} in ${SIGNS[lordVSign]}${lordHn?` (H${lordHn})`:""}`
-      :`${lg.gl} ${lg.name}`;
-    const plHTML=pls.length?pls.map(k=>`${GBYK[k].gl} ${GBYK[k].name}`).join(", ")
+      ?`${gInline(lord)} · ${lordDig?lordDig.full:"—"} in ${sInline(lordVSign)}${lordHn?` (H${lordHn})`:""}`
+      :`${gInline(lord)}`;
+    const plHTML=pls.length?pls.map(k=>gInline(k)).join("")
       :`<span style="color:var(--muted)">empty</span>`;
     const savHTML=sav!=null
-      ?`<span class="bb-sav-badge ${sav>=30?"bb-sav-hi":sav>=25?"bb-sav-mid":"bb-sav-lo"}">${sav} SAV</span>`:"";
-    return `<div class="bb-vcard">
+      ?`<span class="ec-chip ${sav>=30?"good":sav>=25?"gold":"bad"}">${sav} SAV</span>`:"";
+    return `<div class="bb-vcard ec-zone-card">
       <div class="bb-vcard-title">${title}</div>
-      <div class="bb-vcard-sign">${SIGNS[hSign]}</div>
+      <div class="bb-vcard-sign">${sInline(hSign)}</div>
       <div class="bb-vcard-kv">
         <b>Lord</b><span>${lordInfo}</span>
         <b>Planets</b><span>${plHTML}</span>
@@ -5666,13 +5673,13 @@ function renderSpecialLagnas(c,La,sav){
       <div class="bb-chain-node">
         <span class="bb-chain-house">H${person.h}</span>
         <span class="bb-chain-label">${person.label}</span>
-        <span class="bb-chain-sign">${SIGNS[(La+person.h-1)%12]}</span>
+        <span class="bb-chain-sign">${rashiEmblem((La+person.h-1)%12,{size:22})}<span>${SIGNS[(La+person.h-1)%12]}</span></span>
       </div>
       <div class="bb-chain-arrow">+${topic.countH}→</div>
       <div class="bb-chain-node bb-chain-result">
         <span class="bb-chain-house">H${resultH}</span>
         <span class="bb-chain-label">${person.label}'s ${topic.label.toLowerCase()}</span>
-        <span class="bb-chain-sign">${SIGNS[resultSign]} · ${BHAVAS[resultH-1].skt}</span>
+        <span class="bb-chain-sign">${rashiEmblem(resultSign,{size:24})}<span>${SIGNS[resultSign]} · ${BHAVAS[resultH-1].skt}</span></span>
       </div>`;
 
     const d1Lord=SIGN_LORD[resultSign];
@@ -5908,9 +5915,9 @@ function renderSpecialLagnas(c,La,sav){
 
       html+=`<div class="ga-planet-card">
         <div class="ga-planet-hd">
-          <span class="ga-planet-glyph" style="color:${gp.col}">${gp.gl}</span>
-          <span class="ga-planet-name" style="color:${gp.col}">${gp.name}</span>
-          <span class="ga-planet-pos">in ${SIGNS[lp.sign]} · H${planetH} · ${dig.full.split("·")[0].trim()}</span>
+          <span class="ga-planet-glyph">${grahaEmblem(pk,{size:30})}</span>
+          <span class="ga-planet-name">${gp.name}</span>
+          <span class="ga-planet-pos">in ${rashiEmblem(lp.sign,{size:20})}<span>${SIGNS[lp.sign]}</span> · H${planetH} · ${dig.full.split("·")[0].trim()}</span>
         </div>
         <div class="ga-archetype">${meta.theme}</div>
         <div class="ga-planet-body">${meta.body}</div>
@@ -5923,24 +5930,23 @@ function renderSpecialLagnas(c,La,sav){
         const aruH=houseFromSigns(La,ga.sign);
         const signLord=SIGN_LORD[ga.sign];
         const savVal=sav[ga.sign];
-        const savCls=savVal>=30?"ar-sav-hi":savVal<25?"ar-sav-lo":"";
 
         // Register in cluster
         if(!clusterMap[ga.sign]) clusterMap[ga.sign]=[];
-        clusterMap[ga.sign].push({pk,label:`${gp.gl} ${gp.name} (${ri===0?"P₁":"P₂"})`});
+        clusterMap[ga.sign].push({pk,label:`${gp.name} (${ri===0?"P₁":"P₂"})`});
 
         const pInSign=Object.entries(c.planets).filter(([k,p])=>p&&p.sign===ga.sign).map(([k])=>k);
 
         html+=`<div class="ga-arudha-row">
           <div class="ga-arudha-hd">
-            <span class="ga-arudha-from">From H${bhavaH} · ${SIGNS[bhavaSign]}</span>
+            <span class="ga-arudha-from">From H${bhavaH} · ${rashiEmblem(bhavaSign,{size:18})}<span>${SIGNS[bhavaSign]}</span></span>
             <span class="ga-arudha-arr">→</span>
-            <span class="ga-arudha-result" style="color:${GBYK[signLord].col}">${SIGNS[ga.sign]}</span>
+            <span class="ga-arudha-result">${rashiEmblem(ga.sign,{size:20})}<span style="color:${GBYK[signLord].col}">${SIGNS[ga.sign]}</span></span>
             <span class="ga-arudha-hn">H${aruH}</span>
-            <span class="ar-badge ${savCls}" style="font-size:11px;padding:2px 8px;margin-left:auto">SAV ${savVal}</span>
+            <span class="ec-chip ${savVal>=30?"good":savVal<25?"bad":"gold"}" style="margin-left:auto">SAV ${savVal}</span>
           </div>
           <div class="ga-arudha-note">${gaHouseNote(pk,aruH)}</div>
-          ${pInSign.length?`<div style="font-size:12px;color:var(--muted);margin-bottom:8px">${pInSign.map(k=>`${GBYK[k].gl} ${GBYK[k].name}`).join(", ")} in ${SIGNS[ga.sign]}</div>`:""}
+          ${pInSign.length?`<div style="font-size:12px;color:var(--muted);margin-bottom:8px">${pInSign.map(k=>`<span class="bb-inline">${grahaEmblem(k,{size:18})}<span>${GBYK[k].name}</span></span>`).join("")}<span style="color:var(--muted)">in ${SIGNS[ga.sign]}</span></div>`:""}
           <button type="button" class="ar-calc-toggle">▸ How this was calculated</button>
           <div class="ar-calc">
             <div class="ar-step"><span class="ar-step-n">1</span><span>${gp.name} rules <b>${SIGNS[bhavaSign]}</b> (H${bhavaH} from Lagna)</span></div>
@@ -5968,9 +5974,9 @@ function renderSpecialLagnas(c,La,sav){
       const hl=SIGN_LORD[si];
       const pct=Math.round(planets.length/maxCount*100);
       html+=`<div class="ga-cluster-row">
-        <span class="ga-cluster-lbl" style="color:${GBYK[hl].col}">${SIGNS[si]} · H${hn}</span>
+        <span class="ga-cluster-lbl" style="color:${GBYK[hl].col}">${rashiEmblem(si,{size:20})}<span>${SIGNS[si]} · H${hn}</span></span>
         <div class="ga-cluster-bar"><div class="ga-cluster-fill" style="width:${pct}%;background:${GBYK[hl].col};opacity:.6"></div></div>
-        <div class="ga-cluster-tags">${planets.map(p=>`<span class="ga-cluster-tag" style="color:${GBYK[p.pk].col}">${p.label}</span>`).join("")}</div>
+        <div class="ga-cluster-tags">${planets.map(p=>`<span class="ga-cluster-tag">${p.label}</span>`).join("")}</div>
       </div>`;
     });
     html+='</div>';
@@ -7374,11 +7380,13 @@ function toggleTheme(){
     const mo=c.planets.Mo,moNak=mo?nakInfo(mo.sign*30+mo.deg):null;
     const su=c.planets.Su;
     const cd=curDasha(c),t=dignTally(c);
-    const cdTxt=cd?`${GBYK[cd.md.lord].name}${cd.ad?" / "+GBYK[cd.ad.lord].name:""}`:"—";
+    const signChip=i=>`<span class="cmp-sign">${rashiEmblem(i,{size:20})}<span>${SIGNS[i]}</span></span>`;
+    const dashaChip=k=>`<span class="cmp-dasha">${grahaEmblem(k,{size:20})}<span>${GBYK[k].name}</span></span>`;
+    const cdTxt=cd?`${dashaChip(cd.md.lord)}${cd.ad?` / ${dashaChip(cd.ad.lord)}`:""}`:"—";
     return `<h4>${c.name}</h4>
-      <div class="cmp-row"><b>Lagna</b><span>${SIGNS[La]} · lord ${GBYK[ll].name}${llP?` (H${llH}, ${llDig.full.split("·")[0].trim()})`:""}</span></div>
-      <div class="cmp-row"><b>Moon</b><span>${mo?`${SIGNS[mo.sign]} · ${moNak.n}`:"—"}</span></div>
-      <div class="cmp-row"><b>Sun</b><span>${su?SIGNS[su.sign]:"—"}</span></div>
+      <div class="cmp-row"><b>Lagna</b><span>${signChip(La)} · lord ${GBYK[ll].name}${llP?` (H${llH}, ${llDig.full.split("·")[0].trim()})`:""}</span></div>
+      <div class="cmp-row"><b>Moon</b><span>${mo?`${signChip(mo.sign)} · ${moNak.n}`:"—"}</span></div>
+      <div class="cmp-row"><b>Sun</b><span>${su?signChip(su.sign):"—"}</span></div>
       <div class="cmp-row"><b>Current dasha</b><span>${cdTxt}</span></div>
       <div class="cmp-row"><b>Exalted planets</b><span style="color:var(--exalt)">${t.ex}</span></div>
       <div class="cmp-row"><b>Debilitated planets</b><span style="color:var(--debil)">${t.db}</span></div>`;
@@ -7404,7 +7412,7 @@ function toggleTheme(){
     }
     const cda=curDasha(a),cdb=curDasha(b);
     if(cda&&cdb&&cda.md.lord===cdb.md.lord) tags.push(`Both running ${GBYK[cda.md.lord].name} Mahadasha now`);
-    return `<div class="cmp-syn"><b>Quick synthesis</b><div style="margin-top:8px">${tags.map(t=>`<span class="cs-tag">${t}</span>`).join("")}</div>
+    return `<div class="cmp-syn"><b>Quick synthesis</b><div style="margin-top:8px">${tags.map(t=>`<span class="cs-tag ec-chip gold">${t}</span>`).join("")}</div>
       <p class="note" style="margin:10px 0 0">Heuristic overview from natal placements — not a substitute for a full synastry reading.</p></div>`;
   }
   function renderCompare(){
@@ -7414,7 +7422,7 @@ function toggleTheme(){
       cmpEmpty.style.display="block";cmpResult.style.display="none";return;
     }
     cmpEmpty.style.display="none";cmpResult.style.display="block";
-    cmpResult.innerHTML=`<div class="cmp-grid"><div class="cmp-col">${colHtml(charts[ia])}</div><div class="cmp-col">${colHtml(charts[ib])}</div></div>${synthHtml(charts[ia],charts[ib])}`;
+    cmpResult.innerHTML=`<div class="cmp-grid"><div class="cmp-col ec-zone-card">${colHtml(charts[ia])}</div><div class="cmp-col ec-zone-card">${colHtml(charts[ib])}</div></div>${synthHtml(charts[ia],charts[ib])}`;
   }
   function fillCmpSelects(){
     const charts=JA.getCharts?JA.getCharts():[];
