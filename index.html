@@ -1475,7 +1475,7 @@ html.light .brand{color:var(--ink)!important}
   <section id="nakshatras" class="section-reveal">
     <div class="eyebrow">Lunar mansions · fine grain</div>
     <h2 class="display">The 27 Nakshatras</h2>
-    <p class="sub">Nakshatras are the Moon's 27 stations: the subtle layer beneath sign placement. Select one to read its lord, deity, symbol, and interpretive current.</p>
+    <p class="sub">Nakshatras are the Moon's 27 stations: the subtle layer beneath sign placement. Select one for its symbol, ruling deity, motivation, yoni, naming sounds, strengths and shadow — the fine grain that colours any graha placed there.</p>
     <div class="tokens" id="nakshatraTokens"></div>
     <div class="detail" id="nakshatraDetail"></div>
   </section>
@@ -2222,33 +2222,33 @@ const SAV_HOUSE_INTERP=[
 
 /* 27 nakshatras — the finer "costume": lord, deity, symbol, theme */
 const NAK=[
- {n:"Ashwini",l:"Ke",d:"Ashwini Kumaras",s:"horse's head",t:"swift healing, fresh starts, speed",g:"Deva (divine)",sh:"the power to quickly heal &amp; reach",st:"The twin celestial horsemen-physicians who race across the dawn sky bringing miracle cures. Ashwini is initiation, rejuvenation and the fearless first step."},
- {n:"Bharani",l:"Ve",d:"Yama",s:"yoni / womb",t:"bearing extremes, restraint, transformation",g:"Manushya (human)",sh:"the power to take things away (and bear new life)",st:"Ruled by Yama, lord of death and dharma. Bharani holds the tension between birth and death — gestation, discipline, and the moral force to carry creation through extremes."},
- {n:"Krittika",l:"Su",d:"Agni",s:"razor / flame",t:"cutting clarity, purification, sharp focus",g:"Rakshasa (intense)",sh:"the power to burn &amp; purify",st:"Agni's flame that both cooks and cuts. The Pleiades — fierce cosmic nurses who raised the war-god Kartikeya; sharp, purifying, protective."},
- {n:"Rohini",l:"Mo",d:"Brahma / Prajapati",s:"chariot / ox-cart",t:"growth, beauty, fertile abundance",g:"Manushya (human)",sh:"the power to make things grow",st:"The Moon's most beloved star — fertile, magnetic, sensual. The seed that sprouts and the creative fullness of nature."},
- {n:"Mrigashira",l:"Ma",d:"Soma",s:"deer's head",t:"seeking, curiosity, gentle searching",g:"Deva (divine)",sh:"the power to give fulfilment",st:"The deer that wanders the forest forever searching for the perfect scent. Gentle, curious, restless — the eternal seeker."},
- {n:"Ardra",l:"Ra",d:"Rudra",s:"teardrop / diamond",t:"storm and renewal, breakthrough, intensity",g:"Manushya (human)",sh:"the power of effort that brings gain",st:"Rudra, the howling storm-god. Ardra is the thunderclap and the teardrop — destruction that clears the ground so fresh growth can begin."},
- {n:"Punarvasu",l:"Ju",d:"Aditi",s:"quiver of arrows",t:"renewal, return of light, optimism",g:"Deva (divine)",sh:"the power to gain wealth &amp; abundance",st:"Aditi, the boundless cosmic mother. 'The return of the light' after darkness — recovery, second chances, homecoming and unshakeable optimism."},
- {n:"Pushya",l:"Sa",d:"Brihaspati",s:"cow's udder / lotus",t:"nourishment, care, auspicious support",g:"Deva (divine)",sh:"the power to create spiritual energy",st:"Considered the most auspicious nakshatra — the cosmic cow that nourishes all. Brihaspati's star of care, devotion and protective wisdom."},
- {n:"Ashlesha",l:"Me",d:"the Nagas (serpents)",s:"coiled serpent",t:"penetrating, hypnotic, entwining insight",g:"Rakshasa (intense)",sh:"the power to inflict poison &amp; to embrace",st:"The coiled serpents of kundalini. Hypnotic, penetrating, secretive — the entwining wisdom that can heal or bite."},
- {n:"Magha",l:"Ke",d:"the Pitris (ancestors)",s:"throne",t:"lineage, authority, legacy, tradition",g:"Rakshasa (intense)",sh:"the power to leave the body &amp; honour the ancestors",st:"The royal throne of the forefathers. Magha is legacy, ancestry, ceremony and inherited authority — standing on the shoulders of those who came before."},
- {n:"Purva Phalguni",l:"Ve",d:"Bhaga",s:"front legs of a bed",t:"pleasure, romance, rest, creativity",g:"Manushya (human)",sh:"the power of procreation &amp; delight",st:"Bhaga, god of bliss and good fortune. The star of love-making, relaxation, the arts and the sweetness of life enjoyed."},
- {n:"Uttara Phalguni",l:"Su",d:"Aryaman",s:"back legs of a bed",t:"partnership, generosity, reliable service",g:"Manushya (human)",sh:"the power to give prosperity through union",st:"Aryaman, patron of contracts, marriage and patronage. The star of dependable partnership, generosity and noble friendship."},
- {n:"Hasta",l:"Mo",d:"Savitar",s:"the hand / fist",t:"skill, craft, dexterity, manifestation",g:"Deva (divine)",sh:"the power to gain &amp; place in the hand",st:"Savitar, the skilful Sun. Hasta is the hand — craft, dexterity, healing touch, and the power to grasp what you seek and make it real."},
- {n:"Chitra",l:"Ma",d:"Tvashtar / Vishvakarma",s:"a bright jewel / pearl",t:"design, brilliance, beauty, craftsmanship",g:"Rakshasa (intense)",sh:"the power to accumulate merit &amp; honour",st:"Tvashtar, the divine architect who fashions form. The shining jewel — brilliance, design, glamour and dazzling craftsmanship."},
- {n:"Swati",l:"Ra",d:"Vayu",s:"young sprout in the wind",t:"independence, movement, adaptability, trade",g:"Deva (divine)",sh:"the power to scatter like the wind",st:"Vayu, the wind. Swati bends but doesn't break — independent, mobile, flexible; the self-going trader and the reed that survives the storm."},
- {n:"Vishakha",l:"Ju",d:"Indra-Agni",s:"triumphal arch / potter's wheel",t:"goal-focus, determination, achievement",g:"Rakshasa (intense)",sh:"the power to achieve many fruits",st:"The forked star of Indra and Agni. Single-minded, ambitious, patient — the harvest that comes after relentless, focused effort."},
- {n:"Anuradha",l:"Sa",d:"Mitra",s:"lotus",t:"friendship, devotion, cooperation",g:"Deva (divine)",sh:"the power of worship &amp; devotion",st:"Mitra, god of friendship and divine contracts. Anuradha succeeds through devotion and cooperation, and flourishes far from home."},
- {n:"Jyeshtha",l:"Me",d:"Indra",s:"earring / umbrella",t:"seniority, protection, hard-won power",g:"Rakshasa (intense)",sh:"the power to rise &amp; conquer",st:"Indra, king of the gods. 'The eldest' — seniority, responsibility and protective authority that is hard-won and carries a hidden burden."},
- {n:"Mula",l:"Ke",d:"Nirriti",s:"bundle of tied roots",t:"getting to the root, dissolution, inquiry",g:"Rakshasa (intense)",sh:"the power to ruin &amp; destroy (to reach the root)",st:"Nirriti, goddess of dissolution. Mula tears things up by the roots to expose the truth beneath — radical inquiry, endings that found new beginnings."},
- {n:"Purva Ashadha",l:"Ve",d:"Apas (the waters)",s:"winnowing fan / tusk",t:"invincibility, persuasion, purification",g:"Manushya (human)",sh:"the power of invigoration",st:"The unconquerable cosmic waters. 'The undefeated' — persuasion, early victory and the cleansing, swelling power of the ocean."},
- {n:"Uttara Ashadha",l:"Su",d:"Vishvadevas",s:"elephant tusk / planks",t:"lasting victory, integrity, endurance",g:"Manushya (human)",sh:"the power of unchallengeable victory",st:"The Vishvadevas, the universal gods. Uttara Ashadha is the victory that lasts — won through integrity, patience and righteous endurance."},
- {n:"Shravana",l:"Mo",d:"Vishnu",s:"ear / three footprints",t:"listening, learning, wisdom, connection",g:"Deva (divine)",sh:"the power to connect",st:"Vishnu's three world-spanning steps and the listening ear. Wisdom gained through hearing — learning, lineage, scholarship and good name."},
- {n:"Dhanishta",l:"Ma",d:"the eight Vasus",s:"drum / flute",t:"wealth, rhythm, fame, group action",g:"Rakshasa (intense)",sh:"the power to give abundance &amp; fame",st:"The eight Vasus, gods of material abundance, beating the cosmic drum. Wealth, music, rhythm and renown — but the drum is hollow, a caution against empty materialism."},
- {n:"Shatabhisha",l:"Ra",d:"Varuna",s:"empty circle / 100 stars",t:"healing, mysticism, secrecy, research",g:"Rakshasa (intense)",sh:"the power to heal",st:"Varuna, keeper of cosmic waters and law. 'The hundred healers' and the veiling circle — mysticism, secrecy, research and unconventional cures."},
- {n:"Purva Bhadrapada",l:"Ju",d:"Aja Ekapada",s:"sword / two front legs of a cot",t:"idealism, intensity, ascetic fire",g:"Manushya (human)",sh:"the power to raise a person spiritually",st:"Aja Ekapada, the one-footed fire-dragon. Burning idealism and intensity — the ascetic flame that transforms through extremes and otherworldly vision."},
- {n:"Uttara Bhadrapada",l:"Sa",d:"Ahir Budhnya",s:"back legs of a cot / serpent",t:"depth, restraint, calm after storm",g:"Manushya (human)",sh:"the power to bring rain &amp; stability",st:"Ahir Budhnya, the serpent of the deep sea. Hidden depth, restraint and wisdom — the still, fertile calm that settles after the storm."},
- {n:"Revati",l:"Me",d:"Pushan",s:"fish / drum",t:"nourishment, safe passage, completion",g:"Deva (divine)",sh:"the power to nourish &amp; give passage",st:"The final nakshatra. Pushan, the shepherd-god, guides souls and travellers safely to their destination. Completion, transcendence and a gentle, nourishing farewell."}
+ {n:"Ashwini",l:"Ke",d:"Ashwini Kumaras",s:"horse's head",t:"swift healing, fresh starts, speed",g:"Deva (divine)",sh:"the power to quickly heal &amp; reach",st:"The twin celestial horsemen-physicians who race across the dawn sky bringing miracle cures. Ashwini is initiation, rejuvenation and the fearless first step.",tr:"Horse-head",mo:"Dharma",yo:"Horse (male)",sy:"Chu · Che · Cho · La",pos:"quick, pioneering, healing, energetic",neg:"impatient, stubborn, reckless",career:"doctors and healers, athletes, transport and emergency work"},
+ {n:"Bharani",l:"Ve",d:"Yama",s:"yoni / womb",t:"bearing extremes, restraint, transformation",g:"Manushya (human)",sh:"the power to take things away (and bear new life)",st:"Ruled by Yama, lord of death and dharma. Bharani holds the tension between birth and death — gestation, discipline, and the moral force to carry creation through extremes.",tr:"The bearer",mo:"Artha",yo:"Elephant (male)",sy:"Lee · Lu · Le · Lo",pos:"creative, disciplined, enduring, fertile",neg:"extreme, jealous, controlling",career:"midwifery, ethics and law, the arts, transformation work"},
+ {n:"Krittika",l:"Su",d:"Agni",s:"razor / flame",t:"cutting clarity, purification, sharp focus",g:"Rakshasa (intense)",sh:"the power to burn &amp; purify",st:"Agni's flame that both cooks and cuts. The Pleiades — fierce cosmic nurses who raised the war-god Kartikeya; sharp, purifying, protective.",tr:"The cutter",mo:"Kama",yo:"Sheep (female)",sy:"A · Ee · U · Ea",pos:"sharp, focused, protective, purifying",neg:"critical, cutting, impatient",career:"surgery, cooking and fire-crafts, the military, editing"},
+ {n:"Rohini",l:"Mo",d:"Brahma / Prajapati",s:"chariot / ox-cart",t:"growth, beauty, fertile abundance",g:"Manushya (human)",sh:"the power to make things grow",st:"The Moon's most beloved star — fertile, magnetic, sensual. The seed that sprouts and the creative fullness of nature.",tr:"The red one",mo:"Moksha",yo:"Serpent (male)",sy:"O · Va · Vi · Vu",pos:"magnetic, creative, fertile, steady",neg:"possessive, indulgent, materialistic",career:"art and beauty, agriculture, finance, hospitality"},
+ {n:"Mrigashira",l:"Ma",d:"Soma",s:"deer's head",t:"seeking, curiosity, gentle searching",g:"Deva (divine)",sh:"the power to give fulfilment",st:"The deer that wanders the forest forever searching for the perfect scent. Gentle, curious, restless — the eternal seeker.",tr:"Deer's head",mo:"Moksha",yo:"Serpent (female)",sy:"Ve · Vo · Ka · Ki",pos:"curious, gentle, searching, communicative",neg:"restless, fickle, suspicious",career:"research, travel, writing, design, sales"},
+ {n:"Ardra",l:"Ra",d:"Rudra",s:"teardrop / diamond",t:"storm and renewal, breakthrough, intensity",g:"Manushya (human)",sh:"the power of effort that brings gain",st:"Rudra, the howling storm-god. Ardra is the thunderclap and the teardrop — destruction that clears the ground so fresh growth can begin.",tr:"The moist one",mo:"Kama",yo:"Dog (female)",sy:"Ku · Gha · Nga · Chha",pos:"incisive, transformative, resilient",neg:"destructive, restless, harsh",career:"research, engineering, crisis and repair work, IT"},
+ {n:"Punarvasu",l:"Ju",d:"Aditi",s:"quiver of arrows",t:"renewal, return of light, optimism",g:"Deva (divine)",sh:"the power to gain wealth &amp; abundance",st:"Aditi, the boundless cosmic mother. 'The return of the light' after darkness — recovery, second chances, homecoming and unshakeable optimism.",tr:"Return of the light",mo:"Artha",yo:"Cat (female)",sy:"Ke · Ko · Ha · Hi",pos:"optimistic, adaptable, generous, renewing",neg:"scattered, complacent, restless",career:"teaching, writing, hospitality, spiritual life"},
+ {n:"Pushya",l:"Sa",d:"Brihaspati",s:"cow's udder / lotus",t:"nourishment, care, auspicious support",g:"Deva (divine)",sh:"the power to create spiritual energy",st:"Considered the most auspicious nakshatra — the cosmic cow that nourishes all. Brihaspati's star of care, devotion and protective wisdom.",tr:"The nourisher",mo:"Dharma",yo:"Sheep (male)",sy:"Hu · He · Ho · Da",pos:"nurturing, devoted, dependable, wise",neg:"clingy, rigid, over-cautious",career:"caregiving, teaching, public service, food, priesthood"},
+ {n:"Ashlesha",l:"Me",d:"the Nagas (serpents)",s:"coiled serpent",t:"penetrating, hypnotic, entwining insight",g:"Rakshasa (intense)",sh:"the power to inflict poison &amp; to embrace",st:"The coiled serpents of kundalini. Hypnotic, penetrating, secretive — the entwining wisdom that can heal or bite.",tr:"The embrace",mo:"Dharma",yo:"Cat (male)",sy:"Di · Du · De · Do",pos:"insightful, persuasive, shrewd, intuitive",neg:"manipulative, secretive, entangling",career:"psychology, medicine, strategy, the occult, negotiation"},
+ {n:"Magha",l:"Ke",d:"the Pitris (ancestors)",s:"throne",t:"lineage, authority, legacy, tradition",g:"Rakshasa (intense)",sh:"the power to leave the body &amp; honour the ancestors",st:"The royal throne of the forefathers. Magha is legacy, ancestry, ceremony and inherited authority — standing on the shoulders of those who came before.",tr:"The mighty",mo:"Artha",yo:"Rat (male)",sy:"Ma · Mi · Mu · Me",pos:"dignified, loyal, ambitious, ceremonial",neg:"proud, entitled, status-bound",career:"leadership, governance, tradition and ritual, heritage"},
+ {n:"Purva Phalguni",l:"Ve",d:"Bhaga",s:"front legs of a bed",t:"pleasure, romance, rest, creativity",g:"Manushya (human)",sh:"the power of procreation &amp; delight",st:"Bhaga, god of bliss and good fortune. The star of love-making, relaxation, the arts and the sweetness of life enjoyed.",tr:"The former red one",mo:"Kama",yo:"Rat (female)",sy:"Mo · Ta · Ti · Tu",pos:"warm, creative, charming, generous",neg:"indulgent, vain, restless",career:"arts and entertainment, hospitality, design, luxury"},
+ {n:"Uttara Phalguni",l:"Su",d:"Aryaman",s:"back legs of a bed",t:"partnership, generosity, reliable service",g:"Manushya (human)",sh:"the power to give prosperity through union",st:"Aryaman, patron of contracts, marriage and patronage. The star of dependable partnership, generosity and noble friendship.",tr:"The latter red one",mo:"Moksha",yo:"Bull (male)",sy:"Te · To · Pa · Pi",pos:"reliable, generous, organized, kind",neg:"rigid, over-giving, status-anxious",career:"partnerships, counselling, administration, philanthropy"},
+ {n:"Hasta",l:"Mo",d:"Savitar",s:"the hand / fist",t:"skill, craft, dexterity, manifestation",g:"Deva (divine)",sh:"the power to gain &amp; place in the hand",st:"Savitar, the skilful Sun. Hasta is the hand — craft, dexterity, healing touch, and the power to grasp what you seek and make it real.",tr:"The hand",mo:"Moksha",yo:"Buffalo (female)",sy:"Pu · Sha · Na · Tha",pos:"skilful, dexterous, clever, practical",neg:"anxious, manipulative, critical",career:"crafts and handwork, healing, trade, fine skills"},
+ {n:"Chitra",l:"Ma",d:"Tvashtar / Vishvakarma",s:"a bright jewel / pearl",t:"design, brilliance, beauty, craftsmanship",g:"Rakshasa (intense)",sh:"the power to accumulate merit &amp; honour",st:"Tvashtar, the divine architect who fashions form. The shining jewel — brilliance, design, glamour and dazzling craftsmanship.",tr:"The brilliant",mo:"Kama",yo:"Tiger (female)",sy:"Pe · Po · Ra · Ri",pos:"creative, charismatic, refined, design-minded",neg:"showy, restless, self-absorbed",career:"design and architecture, fashion, the arts, engineering"},
+ {n:"Swati",l:"Ra",d:"Vayu",s:"young sprout in the wind",t:"independence, movement, adaptability, trade",g:"Deva (divine)",sh:"the power to scatter like the wind",st:"Vayu, the wind. Swati bends but doesn't break — independent, mobile, flexible; the self-going trader and the reed that survives the storm.",tr:"The self-going",mo:"Artha",yo:"Buffalo (male)",sy:"Ru · Re · Ro · Ta",pos:"independent, adaptable, diplomatic, fair",neg:"indecisive, restless, aloof",career:"trade and business, law, diplomacy, travel"},
+ {n:"Vishakha",l:"Ju",d:"Indra-Agni",s:"triumphal arch / potter's wheel",t:"goal-focus, determination, achievement",g:"Rakshasa (intense)",sh:"the power to achieve many fruits",st:"The forked star of Indra and Agni. Single-minded, ambitious, patient — the harvest that comes after relentless, focused effort.",tr:"The forked",mo:"Dharma",yo:"Tiger (male)",sy:"Ti · Tu · Te · To",pos:"determined, goal-driven, focused, ambitious",neg:"impatient, obsessive, blunt",career:"leadership, research, politics, competitive fields"},
+ {n:"Anuradha",l:"Sa",d:"Mitra",s:"lotus",t:"friendship, devotion, cooperation",g:"Deva (divine)",sh:"the power of worship &amp; devotion",st:"Mitra, god of friendship and divine contracts. Anuradha succeeds through devotion and cooperation, and flourishes far from home.",tr:"The disciple of Radha",mo:"Dharma",yo:"Deer (female)",sy:"Na · Ni · Nu · Ne",pos:"devoted, cooperative, loyal, organizing",neg:"jealous, melancholic, dependent",career:"team and group work, counselling, foreign affairs"},
+ {n:"Jyeshtha",l:"Me",d:"Indra",s:"earring / umbrella",t:"seniority, protection, hard-won power",g:"Rakshasa (intense)",sh:"the power to rise &amp; conquer",st:"Indra, king of the gods. 'The eldest' — seniority, responsibility and protective authority that is hard-won and carries a hidden burden.",tr:"The eldest",mo:"Artha",yo:"Deer (male)",sy:"No · Ya · Yi · Yu",pos:"responsible, protective, capable, resourceful",neg:"controlling, burdened, secretive",career:"management, the occult, military and police, crisis roles"},
+ {n:"Mula",l:"Ke",d:"Nirriti",s:"bundle of tied roots",t:"getting to the root, dissolution, inquiry",g:"Rakshasa (intense)",sh:"the power to ruin &amp; destroy (to reach the root)",st:"Nirriti, goddess of dissolution. Mula tears things up by the roots to expose the truth beneath — radical inquiry, endings that found new beginnings.",tr:"The root",mo:"Kama",yo:"Dog (male)",sy:"Ye · Yo · Bha · Bhi",pos:"investigative, fearless, philosophical, root-seeking",neg:"destructive, blunt, restless",career:"research, medicine, philosophy, investigation, herbs"},
+ {n:"Purva Ashadha",l:"Ve",d:"Apas (the waters)",s:"winnowing fan / tusk",t:"invincibility, persuasion, purification",g:"Manushya (human)",sh:"the power of invigoration",st:"The unconquerable cosmic waters. 'The undefeated' — persuasion, early victory and the cleansing, swelling power of the ocean.",tr:"The former invincible",mo:"Moksha",yo:"Monkey (male)",sy:"Bhu · Dha · Pha · Dha",pos:"persuasive, optimistic, invigorating, ambitious",neg:"proud, stubborn, argumentative",career:"debate and law, leadership, water and shipping"},
+ {n:"Uttara Ashadha",l:"Su",d:"Vishvadevas",s:"elephant tusk / planks",t:"lasting victory, integrity, endurance",g:"Manushya (human)",sh:"the power of unchallengeable victory",st:"The Vishvadevas, the universal gods. Uttara Ashadha is the victory that lasts — won through integrity, patience and righteous endurance.",tr:"The latter invincible",mo:"Moksha",yo:"Mongoose (unpaired)",sy:"Bhe · Bho · Ja · Ji",pos:"principled, persevering, responsible, victorious",neg:"rigid, idealistic, lonely",career:"leadership, public service, pioneering, ethics-led work"},
+ {n:"Shravana",l:"Mo",d:"Vishnu",s:"ear / three footprints",t:"listening, learning, wisdom, connection",g:"Deva (divine)",sh:"the power to connect",st:"Vishnu's three world-spanning steps and the listening ear. Wisdom gained through hearing — learning, lineage, scholarship and good name.",tr:"The hearing",mo:"Artha",yo:"Monkey (female)",sy:"Ju · Je · Jo · Gha",pos:"attentive, wise, well-connected, learned",neg:"gossipy, anxious, over-sensitive",career:"teaching, media, scholarship, counselling, languages"},
+ {n:"Dhanishta",l:"Ma",d:"the eight Vasus",s:"drum / flute",t:"wealth, rhythm, fame, group action",g:"Rakshasa (intense)",sh:"the power to give abundance &amp; fame",st:"The eight Vasus, gods of material abundance, beating the cosmic drum. Wealth, music, rhythm and renown — but the drum is hollow, a caution against empty materialism.",tr:"The wealthiest",mo:"Dharma",yo:"Lion (female)",sy:"Ga · Gi · Gu · Ge",pos:"rhythmic, prosperous, group-minded, capable",neg:"materialistic, aggressive, restless",career:"music and performance, real estate, finance, teamwork"},
+ {n:"Shatabhisha",l:"Ra",d:"Varuna",s:"empty circle / 100 stars",t:"healing, mysticism, secrecy, research",g:"Rakshasa (intense)",sh:"the power to heal",st:"Varuna, keeper of cosmic waters and law. 'The hundred healers' and the veiling circle — mysticism, secrecy, research and unconventional cures.",tr:"The hundred healers",mo:"Dharma",yo:"Horse (female)",sy:"Go · Sa · Si · Su",pos:"healing, independent, mystical, research-minded",neg:"secretive, lonely, stubborn",career:"medicine and healing, research, astrology, technology"},
+ {n:"Purva Bhadrapada",l:"Ju",d:"Aja Ekapada",s:"sword / two front legs of a cot",t:"idealism, intensity, ascetic fire",g:"Manushya (human)",sh:"the power to raise a person spiritually",st:"Aja Ekapada, the one-footed fire-dragon. Burning idealism and intensity — the ascetic flame that transforms through extremes and otherworldly vision.",tr:"The former blessed feet",mo:"Artha",yo:"Lion (male)",sy:"Se · So · Da · Di",pos:"idealistic, intense, visionary, transformative",neg:"extreme, anxious, fanatical",career:"the occult, research, ascetic life, radical reform"},
+ {n:"Uttara Bhadrapada",l:"Sa",d:"Ahir Budhnya",s:"back legs of a cot / serpent",t:"depth, restraint, calm after storm",g:"Manushya (human)",sh:"the power to bring rain &amp; stability",st:"Ahir Budhnya, the serpent of the deep sea. Hidden depth, restraint and wisdom — the still, fertile calm that settles after the storm.",tr:"The latter blessed feet",mo:"Kama",yo:"Cow (female)",sy:"Du · Tha · Jha · Tra",pos:"deep, calm, wise, compassionate",neg:"withdrawn, lazy, melancholic",career:"counselling, mysticism, writing, charity, deep work"},
+ {n:"Revati",l:"Me",d:"Pushan",s:"fish / drum",t:"nourishment, safe passage, completion",g:"Deva (divine)",sh:"the power to nourish &amp; give passage",st:"The final nakshatra. Pushan, the shepherd-god, guides souls and travellers safely to their destination. Completion, transcendence and a gentle, nourishing farewell.",tr:"The prosperous",mo:"Moksha",yo:"Elephant (female)",sy:"De · Do · Cha · Chi",pos:"kind, nurturing, creative, protective",neg:"over-sensitive, indecisive, dependent",career:"caregiving, travel and guidance, the arts, animal care"}
 ];
 NAK.forEach(n=>{
   if(!n.interp){
@@ -2364,6 +2364,41 @@ function initOrrery(){
   }catch(e){ if(console&&console.warn)console.warn("orrery init failed; using emblem",e); host.removeAttribute("data-orrery"); fallback(); }
 }
 window.addEventListener("load",initOrrery);
+/* == NAKSHATRA SYMBOL GLYPHS (inline SVG, themed) == */
+const NAK_SYM=[
+ /*0 Ashwini horse-head*/`<path d="M40 72 Q33 50 44 40 Q52 33 64 34 L57 44 Q66 47 62 58 L54 58 Q52 66 46 72 Z"/><circle cx="52" cy="46" r="1.8" fill="var(--gold)" stroke="none"/>`,
+ /*1 Bharani yoni*/`<path d="M50 32 C40 50 40 62 50 70 C60 62 60 50 50 32 Z"/>`,
+ /*2 Krittika flame/razor*/`<path d="M50 30 C58 42 58 50 50 70 C42 50 42 42 50 30 Z"/><line x1="50" y1="40" x2="50" y2="64"/>`,
+ /*3 Rohini chariot wheel*/`<circle cx="50" cy="52" r="18"/><path d="M50 34 V70 M32 52 H68 M38 40 L62 64 M62 40 L38 64"/>`,
+ /*4 Mrigashira deer head*/`<path d="M42 70 Q40 54 50 50 Q60 54 58 70"/><path d="M44 50 L38 36 M44 44 L34 42 M56 50 L62 36 M56 44 L66 42"/>`,
+ /*5 Ardra teardrop*/`<path d="M50 32 C60 50 60 60 50 70 C40 60 40 50 50 32 Z" fill="var(--gold)" stroke="none"/>`,
+ /*6 Punarvasu bow & arrow*/`<path d="M38 32 Q66 50 38 68"/><line x1="32" y1="50" x2="70" y2="50"/><path d="M64 45 L72 50 L64 55"/>`,
+ /*7 Pushya lotus*/`<path d="M50 66 C40 60 36 50 50 36 C64 50 60 60 50 66 Z"/><path d="M50 66 C42 64 34 56 34 48 M50 66 C58 64 66 56 66 48"/>`,
+ /*8 Ashlesha coiled serpent*/`<path d="M58 60 a10 10 0 1 1 -9 -16 a16 16 0 1 0 15 9"/><circle cx="64" cy="44" r="1.9" fill="var(--gold)" stroke="none"/>`,
+ /*9 Magha throne*/`<path d="M37 44 V68 H63 V44 M37 56 H63 M41 44 V36 H59 V44"/>`,
+ /*10 P.Phalguni front cot legs*/`<path d="M36 38 H64 M40 38 V66 M60 38 V66"/>`,
+ /*11 U.Phalguni rear cot legs*/`<path d="M36 66 H64 M40 34 V66 M60 34 V66"/>`,
+ /*12 Hasta hand*/`<path d="M40 70 V52 C40 44 46 44 46 50 V40 C46 35 51 35 51 40 V42 C51 37 56 37 56 42 V46 C56 42 60 44 60 52 V62 C60 70 52 70 48 70 Z"/>`,
+ /*13 Chitra jewel*/`<path d="M40 44 H60 L66 52 L50 70 L34 52 Z M40 44 L50 52 L60 44 M34 52 H66 M50 52 V70"/>`,
+ /*14 Swati sprout*/`<path d="M48 70 Q46 50 56 41 Q60 37 65 39 Q58 43 56 51 Q54 59 52 70"/>`,
+ /*15 Vishakha arch*/`<path d="M30 70 H70 M36 70 V50 Q36 36 50 36 Q64 36 64 50 V70"/>`,
+ /*16 Anuradha lotus row*/`<path d="M50 64 C42 60 40 50 50 40 C60 50 58 60 50 64 Z M50 62 C44 60 38 54 36 48 M50 62 C56 60 62 54 64 48 M34 66 H66"/>`,
+ /*17 Jyeshtha umbrella*/`<path d="M30 50 Q50 30 70 50 Z M50 50 V70 Q50 66 56 66"/>`,
+ /*18 Mula tied roots*/`<path d="M50 34 V48 M50 48 C44 56 40 62 38 70 M50 48 C50 58 50 64 50 70 M50 48 C56 56 60 62 62 70 M42 48 H58"/>`,
+ /*19 P.Ashadha fan*/`<path d="M36 66 Q50 30 64 66 Z M41 60 H59 M45 52 H55"/>`,
+ /*20 U.Ashadha tusk*/`<path d="M40 38 Q66 40 62 66 Q60 54 48 50 Q42 46 40 38 Z"/>`,
+ /*21 Shravana three footprints*/`<g fill="var(--gold)" stroke="none"><ellipse cx="38" cy="60" rx="5" ry="7"/><ellipse cx="50" cy="50" rx="5" ry="7"/><ellipse cx="62" cy="40" rx="5" ry="7"/></g>`,
+ /*22 Dhanishta drum*/`<path d="M38 36 H62 L44 50 L62 64 H38 L56 50 Z"/>`,
+ /*23 Shatabhisha hundred-circle*/`<circle cx="50" cy="50" r="20"/><g fill="var(--gold)" stroke="none"><circle cx="50" cy="34" r="1.6"/><circle cx="64" cy="42" r="1.6"/><circle cx="66" cy="58" r="1.6"/><circle cx="50" cy="66" r="1.6"/><circle cx="34" cy="58" r="1.6"/><circle cx="34" cy="42" r="1.6"/></g>`,
+ /*24 P.Bhadrapada sword*/`<path d="M50 30 V62 M44 56 H56 M47 62 H53 V70 H47 Z"/>`,
+ /*25 U.Bhadrapada serpent-in-water*/`<path d="M32 54 Q40 44 48 54 T64 54 M30 64 Q40 56 50 64 T70 64"/>`,
+ /*26 Revati fish*/`<path d="M34 50 Q50 38 64 50 Q50 62 34 50 Z M64 50 L72 44 M64 50 L72 56"/><circle cx="44" cy="48" r="1.7" fill="var(--gold)" stroke="none"/>`
+];
+function nakGlyph(idx,size){size=size||64;const inner=NAK_SYM[idx]||"";const nm=(NAK[idx]?NAK[idx].n:"");
+  return `<svg class="emblem nakglyph" width="${size}" height="${size}" viewBox="0 0 100 100" role="img" aria-label="${nm} symbol">`
+    +`<circle class="ring-base" cx="50" cy="50" r="44" fill="none" stroke-width="5"/>`
+    +`<circle class="ring-gold" cx="50" cy="50" r="44" fill="none" stroke-width="1"/>`
+    +`<g fill="none" stroke="var(--gold)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${inner}</g></svg>`;}
 function nakInfo(lon){const span=40/3;lon=((lon%360)+360)%360;const idx=Math.floor(lon/span);const pada=Math.floor((lon-idx*span)/(span/4))+1;return Object.assign({idx,pada},NAK[idx]);}
 const VIMY={Ke:7,Ve:20,Su:6,Mo:10,Ma:7,Ra:18,Ju:16,Sa:19,Me:17};
 const DASHA_SEQ_K=["Ke","Ve","Su","Mo","Ma","Ra","Ju","Sa","Me"];
@@ -2373,15 +2408,26 @@ function openNak(idx){
   nakModalTrigger=document.activeElement;
   document.getElementById("nakCard").innerHTML=`
     <button type="button" class="ghost" style="float:right;border:none;background:none;font-size:22px;cursor:pointer;color:var(--muted)" onclick="closeNak()" aria-label="Close">×</button>
-    <h3 id="nakModalTitle" style="margin:0 0 2px;font-size:22px">✦ ${n.n}</h3>
-    <div class="note" style="margin-bottom:14px">Nakshatra ${idx+1} of 27 · ${fmtDeg(start)} – ${fmtDeg(start+span)}</div>
-    <div class="kv">
+    <div style="display:flex;gap:14px;align-items:flex-start">
+      <div style="flex:0 0 auto">${nakGlyph(idx,72)}</div>
+      <div>
+        <h3 id="nakModalTitle" style="margin:0 0 2px;font-size:22px">${n.n} <span class="skt" style="font-size:14px">· ${n.tr}</span></h3>
+        <div class="note">Nakshatra ${idx+1} of 27 · ${fmtDeg(start)} – ${fmtDeg(start+span)}</div>
+      </div>
+    </div>
+    <div class="kv" style="margin-top:14px">
       <b>Star-lord</b><span>${lord.gl} ${lord.name} — runs ${VIMY[n.l]} years of Vimsottari dasha</span>
       <b>Deity</b><span>${n.d}</span>
       <b>Symbol</b><span>${n.s}</span>
       <b>Gana</b><span>${n.g}</span>
+      <b>Motivation</b><span>${n.mo}</span>
+      <b>Yoni</b><span>${n.yo}</span>
       <b>Shakti (power)</b><span>${n.sh}</span>
       <b>Theme</b><span>${n.t}</span>
+      <b>Naming sounds</b><span>${n.sy}</span>
+      <b>Strengths</b><span>${n.pos}</span>
+      <b>Shadow</b><span>${n.neg}</span>
+      <b>Vocations</b><span>${n.career}</span>
     </div>
     <p style="margin:16px 0 0;color:#dfe4f6;font-size:14.5px;border-top:1px dashed var(--line);padding-top:14px">${n.st}</p>
     <div class="chapref">A planet in ${n.n} is coloured by this star, and its star-lord <b>${lord.name}</b> also runs that planet's Vimsottari dasha — the bridge from <i>meaning</i> to <i>timing</i>.</div>`;
@@ -2771,21 +2817,32 @@ explorer("bhavaTokens","bhavaDetail",BHAVAS,b=>`<span class="gl" style="backgrou
     <p class="dropcap" style="margin:14px 0 0;color:#dfe4f6;line-height:1.72">${b.interp}</p>
     <div class="tags">${b.kar.map(k=>`<span class="tag">${k}</span>`).join("")}</div>
     <div class="chapref">📖 Bhava significations — BPHS. Kendras are structural pillars, Trikonas carry grace, Dusthanas test and transform, Upachayas improve through effort.</div>`);
-explorer("nakshatraTokens","nakshatraDetail",NAK,n=>`<span class="gl" style="background:var(--gold);color:#2a1a0c">✦</span>${n.n}`,n=>{
-  const lord=GBYK[n.l];
-  return `<h3><span class="gl" style="background:var(--gold);color:#2a1a0c">✦</span> ${n.n} <span class="skt">· lord ${lord.name} · deity ${n.d}</span></h3>
-    <div class="tags">
-      <span class="ec-chip gold">Lord · ${lord.gl} ${lord.name}</span>
-      <span class="ec-chip">Deity · ${n.d}</span>
-      <span class="ec-chip">Symbol · ${n.s}</span>
+explorer("nakshatraTokens","nakshatraDetail",NAK,n=>`${nakGlyph(NAK.indexOf(n),26)}<span>${n.n}</span>`,n=>{
+  const lord=GBYK[n.l],idx=NAK.indexOf(n);
+  return `<div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
+      <div style="flex:0 0 auto">${nakGlyph(idx,88)}</div>
+      <div style="flex:1;min-width:210px">
+        <h3 style="margin:0">${n.n} <span class="skt">· ${n.tr}</span></h3>
+        <div class="note" style="margin:3px 0 9px">Nakshatra ${idx+1} of 27 · lord ${lord.name} · deity ${n.d}</div>
+        <div class="tags">
+          <span class="ec-chip gold">Lord · ${lord.gl} ${lord.name}</span>
+          <span class="ec-chip">Symbol · ${n.s}</span>
+          <span class="ec-chip">Gana · ${n.g}</span>
+          <span class="ec-chip">Motivation · ${n.mo}</span>
+          <span class="ec-chip">Yoni · ${n.yo}</span>
+        </div>
+      </div>
     </div>
-    <p class="dropcap" style="margin:14px 0 0;color:#dfe4f6;line-height:1.72">${n.interp}</p>
-    <div class="kv" style="margin-top:12px;grid-template-columns:140px 1fr">
-      <b>Gana</b><span>${n.g}</span>
-      <b>Shakti</b><span>${n.sh}</span>
+    <p class="dropcap" style="margin:14px 0 0;color:#dfe4f6;line-height:1.72">${n.st}</p>
+    <div class="kv" style="margin-top:12px;grid-template-columns:150px 1fr">
+      <b>Shakti (power)</b><span>${n.sh}</span>
       <b>Theme</b><span>${n.t}</span>
+      <b>Naming sounds</b><span>${n.sy}</span>
+      <b>Strengths</b><span>${n.pos}</span>
+      <b>Shadow</b><span>${n.neg}</span>
+      <b>Vocations</b><span>${n.career}</span>
     </div>
-    <div class="chapref">📖 Nakshatra layer: lord + deity + symbol refine how a graha in this star actually behaves.</div>`;
+    <div class="chapref">📖 The nakshatra is the Moon's fine grain: its lord, deity and symbol refine how any graha in this star behaves — and its star-lord <b>${lord.name}</b> runs that planet's Vimsottari dasha, the bridge from <i>meaning</i> to <i>timing</i>.</div>`;
 });
 
 /* ===== SYNTHESIZER ===== */
