@@ -9,7 +9,7 @@
   }
   function init(){
     document.documentElement.classList.add('observatory-ready');
-    const header=document.getElementById('workspaceBar');if(header&&!header.querySelector('.header-mandala'))header.insertAdjacentHTML('afterbegin',wheel('header-mandala','Astronomical mandala'));
+    // No mandala in the top bar: it was cropped by the bar, overlapped the page title and carried no information.
     const hero=document.getElementById('hero');if(hero&&!hero.querySelector('.hero-mandala'))hero.insertAdjacentHTML('beforeend',wheel('hero-mandala','Nakshatra wheel'));
     const charts=document.querySelector('#charts .charts-main');if(charts&&!charts.querySelector('.workbench-constellation'))charts.insertAdjacentHTML('afterbegin',`<div class="workbench-constellation"><div><div class="workbench-kicker">Kundali workbench</div><h3>Trace the living geometry.</h3><p>Your active Kundali is read here through houses, grahas, vargas and daśā. The wheel is a visual orientation device; calculations stay in the chart below.</p><span class="observatory-stamp">पराशर · नवांश · दशा</span></div>${wheel('workbench-mandala','Astronomical orientation wheel')}</div>`);
   }

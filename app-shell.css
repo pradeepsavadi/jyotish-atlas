@@ -8,7 +8,7 @@ html.app-shell #main>section.workspace-active{display:block!important;opacity:1!
 html.app-shell #main>section[hidden]{display:none!important}
 #workspaceRail{position:fixed;inset:0 auto 0 0;width:244px;background:var(--bg2);border-right:1px solid var(--line);overflow-y:auto;padding:24px 16px;box-sizing:border-box}
 .workspace-brand{display:block;font:22px var(--font-display);color:var(--ink);text-decoration:none;padding:0 10px 20px}
-.workspace-group{margin-bottom:16px}.workspace-group p{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:8px 10px}
+.workspace-group{margin-bottom:16px}.workspace-group p{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:8px 10px}
 .workspace-group a{display:flex;align-items:center;min-height:44px;padding:8px 12px;box-sizing:border-box;color:var(--muted);text-decoration:none;border-radius:8px;font-size:14px}
 .workspace-group a:hover,#workspaceLessons a:hover{background:var(--panel2);color:var(--ink)}
 .workspace-group a[aria-current],#workspaceLessons a[aria-current]{background:var(--panel2);color:var(--gold2);box-shadow:inset 3px 0 var(--gold)}
@@ -27,3 +27,12 @@ html.app-shell #main>section[hidden]{display:none!important}
  .app-shell #main{inset:116px 0 0;padding:20px 16px;padding-bottom:max(24px,env(safe-area-inset-bottom))}
 }
 @media print{html.app-shell,html.app-shell body{height:auto;overflow:visible}#workspaceRail,#workspaceBar,#workspaceLessons{display:none!important}.app-shell #main{position:static;overflow:visible;padding:0}}
+/* The four "Learn / Synthesize / My Charts / Practice" cards belong to the Welcome page only. */
+html.app-shell #main>.hero-zones{display:none}
+html.app-shell #main>#hero.workspace-active~.hero-zones{display:grid}
+/* Previous/Next belongs to the Learn lessons; tool pages are reached from the menu. */
+html.app-shell .jm-stepnav:not(.jm-learn-nav){display:none!important}
+/* Menu items: plain label with the technique name as a caption. */
+.workspace-group a{flex-direction:column;align-items:flex-start;justify-content:center;gap:1px}
+.workspace-group a .ws-term{font-size:12px;color:var(--muted);opacity:.8;letter-spacing:.01em}
+.workspace-group a[aria-current="page"] .ws-term{opacity:1}

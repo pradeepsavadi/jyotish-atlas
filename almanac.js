@@ -27,14 +27,16 @@
       sky=`<dl><div><dt>Moon nakshatra · Nakṣatra</dt><dd>${esc(s.moon.nakshatra)}</dd></div><div><dt>Lunar day · Tithi</dt><dd>${tithi}</dd></div><div><dt>Moon in your chart</dt><dd>${esc(SIGNS[s.moon.sign])} · H${s.moon.fromLagna} from Lagna${s.moon.fromMoon?' · H'+s.moon.fromMoon+' from Moon':''}</dd></div></dl>`;
     }catch(e){sky='<p>Today’s sky could not be calculated. Your saved chart is still available.</p>';}
     const p=periods(c,now);
-    const phase=[['Mahadasha',p.md],['Antardasha',p.ad],['Pratyantardasha',p.pd]].map(([label,v])=>{
-      if(!v)return `<div class="period-row"><small>${label}</small><div>Not available in supplied dates</div></div>`;
+    // No period data at all: one sentence and one action, not three "not available" rows.
+    const hasPeriods=!!(c.dashas&&c.dashas.mahas&&c.dashas.mahas.length);
+    const phase=!hasPeriods?`<div class="period-row"><div>Your life periods are worked out from your birth date, which this chart doesn’t include yet.</div><a class="ax-secondary" href="#lifepredictor">Add your birth date</a></div>`:[['Mahadasha',p.md],['Antardasha',p.ad],['Pratyantardasha',p.pd]].map(([label,v])=>{
+      if(!v)return `<div class="period-row"><small>${label}</small><div>Not listed in this chart’s data</div></div>`;
       const known=Number.isFinite(v.end)&&v.end>v.start;
       const percent=known?Math.max(0,Math.min(100,(now-v.start)/(v.end-v.start)*100)):null;
       return `<div class="period-row"><div>${label} · <b>${esc(GBYK[v.lord]?.name||v.lord)}</b></div><small>${date(v.start)} → ${known?date(v.end):'End not supplied'}</small>${known?`<progress value="${percent}" max="100" aria-label="${label} elapsed"></progress><small>${percent.toFixed(1)}% elapsed · period progress, not strength</small>`:''}</div>`;
     }).join('');
     const lord=p.ad?.lord||p.md?.lord,planet=c.planets[lord];
-    const theme=planet?`Your ongoing ${esc(GBYK[lord]?.name||lord)} period brings H${houseFromSigns(c.La.sign,planet.sign)} (${esc(BHAVAS[houseFromSigns(c.La.sign,planet.sign)-1].en)}) into the reading through its natal placement. This is a period theme, not a prediction of today’s events.`:'Add a chart with dasha dates to explore the ongoing life phase.';
+    const theme=planet?`Your ongoing ${esc(GBYK[lord]?.name||lord)} period brings H${houseFromSigns(c.La.sign,planet.sign)} (${esc(BHAVAS[houseFromSigns(c.La.sign,planet.sign)-1].en)}) into the reading through its natal placement. This is a period theme, not a prediction of today’s events.`:'';
     section.querySelector('[data-almanac-sky]').innerHTML=`<small>As of ${esc(date(now))} · ${esc(zone)}</small>${sky}<p>Sky essentials: a partial almanac. Hora requires current location and local sunrise/sunset and is not calculated here. These are instant values, not sunrise-based calendar assignments.</p><h3>Your ongoing life phase</h3>${phase}<p>${theme}</p>`;
   }
   function mount(){

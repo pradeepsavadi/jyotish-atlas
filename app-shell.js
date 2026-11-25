@@ -1,8 +1,10 @@
 /* Persistent workspaces: routing changes visibility, never recreates chart UI. */
 (function(){
-  const groups=[['Today',[['atlasExperience','Personal Almanac']]],['Study',[['starthere','Learn'],['synth','Synthesizer'],['quiz','Practice']]],['Your chart',[['charts','My Charts'],['d1guide','Rāśi Guide'],['bbavam','Relationship Decoder'],['arudhas','Graha Arudhas'],['karmasutra','Career Decoder']]],['Timing & reflection',[['opportunity','Opportunity Windows'],['lifepredictor','Life Predictor'],['outlook','Life Outlook'],['prashna','Prashna'],['journal','Life Journal'],['promptbuilder','Prompt Builder'],['compare','Compare Charts']]]];
-  const lessons=[['starthere','Start here'],['why','The idea'],['grahas','Planets'],['rashis','Signs'],['bhavas','Houses'],['nakshatras','Nakshatras']];
-  const labels=new Map([...groups.flatMap(g=>g[1]),...lessons,['hero','Welcome']]);
+  // [id, plain-language label, technique name shown as a caption]. Menus use the question a
+  // reader has; the classical/feature name stays visible underneath so nothing feels renamed away.
+  const groups=[['Today',[['atlasExperience','Today’s sky','Personal almanac']]],['Study',[['starthere','Learn the basics','Guided course'],['synth','Combine the pieces','Synthesizer'],['quiz','Practice','Quiz']]],['Your chart',[['charts','My charts','Wheel and readings'],['d1guide','Planet by planet','Rāśi guide'],['bbavam','How life areas connect','Relationship decoder'],['arudhas','How others see you','Graha arudhas'],['karmasutra','Work and career','Career decoder']]],['Timing & reflection',[['opportunity','When doors open','Opportunity windows'],['lifepredictor','Life timeline','Life predictor'],['outlook','Year by year','Life outlook'],['prashna','Ask about this moment','Prashna'],['journal','Journal','Life journal'],['promptbuilder','Prepare an AI reading','Prompt builder'],['compare','Compare two charts','Compare charts']]]];
+  const lessons=[['starthere','Start here'],['why','The idea'],['grahas','Planets'],['rashis','Signs'],['bhavas','Houses'],['nakshatras','Nakshatras'],['kalapurusha','Cosmic body']];
+  const labels=new Map([...groups.flatMap(g=>g[1].map(([id,label])=>[id,label])),...lessons,['hero','Welcome']]);
   let main,views,select,links,active;
   const positions=new Map();
   function resolve(id){
@@ -36,9 +38,9 @@
     main=document.getElementById('main');views=[...main.querySelectorAll(':scope > section')];
     main.setAttribute('role','main');main.setAttribute('tabindex','-1');
     const rail=document.createElement('aside');rail.id='workspaceRail';
-    rail.innerHTML='<a class="workspace-brand" href="#atlasExperience">✦ Jyotish Atlas</a><nav aria-label="Workspaces">'+groups.map(([name,items])=>'<div class="workspace-group"><p>'+name+'</p>'+items.map(([id,label])=>`<a href="#${id}" data-workspace="${id}">${label}</a>`).join('')+'</div>').join('')+'</nav>';
+    rail.innerHTML='<a class="workspace-brand" href="#atlasExperience">✦ Jyotish Atlas</a><nav aria-label="Workspaces">'+groups.map(([name,items])=>'<div class="workspace-group"><p>'+name+'</p>'+items.map(([id,label,term])=>`<a href="#${id}" data-workspace="${id}"><span class="ws-label">${label}</span>${term?`<small class="ws-term">${term}</small>`:''}</a>`).join('')+'</div>').join('')+'</nav>';
     const bar=document.createElement('header');bar.id='workspaceBar';
-    bar.innerHTML='<span id="workspaceTitle">Personal Almanac</span><label class="workspace-picker">Workspace<select aria-label="Choose workspace">'+groups.map(([name,items])=>`<optgroup label="${name}">`+items.map(([id,label])=>`<option value="${id}">${label}</option>`).join('')+'</optgroup>').join('')+'</select></label>';
+    bar.innerHTML='<span id="workspaceTitle">Personal Almanac</span><label class="workspace-picker">Workspace<select aria-label="Choose workspace">'+groups.map(([name,items])=>`<optgroup label="${name}">`+items.map(([id,label,term])=>`<option value="${id}">${label}${term?` (${term})`:''}</option>`).join('')+'</optgroup>').join('')+'</select></label>';
     const appearance=document.querySelector('.appearance-field');if(appearance)bar.append(appearance);
     const actions=document.querySelector('.header-actions');if(actions)bar.append(actions);
     document.body.append(rail,bar);
